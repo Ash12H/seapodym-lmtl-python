@@ -14,8 +14,7 @@ def landmask_by_fgroup(
     day_layers: Iterable[int], night_layers: Iterable[int], landmask: xr.DataArray
 ) -> xr.DataArray:
     """
-    The `landmask` has at least 3 dimensions (lat, lon, layer). We are only using the nan cells to generate the
-    landmask by functional group.
+    The `landmask` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
 
     `landmask` can be:
     - temperature
