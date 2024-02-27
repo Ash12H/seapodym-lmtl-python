@@ -49,14 +49,11 @@ class TestCellArea:
 
     def test_haversine_distance(self, tolerance: pint.Quantity):
 
-        zero_degree = 0 * pint.application_registry.degrees
-        one_degree = 1 * pint.application_registry.degrees
-
         hav_dist_zero = cell_area.haversine_distance(
-            min_latitude=zero_degree,
-            max_latitude=zero_degree,
-            min_longitude=zero_degree,
-            max_longitude=zero_degree,
+            min_latitude=0,
+            max_latitude=0,
+            min_longitude=0,
+            max_longitude=0,
         )
         assert hav_dist_zero.units == pint.application_registry.meters
         assert np.isclose(
@@ -64,10 +61,10 @@ class TestCellArea:
         )
 
         hav_dist_equator = cell_area.haversine_distance(
-            min_latitude=zero_degree,
-            max_latitude=zero_degree,
-            min_longitude=zero_degree,
-            max_longitude=one_degree,
+            min_latitude=0,
+            max_latitude=0,
+            min_longitude=0,
+            max_longitude=1,
         )
 
         assert np.isclose(
@@ -75,10 +72,10 @@ class TestCellArea:
         )
 
         hav_dist_equator = cell_area.haversine_distance(
-            min_latitude=90 * one_degree,
-            max_latitude=90 * one_degree,
-            min_longitude=zero_degree,
-            max_longitude=one_degree,
+            min_latitude=90,
+            max_latitude=90,
+            min_longitude=0,
+            max_longitude=1,
         )
 
         assert np.isclose(
@@ -86,23 +83,15 @@ class TestCellArea:
         )
 
         hav_dist_equator = cell_area.haversine_distance(
-            min_latitude=-90 * one_degree,
-            max_latitude=-90 * one_degree,
-            min_longitude=zero_degree,
-            max_longitude=one_degree,
+            min_latitude=-90,
+            max_latitude=-90,
+            min_longitude=0,
+            max_longitude=1,
         )
 
         assert np.isclose(
             hav_dist_equator, 0 * pint.application_registry.m, atol=tolerance
         )
-
-        with pytest.raises(ValueError):  # noqa: PT011
-            cell_area.haversine_distance(
-                min_latitude=zero_degree,
-                max_latitude=-zero_degree,
-                min_longitude=zero_degree,
-                max_longitude=180 * one_degree,
-            )
 
 
 # TODO(Jules): Test others functions.

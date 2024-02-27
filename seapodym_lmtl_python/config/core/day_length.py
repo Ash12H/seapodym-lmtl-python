@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dask.array as da
 import numpy as np
 import pandas as pd
 import pint
@@ -49,6 +50,8 @@ def mesh_day_length(
     latitude: xr.DataArray,
     longitude: xr.DataArray,
     angle_horizon_sun: int = 0,
+    *,
+    dask: bool = False,
 ) -> xr.DataArray:
     """
     Compute the day length according to coordinates.
@@ -91,7 +94,18 @@ def mesh_day_length(
     cell_time = np.tile(day_of_year, (latitude.size, longitude.size, 1)).transpose(
         2, 0, 1
     )
-    data = day_length_forsythe(cell_latitude, cell_time, p=angle_horizon_sun)
+
+    if dask:
+        data = da.map_blocks(
+            day_length_forsythe,
+            cell_latitude,
+            cell_time,
+            p=angle_horizon_sun,
+            chunks=(time_index.size, latitude.size, longitude.size),
+            dtype="float64",
+        )
+    else:
+        data = day_length_forsythe(cell_latitude, cell_time, p=angle_horizon_sun)
     attributes = {
         "long_name": "Day length",
         "standard_name": "day_length",
