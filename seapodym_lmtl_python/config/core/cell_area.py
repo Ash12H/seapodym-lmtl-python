@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import cf_xarray.units  # noqa: F401
 import numpy as np
 import pint
+import pint_xarray  # noqa: F401
+import xarray as xr
 
-EARTH_RADIUS = 6371 * pint.application_registry.kilometers
+from seapodym_lmtl_python.cf_data import coordinates
+
+EARTH_RADIUS = 6_371_000 * pint.application_registry.meters
 
 
 def haversine_distance(
@@ -28,6 +33,17 @@ def haversine_distance(
 
     dlat = max_latitude - min_latitude
     dlon = max_longitude - min_longitude
+
+    if (
+        dlon >= (180 * ureg.degrees).to(ureg.radians).magnitude
+        or dlon < (-180 * ureg.degrees).to(ureg.radians).magnitude
+    ):
+        dlon = (dlon * ureg.radians).to(ureg.degrees).magnitude
+        error_msg = (
+            f"The longitude distance ( = {dlon}) must be in [-180, 180[ interval. The result of the haversine formula "
+            "is the shortest distance between the two points. "
+        )
+        raise ValueError(error_msg)
 
     # # Haversine formula
     hav_theta = (np.sin(dlat / 2) ** 2) + np.cos(min_latitude) * np.cos(
@@ -62,12 +78,12 @@ def cell_borders_length(
 
 
 def cell_area(
-    latitude: float | pint.Quantity,
-    resolution: float | pint.Quantity,
+    latitude: float | pint.Quantity | np.ndarray,
+    resolution: float | pint.Quantity | np.ndarray,
 ) -> pint.Quantity | np.ndarray:
     """
-    Return the cell surface area according to its centroid latitude position and
-    resolution (in degrees).
+    Return the cell surface area (squared meters) according to its centroid latitude position and resolution (in
+    degrees).
     """
     latitude = (
         latitude.to("degrees")
@@ -81,3 +97,48 @@ def cell_area(
     )
     lat_len, lon_len = cell_borders_length(latitude, resolution)
     return lat_len * lon_len
+
+
+def mesh_cell_area(
+    latitude: np.ndarray,
+    longitude: np.ndarray,
+    resolution: float | pint.Quantity,
+) -> xr.DataArray:
+    """
+    Expand the cell_area function to a meshgrid of latitude and longitude.
+
+    Parameters
+    ----------
+    latitude : np.ndarray
+        Latitude values (float values assume degrees).
+    longitude : np.ndarray
+        Longitude values (float values assume degrees).
+    resolution : float | pint.Quantity
+        Resolution of the grid (float values assume degrees).
+
+    Returns
+    -------
+    xr.DataArray
+        A DataArray containing the cell area for each grid cell. Quantified with pint as "squared meters".
+
+    """
+    cell_y = cell_area(latitude=latitude, resolution=resolution)
+    mesh_cell_area = np.tile(cell_y, (len(longitude), 1)).T
+
+    latitude = coordinates.new_latitude(latitude)
+    longitude = coordinates.new_longitude(longitude)
+
+    return xr.DataArray(
+        coords={
+            "latitude": latitude,
+            "longitude": longitude,
+            "cell_area": (("latitude", "longitude"), mesh_cell_area),
+        },
+        dims=["latitude", "longitude"],
+        attrs={
+            "units": "m**2",
+            "long_name": "area of grid cell",
+            "standard_name": "cell_area",
+        },
+        data=mesh_cell_area,
+    ).pint.quantify()

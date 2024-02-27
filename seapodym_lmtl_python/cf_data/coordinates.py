@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Iterable, Literal
+from typing import TYPE_CHECKING, Iterable, Literal
 
-import numpy as np
+import cf_xarray.units  # noqa: F401
+import pint_xarray  # noqa: F401
 import xarray as xr
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 class SeaLayers(Enum):
@@ -43,7 +47,7 @@ def new_latitude(latitude_data: np.ndarray) -> xr.DataArray:
             "units": "degrees_north",
             "axis": "Y",
         },
-    )
+    ).pint.quantify()
 
 
 def new_longitude(longitude_data: Iterable) -> xr.DataArray:
@@ -58,7 +62,7 @@ def new_longitude(longitude_data: Iterable) -> xr.DataArray:
             "units": "degrees_east",
             "axis": "X",
         },
-    )
+    ).pint.quantify()
 
 
 def new_layer(layer_data: Iterable | None = None) -> xr.DataArray:

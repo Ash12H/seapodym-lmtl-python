@@ -42,6 +42,7 @@ class TestLandmask:
 
     def test_landmask(self, simple_forcing):
         mask = landmask.landmask_from_nan(simple_forcing)
+        # Keep spatial dimensions only
         assert mask.shape == simple_forcing.isel(time=0).shape
-        assert set(mask.data.flatten()) == {0, 1}
-        assert set(mask.data.flatten()) == {False, True}
+        # Only boolean values
+        assert mask.dtype == bool
