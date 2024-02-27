@@ -47,7 +47,7 @@ def new_latitude(latitude_data: np.ndarray) -> xr.DataArray:
             "units": "degrees_north",
             "axis": "Y",
         },
-    ).pint.quantify()
+    )
 
 
 def new_longitude(longitude_data: Iterable) -> xr.DataArray:
@@ -62,7 +62,7 @@ def new_longitude(longitude_data: Iterable) -> xr.DataArray:
             "units": "degrees_east",
             "axis": "X",
         },
-    ).pint.quantify()
+    )
 
 
 def new_layer(layer_data: Iterable | None = None) -> xr.DataArray:

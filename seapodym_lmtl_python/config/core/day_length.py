@@ -1,10 +1,16 @@
 """This module contains functions used to calculate the length of the day."""
 
+from __future__ import annotations
+
 import numpy as np
+import pandas as pd
 import pint
+import xarray as xr
 
 
-def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> float:
+def day_length_forsythe(
+    latitude: float, day_of_the_year: int, p: int = 0
+) -> pint.Quantity:
     """
     Compute the day length for a given latitude, day of the year and twilight angle.
 
@@ -14,6 +20,12 @@ def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> fl
         - 6  => civil twilight
         - 12 => nautical twilight
         - 18 => astronomical twilight
+
+    Returns
+    -------
+    pint.Quantity
+        The day length in hours.
+
     """
     # revolution angle for the day of the year
     theta = 0.2163108 + 2 * np.arctan(
@@ -30,3 +42,70 @@ def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> fl
     arg = np.clip(arg, -1.0, 1.0)
 
     return (24.0 - (24.0 / np.pi) * np.arccos(arg)) * pint.application_registry.hour
+
+
+def mesh_day_length(
+    time: xr.DataArray,
+    latitude: xr.DataArray,
+    longitude: xr.DataArray,
+    angle_horizon_sun: int = 0,
+) -> xr.DataArray:
+    """
+    Compute the day length according to coordinates.
+
+    Parameters
+    ----------
+    time : xr.DataArray
+        The time. This coordinates must contains a the following attributes: {'axis':'T'}.
+    latitude : xr.DataArray
+        The latitude.
+    longitude : xr.DataArray
+        The longitude.
+    angle_horizon_sun : int, optional
+        The angle between the sun position and the horizon, in degrees. Default is 0.
+
+    Returns
+    -------
+    xr.DataArray
+        The day length that can be passed to a dataset as coordinates ((time, latitude, longitude), day_length).
+
+    """
+    if isinstance(time, xr.DataArray):
+        try:
+            time_index = time.indexes[time.cf["T"].name]
+        except KeyError as e:
+            error_message = "time must have a attrs={..., 'axis':'T', ...}"
+            raise ValueError(error_message) from e
+
+    if isinstance(time_index, xr.CFTimeIndex):
+        day_of_year = time_index.dayofyear
+    elif isinstance(time_index, pd.DatetimeIndex):
+        day_of_year = time_index.day_of_year
+    else:
+        error_message = "time must be a xr.CFTimeIndex or a pd.DatetimeIndex"
+        raise TypeError(error_message)
+
+    cell_latitude = np.tile(latitude, (time_index.size, longitude.size, 1)).transpose(
+        0, 2, 1
+    )
+    cell_time = np.tile(day_of_year, (latitude.size, longitude.size, 1)).transpose(
+        2, 0, 1
+    )
+    data = day_length_forsythe(cell_latitude, cell_time, p=angle_horizon_sun)
+    attributes = {
+        "long_name": "Day length",
+        "standard_name": "day_length",
+        "description": f"Day length at the surface using Forsythe's method with p={angle_horizon_sun}",
+    }
+    return xr.DataArray(
+        coords={
+            "time": time,
+            "latitude": latitude,
+            "longitude": longitude,
+            "day_length": (("time", "latitude", "longitude"), data, attributes),
+        },
+        dims=["time", "latitude", "longitude"],
+        data=data,
+        name="day_length",
+        attrs=attributes,
+    ).pint.dequantify()

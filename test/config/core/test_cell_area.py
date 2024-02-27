@@ -103,3 +103,6 @@ class TestCellArea:
                 min_longitude=zero_degree,
                 max_longitude=180 * one_degree,
             )
+
+
+# TODO(Jules): Test others functions.
