@@ -66,6 +66,9 @@ def mesh_day_length(
         The longitude.
     angle_horizon_sun : int, optional
         The angle between the sun position and the horizon, in degrees. Default is 0.
+    dask : bool, optional
+        If True, use dask to compute the day length. Default is False.
+        As it is calculated for each timestep and each cell, it can be very memory consuming.
 
     Returns
     -------
@@ -102,10 +105,10 @@ def mesh_day_length(
             cell_time,
             p=angle_horizon_sun,
             chunks=(time_index.size, latitude.size, longitude.size),
-            dtype="float64",
         )
     else:
         data = day_length_forsythe(cell_latitude, cell_time, p=angle_horizon_sun)
+
     attributes = {
         "long_name": "Day length",
         "standard_name": "day_length",

@@ -2,7 +2,7 @@
 
 from dask.distributed import Client
 
-from seapodym_lmtl_python.config import Parameters
+from seapodym_lmtl_python.config.parameters import Parameters
 
 
 def init_client_locally(param: Parameters) -> Client:
@@ -23,6 +23,8 @@ def init_client_locally(param: Parameters) -> Client:
     # NOTE(Jules): So many arguments can be passed to the Client class. This can be setup in the configuration file or
     # with CLI. CLI should override (i.e. max priority) the configuration file.
 
+    return Client()
+
 
 def close_client_locally(client: Client) -> None:
     """
@@ -34,3 +36,4 @@ def close_client_locally(client: Client) -> None:
         The dask client.
 
     """
+    client.close()

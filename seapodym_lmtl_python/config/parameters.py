@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import xarray as xr
 from attrs import Attribute, field, frozen, validators
 
 
@@ -54,13 +55,37 @@ class FunctionParameters:
     )
 
 
-def _path_exists(
-    instance: PathParameters, attribute: Attribute, value: Path  # noqa: ARG001
-) -> None:
-    """Check if the path exists. If not, raise a ValueError."""
-    if not value.exists():
-        message = f"Parameter {attribute.name} : {value} does not exist."
-        raise ValueError(message)
+@frozen(kw_only=True)
+class PathParametersUnit:
+    """This data class is used to store access paths to a forcing field (read with xarray.open_dataset)."""
+
+    forcing_path: Path = field(
+        converter=Path,
+        metadata={"description": "Path to the temperature field."},
+    )
+
+    @forcing_path.validator
+    def _path_exists(self: PathParameters, attribute: Attribute, value: Path) -> None:
+        """Check if the path exists. If not, raise a ValueError."""
+        if not value.exists():
+            message = f"Parameter {attribute.name} : {value} does not exist."
+            raise ValueError(message)
+
+    name: str = field(
+        converter=str,
+    )
+
+    @name.validator
+    def name_isin_forcing(
+        self: PathParametersUnit, attribute: Attribute, value: str
+    ) -> None:
+        """Check if the name exists in the forcing file. If not, raise a ValueError."""
+        if value not in xr.open_dataset(self.forcing_path):
+            message = (
+                f"Parameter {attribute.name} : {value} is not in the forcing file '{self.forcing_path}'."
+                f"\nAccepted values are : {", ".join(list(xr.open_dataset(self.forcing_path)))}"
+            )
+            raise ValueError(message)
 
 
 @frozen(kw_only=True)
@@ -83,14 +108,10 @@ class PathParameters:
 
     """
 
-    temperature: Path = field(
-        converter=Path,
-        validator=[_path_exists],
+    temperature: PathParametersUnit = field(
         metadata={"description": "Path to the temperature field."},
     )
-    primary_production: Path = field(
-        converter=Path,
-        validator=[_path_exists],
+    primary_production: PathParametersUnit = field(
         metadata={"description": "Path to the primary production field."},
     )
 
@@ -100,7 +121,7 @@ class FunctionalGroupUnit:
     """This data class is used to store the parameters of a single functional group."""
 
     name: str = field(
-        metadata={"description": "Describe the behavior of a fonctional group."}
+        metadata={"description": "Describe the behavior of a functional group."}
     )
     day_layer: int = field(
         validator=[validators.gt(0)],
@@ -146,7 +167,7 @@ class Parameters:
     use the new classes.
     """
 
-    fonction_parameters: FunctionParameters = field(
+    function_parameters: FunctionParameters = field(
         metadata={
             "description": "Parameters used in mortality and production functions."
         }

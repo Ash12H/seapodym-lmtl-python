@@ -41,7 +41,7 @@ def haversine_distance(
     hav_theta = (np.sin(dlat / 2) ** 2) + np.cos(min_latitude) * np.cos(
         max_latitude
     ) * np.sin(dlon / 2) ** 2
-    return 2 * EARTH_RADIUS * np.arcsin(np.sqrt(hav_theta))
+    return 2 * EARTH_RADIUS * np.arcsin(np.sqrt(hav_theta))  # pint.meters
 
 
 def cell_borders_length(
@@ -104,9 +104,8 @@ def mesh_cell_area(
         A DataArray containing the cell area for each grid cell.
 
     """
-    cell_y = cell_area(latitude=latitude, resolution=resolution)
-    mesh_cell_area = np.tile(cell_y, (len(longitude), 1)).T
-
+    cell_y = cell_area(latitude=latitude.data, resolution=resolution)
+    mesh_cell_area = np.tile(cell_y, (int(longitude.size), 1)).T
     return xr.DataArray(
         coords={
             "latitude": latitude,
@@ -115,9 +114,8 @@ def mesh_cell_area(
         },
         dims=["latitude", "longitude"],
         attrs={
-            "units": "m**2",
             "long_name": "area of grid cell",
             "standard_name": "cell_area",
         },
         data=mesh_cell_area,
-    )
+    ).pint.dequantify()

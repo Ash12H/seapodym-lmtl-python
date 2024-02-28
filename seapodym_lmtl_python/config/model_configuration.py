@@ -7,29 +7,110 @@ from __future__ import annotations
 
 from typing import Callable
 
+import attrs
 import xarray as xr
 
-from seapodym_lmtl_python.config import Parameters, PathParameters
+from seapodym_lmtl_python.config.parameters import Parameters, PathParameters
 
 
-def _load_forcings(path_parameters: PathParameters) -> xr.Dataset:
+def _load_forcings(path_parameters: PathParameters, **kargs: dict) -> xr.Dataset:
     """Return the forcings as a xarray.Dataset."""
-    pass
+    if kargs is None:
+        kargs = {}
+    primary_production = xr.open_dataset(
+        path_parameters.primary_production.forcing_path,
+        **kargs,
+    )[path_parameters.primary_production.name]
+
+    temperature = xr.open_dataset(
+        path_parameters.temperature.forcing_path,
+        **kargs,
+    )[path_parameters.temperature.name]
+
+    return xr.Dataset(
+        {"primary_production": primary_production, "temperature": temperature}
+    )
 
 
 def _validate_forcings(parameters: Parameters, forcings: xr.Dataset) -> None:
     """Validate the forcings against the parameters."""
-    pass
+    # TODO(Jules): Check that all day/night_layer values are in the depth coordinates
+    return forcings
+
+
+def _build_fgroup_dataset(parameters: Parameters) -> xr.Dataset:
+    """
+    Return the functional groups parameters as a xarray.Dataset.
+    This function is used by the _build_model_configuration function.
+    """
+    # 1. Parse attrs.dataclass
+    grps = parameters.functional_groups_parameters.functional_groups
+    grp_keys = [i.name for i in attrs.fields(type(grps[0]))]
+    grp_values = [list(t) for t in zip(*[attrs.astuple(grp) for grp in grps])]
+    grps_param = dict(zip(grp_keys, grp_values))
+
+    # 2. Generate the coordinates (i.e. functional groups)
+    f_group_coord_data = list(range(len(grps_param["name"])))
+    f_group_coord = xr.DataArray(
+        coords=(f_group_coord_data,),
+        dims=("functional_group",),
+        name="functional_group",
+        attrs={
+            "flag_values": f_group_coord_data,
+            "flag_meanings": " ".join(grps_param["name"]),
+            "standard_name": "functional group",
+        },
+        data=f_group_coord_data,
+    )
+    # 3. Generate all the variables (i.e. parameters)
+    day_position = (
+        ("functional_group",),
+        grps_param["day_layer"],
+        {
+            "description": "Layer in which the functional group is located during the day."
+        },
+    )
+    night_position = (
+        ("functional_group",),
+        grps_param["night_layer"],
+        {
+            "description": "Layer in which the functional group is located during the night."
+        },
+    )
+    functional_group_energy_coefficient = (
+        ("functional_group",),
+        grps_param["energy_coefficient"],
+        {"description": "Energy coefficient of the functional group (named E')."},
+    )
+    # 4. Gather in a ready to merge dataset
+    return xr.Dataset(
+        data_vars={
+            "day_position": day_position,
+            "night_position": night_position,
+            "functional_group_energy_coefficient": functional_group_energy_coefficient,
+        },
+        coords={"functional_group": f_group_coord},
+    )
 
 
 def _build_model_configuration(
     parameters: Parameters, forcings: xr.Dataset
 ) -> xr.Dataset:
     """Return the model configuration as a xarray.Dataset."""
-    pass
+    # 1. Simply add global model parameters
+    data_as_dict = attrs.asdict(parameters.function_parameters)
+    for parameter_unit in attrs.fields(type(parameters.function_parameters)):
+        forcings[parameter_unit.name] = xr.DataArray(
+            data_as_dict[parameter_unit.name], attrs=parameter_unit.metadata
+        )
+    # 2. Add functional groups parameters
+    return xr.merge(
+        (forcings, _build_fgroup_dataset(parameters)),
+        combine_attrs="no_conflicts",
+    )
 
 
-def model_configuration(
+def process(
     param: Parameters,
     optional_validation: None | Callable[[Parameters, xr.Dataset], None] = None,
 ) -> xr.Dataset:
@@ -43,6 +124,8 @@ def model_configuration(
 
     Parameters
     ----------
+    param : Parameters
+        The parameters of the model.
     optional_validation : None | Callable[[Parameters, xr.Dataset], None]
         A function that takes the parameters and the forcings (loaded from PathParameters or childs) as arguments and
         return None. This function is used to run additional tests on the parameters and the forcings.
