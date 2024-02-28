@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import Callable
 
 import attrs
+import cf_xarray  # noqa: F401
 import xarray as xr
 
 from seapodym_lmtl_python.config.parameters import Parameters, PathParameters
@@ -17,19 +18,17 @@ def _load_forcings(path_parameters: PathParameters, **kargs: dict) -> xr.Dataset
     """Return the forcings as a xarray.Dataset."""
     if kargs is None:
         kargs = {}
-    primary_production = xr.open_dataset(
-        path_parameters.primary_production.forcing_path,
-        **kargs,
-    )[path_parameters.primary_production.name]
 
-    temperature = xr.open_dataset(
-        path_parameters.temperature.forcing_path,
-        **kargs,
-    )[path_parameters.temperature.name]
+    all_forcing = {}
 
-    return xr.Dataset(
-        {"primary_production": primary_production, "temperature": temperature}
-    )
+    for forcing_name, forcing_value in attrs.asdict(path_parameters).items():
+        if forcing_value is not None:
+            all_forcing[forcing_name] = xr.open_dataset(
+                forcing_value["forcing_path"],
+                **kargs,
+            )[forcing_value["name"]]
+
+    return xr.Dataset(all_forcing)
 
 
 def _validate_forcings(parameters: Parameters, forcings: xr.Dataset) -> None:
@@ -104,9 +103,16 @@ def _build_model_configuration(
             data_as_dict[parameter_unit.name], attrs=parameter_unit.metadata
         )
     # 2. Add functional groups parameters
-    return xr.merge(
+    results = xr.merge(
         (forcings, _build_fgroup_dataset(parameters)),
         combine_attrs="no_conflicts",
+    )
+    return results.transpose(
+        "functional_group",
+        results.cf["T"].name,
+        results.cf["Y"].name,
+        results.cf["X"].name,
+        results.cf["Z"].name,
     )
 
 

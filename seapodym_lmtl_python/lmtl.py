@@ -4,15 +4,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from seapodym_lmtl_python.config import (
-    close_client_locally,
-    init_client_locally,
-    model_configuration,
-    parse_configuration_file,
+from seapodym_lmtl_python.config import model_configuration
+from seapodym_lmtl_python.config.client import close_client_locally, init_client_locally
+from seapodym_lmtl_python.config.parser import parse_configuration_file
+from seapodym_lmtl_python.config.saving import (
     save_configuration_locally,
     save_outputs_locally,
 )
-from seapodym_lmtl_python.process import biomass, pre_production, production
+from seapodym_lmtl_python.post_production import biomass
+from seapodym_lmtl_python.pre_production import pre_production
+from seapodym_lmtl_python.production import production
 
 
 def run_model(configuration_file_path: Path, **kwargs: dict[str, str]) -> None:
@@ -47,7 +48,7 @@ def run_model(configuration_file_path: Path, **kwargs: dict[str, str]) -> None:
     client = init_client_locally(parameters)
 
     # 3. GENERATE THE CONFIGURATION
-    configuration = model_configuration(parameters)
+    configuration = model_configuration.process(parameters)
 
     # 4. RUN THE PRE-PRODUCTION PROCESS
     configuration = pre_production.process(client, configuration)

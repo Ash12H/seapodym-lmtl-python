@@ -114,6 +114,18 @@ class PathParameters:
     primary_production: PathParametersUnit = field(
         metadata={"description": "Path to the primary production field."},
     )
+    mask: PathParametersUnit | None = field(
+        default=None,
+        metadata={"description": "Path to the mask field."},
+    )
+    day_length: PathParametersUnit | None = field(
+        default=None,
+        metadata={"description": "Path to the day length field."},
+    )
+    cell_area: PathParametersUnit | None = field(
+        default=None,
+        metadata={"description": "Path to the cell area field."},
+    )
 
 
 @frozen(kw_only=True)

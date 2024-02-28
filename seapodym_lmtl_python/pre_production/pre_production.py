@@ -1,30 +1,36 @@
 """All the functions used to generate or modify the forcings."""
 
-from typing import Callable, Iterable
-
 import xarray as xr
 from dask.distributed import Client
+
+from seapodym_lmtl_python.pre_production.core import landmask
 
 # TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
 
 # --- Pre production functions --- #
 
 
-def landmask_by_fgroup(
-    day_layers: Iterable[int], night_layers: Iterable[int], landmask: xr.DataArray
-) -> xr.DataArray:
-    """
-    The `landmask` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
+def compute_global_mask(client: Client, configuration: xr.Dataset) -> xr.DataArray:
+    """Compute the mask using the temperature if it is not already present in the dataset."""
+    if "mask" in configuration:
+        return configuration["mask"]
 
-    `landmask` can be:
-    - temperature
-    - user landmask
+    return client.submit(landmask.landmask_from_nan, configuration["temperature"])
+
+
+# day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray
+def mask_by_fgroup(client: Client, configuration: xr.Dataset) -> xr.DataArray:
+    """
+    The `mask_by_fgroup` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
 
     Output
     ------
-    - landmask  [functional_group, latitude, longitude, layer] -> boolean
+    - mask_by_fgroup  [functional_group, latitude, longitude, layer] -> boolean
     """
-    pass
+    if "mask" in configuration:
+        return configuration
+
+    return client.submit(landmask.landmask_from_nan, configuration["temperature"])
 
 
 def compute_daylength(
@@ -51,7 +57,7 @@ def compute_daylength(
 
 def average_temperature_by_fgroup(
     daylength: xr.DataArray,
-    landmask: xr.DataArray,
+    mask: xr.DataArray,
     day_layer: xr.DataArray,
     night_layer: xr.DataArray,
     temperature: xr.DataArray,
@@ -59,11 +65,11 @@ def average_temperature_by_fgroup(
     """
     Depend on:
     - compute_daylength
-    - landmask_by_fgroup.
+    - mask_by_fgroup.
 
     Input
     -----
-    - landmask_by_fgroup()  [time, latitude, longitude]
+    - mask_by_fgroup()  [time, latitude, longitude]
     - compute_daylength()   [functional_group, latitude, longitude]
     - day/night_layer       [functional_group]
     - temperature           [time, latitude, longitude, layer]
@@ -189,9 +195,7 @@ def compute_mortality_field(
 # --- Wrapper --- #
 
 
-def process(
-    client: Client, configuration: xr.Dataset, kernel: None | list[Callable]
-) -> xr.Dataset:
+def process(client: Client, configuration: xr.Dataset) -> xr.Dataset:
     """
     Wraps all the pre-production functions.
 
@@ -203,33 +207,18 @@ def process(
         The dask client to use.
     configuration : xr.Dataset
         The model configuration that contains both forcing and parameters.
-    kernel : None | list[Callable]
-        The list of pre-production functions to use. If None, the default list is used.
 
     """
-    if kernel is None:
-        kernel = [
-            landmask_by_fgroup,
-            compute_daylength,
-            average_temperature_by_fgroup,
-            apply_coefficient_to_primary_production,
-            min_temperature_by_cohort,
-            mask_temperature_by_cohort_by_functional_group,
-            compute_cell_area,
-            compute_mortality_field,
-        ]
-
-    # ...   TODO(Jules): Apply all pre-production functions using forcing and configuration parameters. The results are
-    # ...   then integrated into the latter.
+    mask = compute_global_mask(client, configuration)
 
     # COPIED FROM LMTL FILE ------------------
 
-    # landmask = client.submit(landmask_by_fgroup, None, None, None)
+    # mask = client.submit(mask_by_fgroup, None, None, None)
     # day_length = client.submit(compute_daylength, None, None, None)
     # avg_temperature = client.submit(
     #     average_temperature_by_fgroup,
     #     day_length,
-    #     landmask,
+    #     mask,
     #     None,
     #     None,
     #     None,
@@ -246,4 +235,8 @@ def process(
     # cell_area = client.submit(compute_cell_area, None, None)
     # mortality = client.submit(compute_mortality_field, avg_temperature, None, None)
 
-    return configuration
+    # configuration["mask"] = mask.result()
+
+    # return configuration
+
+    return mask
