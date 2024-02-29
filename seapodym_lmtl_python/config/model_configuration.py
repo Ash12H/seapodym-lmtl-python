@@ -5,6 +5,7 @@ the forcings (lazily).
 
 from __future__ import annotations
 
+from enum import StrEnum
 from typing import Callable
 
 import attrs
@@ -12,6 +13,15 @@ import cf_xarray  # noqa: F401
 import xarray as xr
 
 from seapodym_lmtl_python.config.parameters import Parameters, PathParameters
+
+
+class ForcingNames(StrEnum):
+    """Standard names for forcing."""
+
+    day_position = "day_position"
+    night_position = "night_position"
+    fgroup_energy_coef = "functional_group_energy_coefficient"
+    fgroup = "functional_group"
 
 
 def _load_forcings(path_parameters: PathParameters, **kargs: dict) -> xr.Dataset:
@@ -52,9 +62,9 @@ def _build_fgroup_dataset(parameters: Parameters) -> xr.Dataset:
     f_group_coord_data = list(range(len(grps_param["name"])))
     f_group_coord = xr.DataArray(
         coords=(f_group_coord_data,),
-        dims=("functional_group",),
-        name="functional_group",
-        attrs={
+        dims=(ForcingNames.fgroup,),
+        name=ForcingNames.fgroup,
+        attrs={  # cf_xarray convention
             "flag_values": f_group_coord_data,
             "flag_meanings": " ".join(grps_param["name"]),
             "standard_name": "functional group",
@@ -63,32 +73,32 @@ def _build_fgroup_dataset(parameters: Parameters) -> xr.Dataset:
     )
     # 3. Generate all the variables (i.e. parameters)
     day_position = (
-        ("functional_group",),
+        (ForcingNames.fgroup,),
         grps_param["day_layer"],
         {
             "description": "Layer in which the functional group is located during the day."
         },
     )
     night_position = (
-        ("functional_group",),
+        (ForcingNames.fgroup,),
         grps_param["night_layer"],
         {
             "description": "Layer in which the functional group is located during the night."
         },
     )
     functional_group_energy_coefficient = (
-        ("functional_group",),
+        (ForcingNames.fgroup,),
         grps_param["energy_coefficient"],
         {"description": "Energy coefficient of the functional group (named E')."},
     )
     # 4. Gather in a ready to merge dataset
     return xr.Dataset(
         data_vars={
-            "day_position": day_position,
-            "night_position": night_position,
-            "functional_group_energy_coefficient": functional_group_energy_coefficient,
+            ForcingNames.day_position: day_position,
+            ForcingNames.night_position: night_position,
+            ForcingNames.fgroup_energy_coef: functional_group_energy_coefficient,
         },
-        coords={"functional_group": f_group_coord},
+        coords={ForcingNames.fgroup: f_group_coord},
     )
 
 
@@ -108,7 +118,7 @@ def _build_model_configuration(
         combine_attrs="no_conflicts",
     )
     return results.transpose(
-        "functional_group",
+        ForcingNames.fgroup,
         results.cf["T"].name,
         results.cf["Y"].name,
         results.cf["X"].name,

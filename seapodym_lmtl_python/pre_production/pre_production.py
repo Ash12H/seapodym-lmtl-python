@@ -1,5 +1,6 @@
 """All the functions used to generate or modify the forcings."""
 
+from typing import Iterable
 import xarray as xr
 from dask.distributed import Client
 
@@ -10,16 +11,9 @@ from seapodym_lmtl_python.pre_production.core import landmask
 # --- Pre production functions --- #
 
 
-def compute_global_mask(client: Client, configuration: xr.Dataset) -> xr.DataArray:
-    """Compute the mask using the temperature if it is not already present in the dataset."""
-    if "mask" in configuration:
-        return configuration["mask"]
-
-    return client.submit(landmask.landmask_from_nan, configuration["temperature"])
-
-
-# day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray
-def mask_by_fgroup(client: Client, configuration: xr.Dataset) -> xr.DataArray:
+def mask_by_fgroup(
+    day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray
+) -> xr.DataArray:
     """
     The `mask_by_fgroup` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
 
@@ -27,10 +21,6 @@ def mask_by_fgroup(client: Client, configuration: xr.Dataset) -> xr.DataArray:
     ------
     - mask_by_fgroup  [functional_group, latitude, longitude, layer] -> boolean
     """
-    if "mask" in configuration:
-        return configuration
-
-    return client.submit(landmask.landmask_from_nan, configuration["temperature"])
 
 
 def compute_daylength(
@@ -190,53 +180,3 @@ def compute_mortality_field(
     - mortality_field [functional_group, time, latitude, longitude]
     """
     pass
-
-
-# --- Wrapper --- #
-
-
-def process(client: Client, configuration: xr.Dataset) -> xr.Dataset:
-    """
-    Wraps all the pre-production functions.
-
-    It generates all the forcings used in the production and post-production processes.
-
-    Parameters
-    ----------
-    client : None | Client
-        The dask client to use.
-    configuration : xr.Dataset
-        The model configuration that contains both forcing and parameters.
-
-    """
-    mask = compute_global_mask(client, configuration)
-
-    # COPIED FROM LMTL FILE ------------------
-
-    # mask = client.submit(mask_by_fgroup, None, None, None)
-    # day_length = client.submit(compute_daylength, None, None, None)
-    # avg_temperature = client.submit(
-    #     average_temperature_by_fgroup,
-    #     day_length,
-    #     mask,
-    #     None,
-    #     None,
-    #     None,
-    # )
-    # pre_production = client.submit(
-    #     apply_coefficient_to_primary_production, None, None, None
-    # )
-    # min_temperature = client.submit(min_temperature_by_cohort, None, None, None)
-    # mask_temperature = client.submit(
-    #     mask_temperature_by_cohort_by_functional_group,
-    #     min_temperature,
-    #     avg_temperature,
-    # )
-    # cell_area = client.submit(compute_cell_area, None, None)
-    # mortality = client.submit(compute_mortality_field, avg_temperature, None, None)
-
-    # configuration["mask"] = mask.result()
-
-    # return configuration
-
-    return mask
