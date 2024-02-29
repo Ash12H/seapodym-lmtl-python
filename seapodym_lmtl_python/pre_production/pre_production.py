@@ -1,6 +1,7 @@
 """All the functions used to generate or modify the forcings."""
 
 from typing import Iterable
+
 import xarray as xr
 from dask.distributed import Client
 
@@ -59,7 +60,7 @@ def average_temperature_by_fgroup(
 
     Input
     -----
-    - mask_by_fgroup()  [time, latitude, longitude]
+    - mask_by_fgroup()      [time, latitude, longitude]
     - compute_daylength()   [functional_group, latitude, longitude]
     - day/night_layer       [functional_group]
     - temperature           [time, latitude, longitude, layer]

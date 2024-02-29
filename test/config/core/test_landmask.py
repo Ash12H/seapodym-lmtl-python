@@ -3,7 +3,7 @@ import pytest
 import xarray as xr
 
 from seapodym_lmtl_python.cf_data import coordinates
-from seapodym_lmtl_python.config.core import landmask
+from seapodym_lmtl_python.pre_production.core import landmask
 
 
 @pytest.fixture()

@@ -28,11 +28,11 @@ class BaseModel(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def parameters(self: BaseModel) -> object:
+    def configuration(self: BaseModel) -> object:
         """The structure that store the model parameters."""
 
-    @abc.abstractmethod
-    def parse(self: BaseModel, configuration_file: str | Path | IO) -> None:
+    @abc.abstractclassmethod
+    def parse(cls: BaseModel, configuration_file: str | Path | IO) -> BaseModel:
         """Parse the configuration file."""
 
     @abc.abstractmethod
