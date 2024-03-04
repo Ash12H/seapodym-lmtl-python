@@ -44,6 +44,10 @@ class NoTransportLabels(StrEnum):
     # Files
     fgroup = "functional_group"  # Equivalent to name
     cohort = "cohort"  # New axis
+    timesteps_number = "timesteps_number"
+    min_timestep = "min_timestep"
+    max_timestep = "max_timestep"
+    mean_timestep = "mean_timestep"
 
 
 class NoTransportConfiguration(BaseConfiguration):
@@ -161,11 +165,13 @@ class NoTransportConfiguration(BaseConfiguration):
             user.
             """
             cohort_index = np.arange(0, len(timesteps_number), 1, dtype=int)
-
             max_timestep = np.cumsum(timesteps_number)
-            min_timestep = np.insert(max_timestep, 0, 0)[:-1]
+            # min_timestep = np.insert(max_timestep, 0, 0)[:-1]
+            min_timestep = max_timestep - (np.asarray(timesteps_number) - 1)
+            mean_timestep = (max_timestep + min_timestep) / 2
+
             data_vars = {
-                "timesteps_number": (
+                NoTransportLabels.timesteps_number: (
                     (NoTransportLabels.fgroup, NoTransportLabels.cohort),
                     [timesteps_number],
                     {
@@ -175,15 +181,20 @@ class NoTransportConfiguration(BaseConfiguration):
                         )
                     },
                 ),
-                "min_timestep": (
+                NoTransportLabels.min_timestep: (
                     (NoTransportLabels.fgroup, NoTransportLabels.cohort),
                     [min_timestep],
                     {"description": "The minimum timestep index."},
                 ),
-                "max_timestep": (
+                NoTransportLabels.max_timestep: (
                     (NoTransportLabels.fgroup, NoTransportLabels.cohort),
                     [max_timestep],
                     {"description": "The maximum timestep index."},
+                ),
+                NoTransportLabels.mean_timestep: (
+                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                    [mean_timestep],
+                    {"description": "The mean timestep index."},
                 ),
             }
 

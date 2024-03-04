@@ -12,13 +12,13 @@ from seapodym_lmtl_python.pre_production.core import landmask
 # --- Pre production functions --- #
 
 
-def mask_by_fgroup(day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray) -> xr.DataArray:
+def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: xr.DataArray) -> xr.DataArray:
     """
     The `mask_by_fgroup` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
 
     Output
     ------
-    - mask_by_fgroup  [functional_group, latitude, longitude, layer] -> boolean
+    - mask_by_fgroup  [functional_group, latitude, longitude] -> boolean
     """
 
 
@@ -90,22 +90,22 @@ def apply_coefficient_to_primary_production(
 
 
 def min_temperature_by_cohort(
-    cohort_coordinates: xr.DataArray,
-    tr_max: float,
-    tr_rate: float,
+    mean_timestep: xr.DataArray,
+    tr_max: xr.DataArray,
+    tr_rate: xr.DataArray,
 ) -> xr.DataArray:
     """
     Define the minimal temperature of a cohort to be recruited.
 
     Input
     -----
-    - cohort_coordinates [cohort_age] (The coordinates)
-    - tr_max float
-    - tr_rate float
+    - mean_timestep [functional_group, cohort_age]
+    - tr_max [functional_group]
+    - tr_rate [functional_group]
 
     Output
     ------
-    - min_temperature_by_cohort {cohort_age: min_temperature} : a datarray with cohort_age as coordinate and
+    - min_temperature_by_cohort [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
     minimum temperature as value.
     """
     pass
@@ -156,7 +156,7 @@ def compute_cell_area(latitude: xr.DataArray, longitude: xr.DataArray):
 
 
 def compute_mortality_field(
-    average_temperature: xr.DataArray, inv_lambda_max: float, inv_lambda_rate: float
+    average_temperature: xr.DataArray, inv_lambda_max: xr.DataArray, inv_lambda_rate: xr.DataArray
 ) -> xr.DataArray:
     """
     Use the relation between temperature and mortality to generate the mortality field.
@@ -168,8 +168,8 @@ def compute_mortality_field(
     Input
     ------
     - average_temperature [functional_group, time, latitude, longitude]
-    - inv_lambda_max float
-    - inv_lambda_rate float
+    - inv_lambda_max [functional_group]
+    - inv_lambda_rate [functional_group]
 
     Output
     ------

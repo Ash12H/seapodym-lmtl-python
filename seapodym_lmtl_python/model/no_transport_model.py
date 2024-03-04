@@ -33,6 +33,9 @@ class ForcingLabels(StrEnum):
     avg_temperature_by_fgroup = "average_temperature_by_fgroup"
     primary_production_by_fgroup = "primary_production_by_fgroup"
     min_temperature_by_cohort = "min_temperature_by_cohort"
+    mask_temperature = "mask_temperature"
+    cell_area = "cell_area"
+    mortality_field = "mortality_field"
     # Parameters
     temperature = "temperature"
     primary_production = "primary_production"
@@ -102,14 +105,12 @@ class NoTransportModel(BaseModel):
                 return self.state[forcing_name]
             return self.client.submit(function, *args, **kargs)
 
-        # 1. Global mask
         mask = apply_if_not_already_computed(
             ForcingLabels.mask_global,
             landmask.landmask_from_nan,
             forcing=self.state[ForcingLabels.temperature],
         )
 
-        # 2. Mask by functional group
         mask_fgroup = apply_if_not_already_computed(
             ForcingLabels.mask_by_fgroup,
             pre_production.mask_by_fgroup,
@@ -118,7 +119,6 @@ class NoTransportModel(BaseModel):
             mask=mask,
         )
 
-        # 3. Mask by functional group
         day_length = apply_if_not_already_computed(
             ForcingLabels.day_length,
             pre_production.compute_daylength,
@@ -127,14 +127,13 @@ class NoTransportModel(BaseModel):
             longitude=self.state.cf["X"],
         )
 
-        # 4. Average temperature by functional group
         avg_tmp = apply_if_not_already_computed(
             ForcingLabels.avg_temperature_by_fgroup,
             pre_production.average_temperature_by_fgroup,
             daylength=day_length,
             mask=mask_fgroup,
-            day_layers=self.state[NoTransportLabels.day_layer],
-            night_layers=self.state[NoTransportLabels.day_layer],
+            day_layer=self.state[NoTransportLabels.day_layer],
+            night_layer=self.state[NoTransportLabels.day_layer],
             temperature=self.state[ForcingLabels.temperature],
         )
 
@@ -145,13 +144,35 @@ class NoTransportModel(BaseModel):
             functional_group_coefficient=self.state[NoTransportLabels.energy_transfert],
         )
 
-        # min_temperature_by_cohort = apply_if_not_already_computed(
-        #     ForcingLabels.min_temperature_by_cohort,
-        #     pre_production.min_temperature_by_cohort,
-        #     cohort_coordinates=self.state[],
-        #     tr_max=self.state[],
-        #     tr_rate=self.state[],
-        # )
+        min_temperature_by_cohort = apply_if_not_already_computed(
+            ForcingLabels.min_temperature_by_cohort,
+            pre_production.min_temperature_by_cohort,
+            mean_timestep=self.state[NoTransportLabels.mean_timestep],
+            tr_max=self.state[NoTransportLabels.temperature_recruitment_max],
+            tr_rate=self.state[NoTransportLabels.temperature_recruitment_rate],
+        )
+
+        mask_temperature = apply_if_not_already_computed(
+            ForcingLabels.mask_temperature,
+            pre_production.mask_temperature_by_cohort_by_functional_group,
+            min_temperature_by_cohort=min_temperature_by_cohort,
+            average_temperature=avg_tmp,
+        )
+
+        cell_area = apply_if_not_already_computed(
+            ForcingLabels.cell_area,
+            pre_production.compute_cell_area,
+            latitude=self.state.cf["Y"],
+            longitude=self.state.cf["X"],
+        )
+
+        mortality_field = apply_if_not_already_computed(
+            ForcingLabels.mortality_field,
+            pre_production.compute_mortality_field,
+            average_temperature=avg_tmp,
+            inv_lambda_max=self.state[NoTransportLabels.inv_lambda_max],
+            inv_lambda_rate=self.state[NoTransportLabels.inv_lambda_rate],
+        )
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
