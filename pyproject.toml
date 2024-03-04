@@ -17,6 +17,7 @@ cf-xarray = "^0.9.0"
 pint = "^0.23"
 xgcm = "^0.8.1"
 pint-xarray = "^0.3"
+zarr = "^2.17.0"
 
 
 [tool.poetry.group.dev.dependencies]

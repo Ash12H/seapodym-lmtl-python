@@ -12,9 +12,7 @@ from seapodym_lmtl_python.pre_production.core import landmask
 # --- Pre production functions --- #
 
 
-def mask_by_fgroup(
-    day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray
-) -> xr.DataArray:
+def mask_by_fgroup(day_layers: Iterable[int], night_layers: Iterable[int], mask: xr.DataArray) -> xr.DataArray:
     """
     The `mask_by_fgroup` has at least 3 dimensions (lat, lon, layer) and is a boolean array.
 
@@ -74,7 +72,6 @@ def average_temperature_by_fgroup(
 
 def apply_coefficient_to_primary_production(
     primary_production: xr.DataArray,
-    global_coefficient: float,
     functional_group_coefficient: xr.DataArray,
 ) -> xr.DataArray:
     """
@@ -88,8 +85,6 @@ def apply_coefficient_to_primary_production(
     Output
     ------
     - primary_production [functional_group, time, latitude, longitude]
-
-    TODO(Jules): Answer the question about the primary_production which is defined in m**3.
     """
     pass
 

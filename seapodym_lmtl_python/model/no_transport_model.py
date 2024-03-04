@@ -10,9 +10,9 @@ from typing import IO, Callable
 import xarray as xr
 from dask.distributed import Client, Future
 
-from seapodym_lmtl_python.config.client import init_client_locally
-from seapodym_lmtl_python.configuration.no_transport_configuration import NoTransportConfiguration, NoTransportLabels
-from seapodym_lmtl_python.configuration.no_transport_parameters import NoTransportParameters
+from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
+from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration, NoTransportLabels
+from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
 from seapodym_lmtl_python.model.base_model import BaseModel
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
@@ -86,7 +86,7 @@ class NoTransportModel(BaseModel):
         return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
 
     def initialize(self: NoTransportModel) -> None:
-        self.client = init_client_locally(self.configuration)
+        self.client = no_transport_client.init_client_locally(self.configuration)
 
     def generate_configuration(self: NoTransportModel) -> None:
         self.state: xr.Dataset = self.configuration.as_dataset()
@@ -113,8 +113,8 @@ class NoTransportModel(BaseModel):
         mask_fgroup = apply_if_not_already_computed(
             ForcingLabels.mask_by_fgroup,
             pre_production.mask_by_fgroup,
-            day_layers=self.state[NoTransportLabels.day_position],
-            night_layers=self.state[NoTransportLabels.night_position],
+            day_layers=self.state[NoTransportLabels.day_layer],
+            night_layers=self.state[NoTransportLabels.night_layer],
             mask=mask,
         )
 
@@ -142,14 +142,12 @@ class NoTransportModel(BaseModel):
             ForcingLabels.primary_production_by_fgroup,
             pre_production.apply_coefficient_to_primary_production,
             primary_production=self.state[ForcingLabels.primary_production],
-            global_coefficient=...,
             functional_group_coefficient=self.state[NoTransportLabels.energy_transfert],
         )
 
         # min_temperature_by_cohort = apply_if_not_already_computed(
         #     ForcingLabels.min_temperature_by_cohort,
         #     pre_production.min_temperature_by_cohort,
-        #     #TODO(Jules): Finish this
         #     cohort_coordinates=self.state[],
         #     tr_max=self.state[],
         #     tr_rate=self.state[],
@@ -166,3 +164,4 @@ class NoTransportModel(BaseModel):
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""
+        no_transport_client.close_client_locally(self.client)

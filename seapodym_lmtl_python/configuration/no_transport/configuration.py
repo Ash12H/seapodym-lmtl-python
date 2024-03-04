@@ -7,14 +7,15 @@ from __future__ import annotations
 
 from enum import StrEnum
 from pathlib import Path
-from typing import IO, Callable
+from typing import IO
 
 import attrs
 import cf_xarray  # noqa: F401
+import numpy as np
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
-from seapodym_lmtl_python.configuration.no_transport_parameters import (
+from seapodym_lmtl_python.configuration.no_transport.parameters import (
     FunctionalGroupUnit,
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
@@ -42,6 +43,7 @@ class NoTransportLabels(StrEnum):
     night_layer = "night_layer"
     # Files
     fgroup = "functional_group"  # Equivalent to name
+    cohort = "cohort"  # New axis
 
 
 class NoTransportConfiguration(BaseConfiguration):
@@ -62,14 +64,14 @@ class NoTransportConfiguration(BaseConfiguration):
         msg = "This method is not implemented yet."
         raise NotImplementedError(msg)
 
-    def _load_forcings(self: NoTransportConfiguration, path_parameters: PathParameters, **kargs: dict) -> xr.Dataset:
+    def _load_forcings(self: NoTransportConfiguration, **kargs: dict) -> xr.Dataset:
         """Return the forcings as a xarray.Dataset."""
         if kargs is None:
             kargs = {}
 
         all_forcing = {}
 
-        for forcing_name, forcing_value in attrs.asdict(path_parameters).items():
+        for forcing_name, forcing_value in attrs.asdict(self.parameters.path_parameters).items():
             if forcing_value is not None:
                 all_forcing[forcing_name] = xr.open_dataset(
                     forcing_value["forcing_path"],
@@ -78,10 +80,7 @@ class NoTransportConfiguration(BaseConfiguration):
 
         return xr.Dataset(all_forcing)
 
-    def _build_fgroup_dataset__generate_param_coords(
-        self: NoTransportConfiguration,
-        parameters: NoTransportParameters,
-    ) -> tuple[dict, xr.DataArray]:
+    def _build_fgroup_dataset__generate_param_coords(self: NoTransportConfiguration) -> tuple[dict, xr.DataArray]:
         """
         Helper method used by _build_fgroup_dataset to generate both the functional groups parameters as dictionary and
         the functional groups coordinates as xarray.DataArray.
@@ -98,7 +97,7 @@ class NoTransportConfiguration(BaseConfiguration):
             return all_param
 
         # 1. Generate a dictionary with all parameters as list
-        grps: list[FunctionalGroupUnit] = parameters.functional_groups_parameters.functional_groups
+        grps: list[FunctionalGroupUnit] = self.parameters.functional_groups_parameters.functional_groups
         grps_param = _rec_parameters([attrs.asdict(grp) for grp in grps])
 
         # 2. Generate the coordinates (i.e. functional groups)
@@ -118,9 +117,7 @@ class NoTransportConfiguration(BaseConfiguration):
         return grps_param, f_group_coord
 
     def _build_fgroup_dataset__generate_variables(
-        self: NoTransportConfiguration,
-        params: dict,
-        classes_and_names: list[tuple[attrs.Attribute, str]],
+        self: NoTransportConfiguration, params: dict, classes_and_names: list[tuple[attrs.Attribute, str]]
     ) -> dict[str, tuple]:
         """
         Generate a dictionary where each key is a variable name and each value is a tuple of parameters. It can be used
@@ -136,12 +133,12 @@ class NoTransportConfiguration(BaseConfiguration):
 
         return {name: _generate_tuple(cls, name) for cls, name in classes_and_names}
 
-    def _build_fgroup_dataset(self: NoTransportConfiguration, parameters: NoTransportParameters) -> xr.Dataset:
+    def _build_fgroup_dataset(self: NoTransportConfiguration) -> xr.Dataset:
         """
         Return the functional groups parameters as a xarray.Dataset.
         This function is used by the _build_model_configuration function.
         """
-        (param_as_dict, f_group_coord) = self._build_fgroup_dataset__generate_param_coords(parameters)
+        (param_as_dict, f_group_coord) = self._build_fgroup_dataset__generate_param_coords()
         names_classes = [
             (FunctionalGroupUnit, NoTransportLabels.fgroup_name),
             (FunctionalGroupUnit, NoTransportLabels.energy_transfert),
@@ -155,11 +152,58 @@ class NoTransportConfiguration(BaseConfiguration):
         param_variables = self._build_fgroup_dataset__generate_variables(param_as_dict, names_classes)
         return xr.Dataset(param_variables, coords={NoTransportLabels.fgroup: f_group_coord})
 
+    def _build_cohort_dataset(self: NoTransportConfiguration, names: xr.DataArray) -> xr.Dataset:
+        """Return the cohort parameters as a xarray.Dataset."""
+
+        def _cohort_by_fgroup(fgroup: int, timesteps_number: list[int]) -> xr.Dataset:
+            """
+            Build the cohort axis for a specific functional group using the `timesteps_number` parameter given by the
+            user.
+            """
+            cohort_index = np.arange(0, len(timesteps_number), 1, dtype=int)
+
+            max_timestep = np.cumsum(timesteps_number)
+            min_timestep = np.insert(max_timestep, 0, 0)[:-1]
+            data_vars = {
+                "timesteps_number": (
+                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                    [timesteps_number],
+                    {
+                        "description": (
+                            "The number of timesteps represented in the cohort. If there is no aggregation, all values are "
+                            "equal to 1."
+                        )
+                    },
+                ),
+                "min_timestep": (
+                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                    [min_timestep],
+                    {"description": "The minimum timestep index."},
+                ),
+                "max_timestep": (
+                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                    [max_timestep],
+                    {"description": "The maximum timestep index."},
+                ),
+            }
+
+            return xr.Dataset(
+                coords={NoTransportLabels.fgroup: fgroup, NoTransportLabels.cohort: cohort_index}, data_vars=data_vars
+            )
+
+        all_fgroups = self.parameters.functional_groups_parameters.functional_groups
+        all_cohorts_timesteps = [fgroup.functional_type.cohorts_timesteps for fgroup in all_fgroups]
+        all_index = [names[NoTransportLabels.fgroup][names == fgroup.name] for fgroup in all_fgroups]
+        return xr.merge(
+            [_cohort_by_fgroup(grp_index, timesteps) for grp_index, timesteps in zip(all_index, all_cohorts_timesteps)]
+        )
+
     # TODO(Jules): Add the validation process
     # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
 
     def as_dataset(self: NoTransportConfiguration) -> xr.Dataset:
         """Return the configuration as a xarray.Dataset."""
-        fgroup = self._build_fgroup_dataset(self.parameters)
-        forcings = self._load_forcings(self.parameters.path_parameters)
-        return xr.merge([fgroup, forcings])
+        fgroup = self._build_fgroup_dataset()
+        forcings = self._load_forcings()
+        cohorts = self._build_cohort_dataset(fgroup[NoTransportLabels.fgroup_name])
+        return xr.merge([fgroup, forcings, cohorts])

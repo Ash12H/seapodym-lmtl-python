@@ -5,8 +5,10 @@ attributes.
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
+import numpy as np
 import xarray as xr
 from attrs import Attribute, field, frozen, validators
 
@@ -40,6 +42,10 @@ class PathParametersUnit:
                 f"\nAccepted values are : {", ".join(list(xr.open_dataset(self.forcing_path)))}"
             )
             raise ValueError(message)
+
+    # TODO(Jules): Check timestep is continuous
+    # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
+    # Return the timestep of the field ?
 
 
 @frozen(kw_only=True)
@@ -81,6 +87,9 @@ class PathParameters:
         metadata={"description": "Path to the cell area field."},
     )
 
+    # TODO(Jules): Check if the timestep is the same for all the fields
+    # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
+
 
 @frozen(kw_only=True)
 class FunctionalGroupUnitRelationParameters:
@@ -115,6 +124,34 @@ class FunctionalGroupUnitRelationParameters:
         converter=float,
         metadata={"description": "Maximum value of the recruitment time (temperature is 0°C).", "units": "day"},
     )
+    cohorts_timesteps: list[int] | None = field(
+        metadata={"description": "The number of timesteps in the cohort. Useful for cohorts aggregation."},
+    )
+
+    @cohorts_timesteps.validator
+    def _cohorts_timesteps_equal_tr_max(
+        self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: list[int]
+    ) -> None:
+        if np.sum(value) != np.ceil(self.temperature_recruitment_max):
+            message = (
+                f"Parameter {attribute.name} : {value} does not sum (= {np.sum(value)}) to the maximum recruitment "
+                f"time {np.ceil(self.temperature_recruitment_max)}."
+            )
+            raise ValueError(message)
+
+    def __attrs_post_init__(self: FunctionalGroupUnitRelationParameters) -> None:
+        """Ensure that the last cohort contains a single timestep."""
+        if self.cohorts_timesteps[-1] != 1:
+            previous = np.copy(self.cohorts_timesteps)
+            new = np.copy(previous)
+            new[-1] = new[-1] - 1
+            new = np.concatenate([new, [1]])
+            object.__setattr__(self, "cohorts_timesteps", new)
+            msg = (
+                "The last cohort timesteps must be equal to 1. It has been modified to follow the standard behavior."
+                f"\nPrevious :{previous}\nNew : {new}"
+            )
+            logging.info(msg)
 
 
 @frozen(kw_only=True)
@@ -167,3 +204,4 @@ class NoTransportParameters:
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
     )
+    # TODO(Jules): Validate timestep is multiple of cohort_timesteps
