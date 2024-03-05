@@ -5,12 +5,13 @@ attributes.
 
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 
 import numpy as np
 import xarray as xr
 from attrs import Attribute, field, frozen, validators
+
+from seapodym_lmtl_python.logging.custom_logger import logger
 
 
 @frozen(kw_only=True)
@@ -151,7 +152,7 @@ class FunctionalGroupUnitRelationParameters:
                 "The last cohort timesteps must be equal to 1. It has been modified to follow the standard behavior."
                 f"\nPrevious :{previous}\nNew : {new}"
             )
-            logging.info(msg)
+            logger.info(msg)
 
 
 @frozen(kw_only=True)

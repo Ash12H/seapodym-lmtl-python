@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from enum import StrEnum
 from pathlib import Path
 from typing import IO, Callable
@@ -13,6 +12,7 @@ from dask.distributed import Client, Future
 from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration, NoTransportLabels
 from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
+from seapodym_lmtl_python.logging.custom_logger import logger
 from seapodym_lmtl_python.model.base_model import BaseModel
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
@@ -79,7 +79,7 @@ class NoTransportModel(BaseModel):
                 f"The model has already a client running at '{self._client.dashboard_link}'."
                 f"\nWe are then closing it and starting the new one at '{client.dashboard_link}'"
             )
-            logging.warning(warning_message)
+            logger.warning(warning_message)
             self._client.close()
             self._client = client
         self._client = client

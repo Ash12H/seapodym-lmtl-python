@@ -36,9 +36,6 @@ def compute_daylength(
     - daylength [time, latitude, longitude]
 
     ---
-
-    TODO(Jules): 2. This forcing can be given by the user. That way, this function isn't called.
-
     Information available in `xarray.cftime_range()` function.
     """
     pass
