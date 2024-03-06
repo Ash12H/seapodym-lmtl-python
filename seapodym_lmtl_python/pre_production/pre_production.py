@@ -182,7 +182,7 @@ def compute_cell_area(
 
 
 def compute_mortality_field(
-    average_temperature: xr.DataArray, inv_lambda_max: xr.DataArray, inv_lambda_rate: xr.DataArray
+    average_temperature: xr.DataArray, inv_lambda_max: xr.DataArray, inv_lambda_rate: xr.DataArray, timestep: float
 ) -> xr.DataArray:
     """
     Use the relation between temperature and mortality to generate the mortality field.
@@ -201,4 +201,4 @@ def compute_mortality_field(
     ------
     - mortality_field [functional_group, time, latitude, longitude]
     """
-    pass
+    return np.exp(-timestep * (np.exp(inv_lambda_rate * average_temperature) / inv_lambda_max))

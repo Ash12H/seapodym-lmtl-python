@@ -173,7 +173,24 @@ class NoTransportModel(BaseModel):
             average_temperature=avg_tmp,
             inv_lambda_max=self.state[NoTransportLabels.inv_lambda_max],
             inv_lambda_rate=self.state[NoTransportLabels.inv_lambda_rate],
+            timestep=self.state[NoTransportLabels.timestep],
         )
+
+        results = self.client.gather(
+            {
+                ForcingLabels.mask_global: mask,
+                ForcingLabels.mask_by_fgroup: mask_fgroup,
+                ForcingLabels.day_length: day_length,
+                ForcingLabels.avg_temperature_by_fgroup: avg_tmp,
+                ForcingLabels.primary_production_by_fgroup: primary_production_by_fgroup,
+                ForcingLabels.min_temperature_by_cohort: min_temperature_by_cohort,
+                ForcingLabels.mask_temperature: mask_temperature,
+                ForcingLabels.cell_area: cell_area,
+                ForcingLabels.mortality_field: mortality_field,
+            }
+        )
+
+        self.state = xr.merge([self.state, results])
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
