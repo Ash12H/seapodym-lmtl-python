@@ -7,11 +7,35 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import cf_xarray  # noqa: F401
 import numpy as np
+import pandas as pd
 import xarray as xr
-from attrs import Attribute, field, frozen, validators
+from attrs import Attribute, field, frozen, validators, asdict
 
 from seapodym_lmtl_python.logging.custom_logger import logger
+
+
+def _check_single_forcing_resolution(latitude: xr.DataArray, longitude: xr.DataArray) -> float | tuple[float, float]:
+    """Helper function used by PathParametersUnit to check the resolution of a single forcing."""
+    lat_resolution = np.asarray(set(np.round(latitude[1:].data - latitude[:-1].data, decimals=5)))
+    lon_resolution = np.asarray(set(np.round(longitude[1:].data - longitude[:-1].data, decimals=5)))
+    if lat_resolution.size > 1 or lon_resolution.size > 1:
+        msg = (
+            "The resolution of the forcing is not constant (rounded to E-5). Its value is set to the mean."
+            "\nLatitude resolution: {lat_res}\nLongitude resolution: {lon_res}"
+        )
+        logger.warning(msg)
+        lat_resolution = np.mean(lat_resolution)
+        lon_resolution = np.mean(lon_resolution)
+    if lat_resolution == lon_resolution:
+        return lat_resolution
+    msg = (
+        f"The resolution of the forcing is not the same for latitude ({lat_resolution}) and "
+        f"longitude ({lon_resolution})."
+    )
+    logger.info(msg)
+    return (lat_resolution, lon_resolution)
 
 
 @frozen(kw_only=True)
@@ -44,9 +68,42 @@ class PathParametersUnit:
             )
             raise ValueError(message)
 
-    # TODO(Jules): Check timestep is continuous
-    # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
-    # Return the timestep of the field ?
+    resolution: float | tuple[float, float] | None = field(
+        default=None,
+        metadata={"description": "Space resolution of the field as (lat, lon) or both if equals."},
+    )
+
+    timestep: int | None = field(
+        default=None,
+        metadata={"description": "Timestep of the field in day(s)."},
+    )
+
+    def __attrs_post_init__(self: PathParametersUnit) -> None:
+        """Compute  and timestep."""
+        data = xr.open_dataset(self.forcing_path)[self.name]
+        # Check space resolution consistency
+        if "X" in data.cf and "Y" in data.cf:
+            resolution = _check_single_forcing_resolution(latitude=data.cf["Y"], longitude=data.cf["X"])
+            if self.resolution is not None and self.resolution != resolution:
+                msg = (
+                    f"The given resolution of the forcing is not the same as the computed one."
+                    f"\nGiven: {self.resolution}, Computed: {resolution}."
+                    f"\nGiven resolution will be used."
+                )
+                logger.warning(msg)
+            else:
+                object.__setattr__(self, "resolution", resolution)
+        # Check time resolution consistency
+        if "T" in data.cf:
+            timedelta = pd.TimedeltaIndex(data.cf.indexes["T"][1:] - data.cf.indexes["T"][:-1]).days.unique()
+            if len(timedelta) != 1:
+                msg = (
+                    f"The time axis is not regular. Differents values of timedelta are found: {timedelta}."
+                    "\nConsider to use the cftime library to handle special calendar."
+                )
+                logger.error(msg)
+                raise ValueError(msg)
+            object.__setattr__(self, "timestep", timedelta[0])
 
 
 @frozen(kw_only=True)
@@ -87,9 +144,6 @@ class PathParameters:
         default=None,
         metadata={"description": "Path to the cell area field."},
     )
-
-    # TODO(Jules): Check if the timestep is the same for all the fields
-    # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
 
 
 @frozen(kw_only=True)
@@ -205,4 +259,38 @@ class NoTransportParameters:
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
     )
-    # TODO(Jules): Validate timestep is multiple of cohort_timesteps
+
+    timestep: int | None = field(
+        default=None,
+        metadata={"description": "Common timestep of the fields in day(s)."},
+    )
+
+    resolution: float | tuple[float, float] | None = field(
+        default=None,
+        metadata={"description": "Common space resolution of the fields as (lat, lon) or both if equals."},
+    )
+
+    # TODO(Jules): Finish this work
+
+    # def __attrs_post_init__(self: NoTransportParameters) -> None:
+    #     timedelta = [
+    #         forcing.timestep
+    #         for forcing in asdict(self.path_parameters).values()
+    #         if forcing is not None and forcing.timestep is not None
+    #     ]
+
+    #     for forcing in ["temperature", "primary_production", "mask", "day_length", "cell_area"]:
+    #         data = getattr(self, forcing)
+
+    #     if len(set(timedelta)) != 1:
+    #         msg = (
+    #             f"The time axis is not regular. Differents values of timedelta are found: {timedelta}."
+    #             "\nCalendars will be interpolated in the rest of the simulation."
+    #         )
+    #         logger.warning(msg)
+    #         object.__setattr__(self, "timestep", min(timedelta))
+    #     else:
+    #         object.__setattr__(self, "timestep", timedelta[0])
+    #     # TODO(Jules): Do the same for space resolution
+
+    # # TODO(Jules): Validate timestep (ie. min_timestep) is multiple of cohort_timesteps

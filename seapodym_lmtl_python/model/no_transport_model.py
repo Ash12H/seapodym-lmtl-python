@@ -164,6 +164,7 @@ class NoTransportModel(BaseModel):
             pre_production.compute_cell_area,
             latitude=self.state.cf["Y"],
             longitude=self.state.cf["X"],
+            resolution=self.state[NoTransportLabels.resolution],
         )
 
         mortality_field = apply_if_not_already_computed(

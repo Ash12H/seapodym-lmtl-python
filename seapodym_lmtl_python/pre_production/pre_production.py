@@ -4,7 +4,7 @@ import numpy as np
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportLabels
-from seapodym_lmtl_python.pre_production.core import day_length
+from seapodym_lmtl_python.pre_production.core import cell_area, day_length
 
 # TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
 
@@ -160,7 +160,9 @@ def mask_temperature_by_cohort_by_functional_group(
     return average_temperature >= min_temperature_by_cohort
 
 
-def compute_cell_area(latitude: xr.DataArray, longitude: xr.DataArray):
+def compute_cell_area(
+    latitude: xr.DataArray, longitude: xr.DataArray, resolution: float | tuple[float, float]
+) -> xr.DataArray:
     """
     Compute the cell area from the latitude and longitude.
 
@@ -168,13 +170,15 @@ def compute_cell_area(latitude: xr.DataArray, longitude: xr.DataArray):
     ------
     - latitude [latitude]
     - longitude [longitude]
-    - (Grid ?)
+    - resolution
 
     Output
     ------
-    - cell_area [latitude, longitude]
+    - cell_area [latitude, longitude]s
     """
-    pass
+    resolution = np.asarray(resolution)
+    resolution = float(resolution) if resolution.size == 1 else tuple(resolution)
+    return cell_area.mesh_cell_area(latitude, longitude, resolution)
 
 
 def compute_mortality_field(

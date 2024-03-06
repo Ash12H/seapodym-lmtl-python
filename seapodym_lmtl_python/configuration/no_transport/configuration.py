@@ -22,6 +22,7 @@ from seapodym_lmtl_python.configuration.no_transport.parameters import (
     NoTransportParameters,
     PathParameters,
 )
+from seapodym_lmtl_python.logging.custom_logger import logger
 
 
 class NoTransportLabels(StrEnum):
@@ -33,6 +34,7 @@ class NoTransportLabels(StrEnum):
     """
 
     # Functional group
+    fgroup = "functional_group"  # Equivalent to name
     fgroup_name = "name"
     energy_transfert = "energy_transfert"
     inv_lambda_max = "inv_lambda_max"
@@ -41,13 +43,14 @@ class NoTransportLabels(StrEnum):
     temperature_recruitment_rate = "temperature_recruitment_rate"
     day_layer = "day_layer"
     night_layer = "night_layer"
-    # Files
-    fgroup = "functional_group"  # Equivalent to name
+    # Cohorts
     cohort = "cohort"  # New axis
     timesteps_number = "timesteps_number"
     min_timestep = "min_timestep"
     max_timestep = "max_timestep"
     mean_timestep = "mean_timestep"
+    timestep = "timestep"
+    resolution = "resolution"
 
 
 class NoTransportConfiguration(BaseConfiguration):
@@ -70,17 +73,22 @@ class NoTransportConfiguration(BaseConfiguration):
 
     def _load_forcings(self: NoTransportConfiguration, **kargs: dict) -> xr.Dataset:
         """Return the forcings as a xarray.Dataset."""
+
         if kargs is None:
             kargs = {}
 
-        all_forcing = {}
+        all_forcing = {
+            NoTransportLabels.timestep: self.parameters.timestep,
+            NoTransportLabels.resolution: self.parameters.resolution,
+        }
 
         for forcing_name, forcing_value in attrs.asdict(self.parameters.path_parameters).items():
             if forcing_value is not None:
-                all_forcing[forcing_name] = xr.open_dataset(
+                data = xr.open_dataset(
                     forcing_value["forcing_path"],
                     **kargs,
                 )[forcing_value["name"]]
+                all_forcing[forcing_name] = data
 
         return xr.Dataset(all_forcing)
 
