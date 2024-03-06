@@ -113,7 +113,7 @@ class FunctionalGroupUnitRelationParameters:
     )
     temperature_recruitment_rate: float = field(
         validator=[
-            validators.gt(0),
+            validators.lt(0),
         ],
         converter=float,
         metadata={"description": "Rate of the recruitment time."},

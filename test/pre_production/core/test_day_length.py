@@ -13,9 +13,7 @@ def simple_forcing() -> xr.DataArray:
     coords_layer = coordinates.new_layer()
     coords_latitude = coordinates.new_latitude([-90, 0, 90])
     coords_longitude = coordinates.new_longitude([-180, 0, 180])
-    coords_time = coordinates.new_time(
-        xr.cftime_range(start="2000-01-01", end="2000-01-02", freq="D")
-    )
+    coords_time = coordinates.new_time(xr.cftime_range(start="2000-01-01", end="2000-01-02", freq="D"))
     return xr.DataArray(
         coords={
             "time": coords_time,
@@ -44,33 +42,27 @@ def tolerance() -> pint.Quantity:
 
 
 class TestDayLength:
-
     def test_day_length_forsythe_p_zero(self, tolerance: pint.Quantity):
         zero_hour = 0 * pint.application_registry.hour
         twelve_hour = 12 * pint.application_registry.hour
         twenty_four_hour = 24 * pint.application_registry.hour
 
+        def wrap_to_hour(x, y, z):
+            return day_length_forsythe(x, y, z) * pint.application_registry.hour
+
         # START YEAR
-        assert np.isclose(day_length_forsythe(0, 0, 0), twelve_hour, atol=tolerance)
-        assert np.isclose(day_length_forsythe(90, 0, 0), zero_hour, atol=tolerance)
-        assert np.isclose(
-            day_length_forsythe(-90, 0, 0), twenty_four_hour, atol=tolerance
-        )
+        assert np.isclose(wrap_to_hour(0, 0, 0), twelve_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(90, 0, 0), zero_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(-90, 0, 0), twenty_four_hour, atol=tolerance)
         # MID YEAR
-        assert np.isclose(day_length_forsythe(0, 180, 0), twelve_hour, atol=tolerance)
-        assert np.isclose(
-            day_length_forsythe(90, 180, 0), twenty_four_hour, atol=tolerance
-        )
-        assert np.isclose(day_length_forsythe(-90, 180, 0), zero_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(0, 180, 0), twelve_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(90, 180, 0), twenty_four_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(-90, 180, 0), zero_hour, atol=tolerance)
         # NO LEAP
-        assert np.isclose(day_length_forsythe(0, 365, 0), twelve_hour, atol=tolerance)
-        assert np.isclose(day_length_forsythe(90, 365, 0), zero_hour, atol=tolerance)
-        assert np.isclose(
-            day_length_forsythe(-90, 365, 0), twenty_four_hour, atol=tolerance
-        )
+        assert np.isclose(wrap_to_hour(0, 365, 0), twelve_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(90, 365, 0), zero_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(-90, 365, 0), twenty_four_hour, atol=tolerance)
         # ALL LEAP
-        assert np.isclose(day_length_forsythe(0, 366, 0), twelve_hour, atol=tolerance)
-        assert np.isclose(day_length_forsythe(90, 366, 0), zero_hour, atol=tolerance)
-        assert np.isclose(
-            day_length_forsythe(-90, 366, 0), twenty_four_hour, atol=tolerance
-        )
+        assert np.isclose(wrap_to_hour(0, 366, 0), twelve_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(90, 366, 0), zero_hour, atol=tolerance)
+        assert np.isclose(wrap_to_hour(-90, 366, 0), twenty_four_hour, atol=tolerance)

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import cf_xarray.units  # noqa: F401
 import numpy as np
 import pint
@@ -11,12 +13,7 @@ import xarray as xr
 EARTH_RADIUS = 6_371_000 * pint.application_registry.meters
 
 
-def haversine_distance(
-    min_latitude: float,
-    max_latitude: float,
-    min_longitude: float,
-    max_longitude: float,
-) -> float:
+def haversine_distance(min_latitude: float, max_latitude: float, min_longitude: float, max_longitude: float) -> float:
     """
     Calculate the great circle distance between two points on the earth (specified in
     decimal degrees).
@@ -38,25 +35,35 @@ def haversine_distance(
     dlon = max_longitude - min_longitude
 
     # # Haversine formula
-    hav_theta = (np.sin(dlat / 2) ** 2) + np.cos(min_latitude) * np.cos(
-        max_latitude
-    ) * np.sin(dlon / 2) ** 2
-    return 2 * EARTH_RADIUS * np.arcsin(np.sqrt(hav_theta))  # pint.meters
+    hav_theta = (np.sin(dlat / 2) ** 2) + np.cos(min_latitude) * np.cos(max_latitude) * np.sin(dlon / 2) ** 2
+    return 2 * EARTH_RADIUS.magnitude * np.arcsin(np.sqrt(hav_theta))  # meters
 
 
-def cell_borders_length(
-    latitude: float,
-    resolution: float,
-) -> tuple[float, float]:
+def cell_borders_length(latitude: float, resolution: float | tuple[float, float]) -> tuple[float, float]:
     """
     Calculate the edge length of a cell (in kilometers) using its centroid latitude
     position and its resolution (in degrees).
+
+    Parameters
+    ----------
+    latitude : float
+        Latitude of the cell centroid.
+    resolution : float or tuple
+        Resolution of the grid in degrees. If a float, the resolution is assumed to be the same for latitude and
+        longitude. If a tuple, the first value is the resolution for latitude and the second value is the resolution for
+        longitude.
+
     """
+    if isinstance(resolution, Iterable):
+        res_lat = resolution[0]
+        res_lon = resolution[1]
+    else:
+        res_lat = res_lon = resolution
     longitude = 0
 
     lat_len = haversine_distance(
-        min_latitude=(latitude - (resolution / 2)),
-        max_latitude=(latitude + (resolution / 2)),
+        min_latitude=(latitude - (res_lat / 2)),
+        max_latitude=(latitude + (res_lat / 2)),
         min_longitude=longitude,
         max_longitude=longitude,
     )
@@ -64,27 +71,32 @@ def cell_borders_length(
         min_latitude=latitude,
         max_latitude=latitude,
         min_longitude=longitude,
-        max_longitude=resolution,
+        max_longitude=res_lon,
     )
     return lat_len, lon_len
 
 
-def cell_area(
-    latitude: float,
-    resolution: float,
-) -> float:
+def cell_area(latitude: float, resolution: float | tuple[float, float]) -> float:
     """
     Return the cell surface area (squared meters) according to its centroid latitude position and resolution (in
     degrees).
+
+    Parameters
+    ----------
+    latitude : float
+        Latitude of the cell centroid.
+    resolution : float or tuple
+        Resolution of the grid in degrees. If a float, the resolution is assumed to be the same for latitude and
+        longitude. If a tuple, the first value is the resolution for latitude and the second value is the resolution for
+        longitude.
+
     """
     lat_len, lon_len = cell_borders_length(latitude, resolution)
     return lat_len * lon_len
 
 
 def mesh_cell_area(
-    latitude: xr.DataArray,
-    longitude: xr.DataArray,
-    resolution: float,
+    latitude: xr.DataArray, longitude: xr.DataArray, resolution: float | tuple[float, float]
 ) -> xr.DataArray:
     """
     Expand the cell_area function to a meshgrid of latitude and longitude.
@@ -95,8 +107,10 @@ def mesh_cell_area(
         Latitude values (float values assume degrees).
     longitude : np.ndarray
         Longitude values (float values assume degrees).
-    resolution : float
-        Resolution of the grid (float values assume degrees).
+    resolution : float or tuple
+        Resolution of the grid in degrees. If a float, the resolution is assumed to be the same for latitude and
+        longitude. If a tuple, the first value is the resolution for latitude and the second value is the resolution for
+        longitude.
 
     Returns
     -------
@@ -116,6 +130,7 @@ def mesh_cell_area(
         attrs={
             "long_name": "area of grid cell",
             "standard_name": "cell_area",
+            "units": "meter**2",
         },
         data=mesh_cell_area,
-    ).pint.dequantify()
+    )

@@ -1,5 +1,6 @@
 """All the functions used to generate or modify the forcings."""
 
+import numpy as np
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportLabels
@@ -60,6 +61,7 @@ def compute_daylength(time: xr.DataArray, latitude: xr.DataArray, longitude: xr.
     return day_length.mesh_day_length(time, latitude, longitude, dask=True)
 
 
+# TODO(Jules): Pourquoi le daylength est-il en coordonnée et non en variable ?
 def average_temperature_by_fgroup(
     daylength: xr.DataArray,
     mask: xr.DataArray,
@@ -110,7 +112,7 @@ def apply_coefficient_to_primary_production(
     ------
     - primary_production [functional_group, time, latitude, longitude]
     """
-    pass
+    return xr.concat((i * primary_production for i in functional_group_coefficient), dim=NoTransportLabels.fgroup)
 
 
 def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray, tr_rate: xr.DataArray) -> xr.DataArray:
@@ -128,7 +130,7 @@ def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray,
     - min_temperature_by_cohort [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
     minimum temperature as value.
     """
-    pass
+    return np.log(mean_timestep / tr_max) / tr_rate
 
 
 def mask_temperature_by_cohort_by_functional_group(
@@ -155,7 +157,7 @@ def mask_temperature_by_cohort_by_functional_group(
     layer. We therefore have a function with a high cost in terms of computation and memory space.
 
     """
-    pass
+    return average_temperature >= min_temperature_by_cohort
 
 
 def compute_cell_area(latitude: xr.DataArray, longitude: xr.DataArray):
