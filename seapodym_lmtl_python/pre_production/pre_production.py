@@ -1,11 +1,9 @@
 """All the functions used to generate or modify the forcings."""
 
-from typing import Iterable
-
 import xarray as xr
-from dask.distributed import Client
 
-from seapodym_lmtl_python.pre_production.core import landmask
+from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportLabels
+from seapodym_lmtl_python.pre_production.core import day_length
 
 # TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
 
@@ -20,16 +18,37 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
     ------
     - mask_by_fgroup  [functional_group, latitude, longitude] -> boolean
     """
+    masks = []
+    for i in day_layers[NoTransportLabels.fgroup]:
+        day_pos = day_layers.sel(functional_group=i)
+        night_pos = night_layers.sel(functional_group=i)
+
+        day_mask = mask.cf.sel(Z=day_pos)
+        night_mask = mask.cf.sel(Z=night_pos)
+        masks.append(day_mask & night_mask)
+
+    return xr.DataArray(
+        coords={
+            NoTransportLabels.fgroup: day_layers[NoTransportLabels.fgroup],
+            mask.cf["Y"].name: mask.cf["Y"],
+            mask.cf["X"].name: mask.cf["X"],
+        },
+        dims=(NoTransportLabels.fgroup, mask.cf["Y"].name, mask.cf["X"].name),
+        data=masks,
+        attrs={
+            "long_name": "mask",
+            "flag_values": [0, 1],
+            "flag_meanings": {0: "land", 1: "ocean"},
+        },
+    )
 
 
-def compute_daylength(
-    time: xr.DataArray,
-    latitude: xr.DataArray,
-    longitude: xr.DataArray,
-) -> xr.DataArray:
+def compute_daylength(time: xr.DataArray, latitude: xr.DataArray, longitude: xr.DataArray) -> xr.DataArray:
     """
-    Use the grid and the time to generate the daylength. Should have a look to a the C++ model -> a python lib is
-    available.
+    Use the grid and the time to generate the daylength.
+
+    Should have a look to https://stackoverflow.com/questions/38986527/sunrise-and-sunset-time-in-python. Some libraries
+    exist that do the job.
 
     Output
     ------
@@ -38,7 +57,7 @@ def compute_daylength(
     ---
     Information available in `xarray.cftime_range()` function.
     """
-    pass
+    return day_length.mesh_day_length(time, latitude, longitude, dask=True)
 
 
 def average_temperature_by_fgroup(
@@ -64,12 +83,20 @@ def average_temperature_by_fgroup(
     ------
     - avg_temperature [functional_group, time, latitude, longitude]
     """
-    pass
+    average_temperature = []
+    for fgroup in day_layer[NoTransportLabels.fgroup]:
+        day_temperature = temperature.cf.sel(Z=day_layer.sel({NoTransportLabels.fgroup: fgroup}))
+        night_temperature = temperature.cf.sel(Z=night_layer.sel({NoTransportLabels.fgroup: fgroup}))
+        mean_temperature = ((daylength * day_temperature) + ((24 - daylength) * night_temperature)) / 24
+        if "Z" in mean_temperature.cf:
+            mean_temperature = mean_temperature.cf.drop_vars("Z")
+        mean_temperature = mean_temperature.where(mask.sel({NoTransportLabels.fgroup: fgroup}))
+        average_temperature.append(mean_temperature)
+    return xr.concat(average_temperature, dim=NoTransportLabels.fgroup)
 
 
 def apply_coefficient_to_primary_production(
-    primary_production: xr.DataArray,
-    functional_group_coefficient: xr.DataArray,
+    primary_production: xr.DataArray, functional_group_coefficient: xr.DataArray
 ) -> xr.DataArray:
     """
     It is equivalent to generate the fisrt cohort of pre-production.
@@ -86,11 +113,7 @@ def apply_coefficient_to_primary_production(
     pass
 
 
-def min_temperature_by_cohort(
-    mean_timestep: xr.DataArray,
-    tr_max: xr.DataArray,
-    tr_rate: xr.DataArray,
-) -> xr.DataArray:
+def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray, tr_rate: xr.DataArray) -> xr.DataArray:
     """
     Define the minimal temperature of a cohort to be recruited.
 

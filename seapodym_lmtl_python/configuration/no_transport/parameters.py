@@ -152,7 +152,7 @@ class FunctionalGroupUnitRelationParameters:
                 "The last cohort timesteps must be equal to 1. It has been modified to follow the standard behavior."
                 f"\nPrevious :{previous}\nNew : {new}"
             )
-            logger.info(msg)
+            logger.warning(msg)
 
 
 @frozen(kw_only=True)

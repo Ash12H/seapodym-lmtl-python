@@ -33,7 +33,7 @@ class CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-logger = logging.getLogger()  # Root logger
+logger = logging.getLogger("Seapodym")  # Root logger
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(CustomFormatter(fmt="%(asctime)s :: %(name)s ::  %(levelname)s ::%(message)s\n"))
 logger.addHandler(console_handler)
@@ -49,6 +49,3 @@ def set_debug() -> None:
 
 def set_default() -> None:
     logger.setLevel(logging.WARNING)
-
-
-set_default()

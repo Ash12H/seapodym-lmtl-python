@@ -10,7 +10,7 @@ def landmask_from_nan(forcing: xr.DataArray) -> xr.DataArray:
     mask.attrs = {
         "long_name": "mask",
         "flag_values": [0, 1],
-        "flag_meanings": "0: land, 1: ocean",
+        "flag_meanings": {0: "land", 1: "ocean"},
     }
     return mask
 

@@ -5,13 +5,10 @@ from __future__ import annotations
 import dask.array as da
 import numpy as np
 import pandas as pd
-import pint
 import xarray as xr
 
 
-def day_length_forsythe(
-    latitude: float, day_of_the_year: int, p: int = 0
-) -> pint.Quantity:
+def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> float:
     """
     Compute the day length for a given latitude, day of the year and twilight angle.
 
@@ -24,14 +21,12 @@ def day_length_forsythe(
 
     Returns
     -------
-    pint.Quantity
+    float
         The day length in hours.
 
     """
     # revolution angle for the day of the year
-    theta = 0.2163108 + 2 * np.arctan(
-        0.9671396 * np.tan(0.00860 * (day_of_the_year - 186))
-    )
+    theta = 0.2163108 + 2 * np.arctan(0.9671396 * np.tan(0.00860 * (day_of_the_year - 186)))
     # sun's declination angle, or the angular distance at solar noon between the
     # Sun and the equator, from the Eartch orbit revolution angle
     phi = np.arcsin(0.39795 * np.cos(theta))
@@ -42,7 +37,7 @@ def day_length_forsythe(
 
     arg = np.clip(arg, -1.0, 1.0)
 
-    return (24.0 - (24.0 / np.pi) * np.arccos(arg)) * pint.application_registry.hour
+    return 24.0 - (24.0 / np.pi) * np.arccos(arg)
 
 
 def mesh_day_length(
@@ -91,12 +86,8 @@ def mesh_day_length(
         error_message = "time must be a xr.CFTimeIndex or a pd.DatetimeIndex"
         raise TypeError(error_message)
 
-    cell_latitude = np.tile(latitude, (time_index.size, longitude.size, 1)).transpose(
-        0, 2, 1
-    )
-    cell_time = np.tile(day_of_year, (latitude.size, longitude.size, 1)).transpose(
-        2, 0, 1
-    )
+    cell_latitude = np.tile(latitude, (time_index.size, longitude.size, 1)).transpose(0, 2, 1)
+    cell_time = np.tile(day_of_year, (latitude.size, longitude.size, 1)).transpose(2, 0, 1)
 
     if dask:
         data = da.map_blocks(
@@ -113,6 +104,7 @@ def mesh_day_length(
         "long_name": "Day length",
         "standard_name": "day_length",
         "description": f"Day length at the surface using Forsythe's method with p={angle_horizon_sun}",
+        "units": "hour",
     }
     return xr.DataArray(
         coords={
@@ -125,4 +117,4 @@ def mesh_day_length(
         data=data,
         name="day_length",
         attrs=attributes,
-    ).pint.dequantify()
+    )
