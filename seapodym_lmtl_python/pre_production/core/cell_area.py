@@ -124,7 +124,6 @@ def mesh_cell_area(
         coords={
             "latitude": latitude,
             "longitude": longitude,
-            "cell_area": (("latitude", "longitude"), mesh_cell_area),
         },
         dims=["latitude", "longitude"],
         attrs={

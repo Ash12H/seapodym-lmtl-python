@@ -176,14 +176,15 @@ class NoTransportModel(BaseModel):
             timestep=self.state[NoTransportLabels.timestep],
         )
 
+        # NOTE(Jules): Some forcing are not used in the production-process so we do not keep them in memory.
         results = self.client.gather(
             {
-                ForcingLabels.mask_global: mask,
+                # ForcingLabels.mask_global: mask,
                 ForcingLabels.mask_by_fgroup: mask_fgroup,
-                ForcingLabels.day_length: day_length,
-                ForcingLabels.avg_temperature_by_fgroup: avg_tmp,
+                # ForcingLabels.day_length: day_length,
+                # ForcingLabels.avg_temperature_by_fgroup: avg_tmp,
                 ForcingLabels.primary_production_by_fgroup: primary_production_by_fgroup,
-                ForcingLabels.min_temperature_by_cohort: min_temperature_by_cohort,
+                # ForcingLabels.min_temperature_by_cohort: min_temperature_by_cohort,
                 ForcingLabels.mask_temperature: mask_temperature,
                 ForcingLabels.cell_area: cell_area,
                 ForcingLabels.mortality_field: mortality_field,

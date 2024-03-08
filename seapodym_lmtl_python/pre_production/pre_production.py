@@ -36,10 +36,11 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
         },
         dims=(NoTransportLabels.fgroup, mask.cf["Y"].name, mask.cf["X"].name),
         data=masks,
+        # TODO(Jules): Inherite from mask ?
         attrs={
             "long_name": "mask",
             "flag_values": [0, 1],
-            "flag_meanings": {0: "land", 1: "ocean"},
+            "flag_meanings": "0:land, 1:ocean",
         },
     )
 

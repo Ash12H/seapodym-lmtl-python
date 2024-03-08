@@ -107,12 +107,7 @@ def mesh_day_length(
         "units": "hour",
     }
     return xr.DataArray(
-        coords={
-            "time": time,
-            "latitude": latitude,
-            "longitude": longitude,
-            "day_length": (("time", "latitude", "longitude"), data, attributes),
-        },
+        coords={"time": time, "latitude": latitude, "longitude": longitude},
         dims=["time", "latitude", "longitude"],
         data=data,
         name="day_length",
