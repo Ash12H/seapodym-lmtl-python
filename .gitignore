@@ -1,0 +1,8 @@
+.venv
+
+# Cache
+.ruff_cache
+__pycache__
+
+notebooks/*Temporary*/*.ipynb
+.DS_Store
