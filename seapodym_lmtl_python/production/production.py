@@ -143,7 +143,7 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: bool 
         The output dataset.
 
     """
-    data.cf.transpose("functional_group", "T", "Y", "X", "Z", "cohort")
+    data = data.cf.transpose(ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort)
     results_recruited = []
     if export_preproduction:
         results_preproduction = []
@@ -152,14 +152,14 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: bool 
         logger.info(f"Computing production for Cohort {int(fgroup)}")
         fgroup_data = data.sel({ConfigurationLabels.fgroup: fgroup}).dropna(ConfigurationLabels.cohort)
 
-        param = {
-            "primary_production": np.nan_to_num(fgroup_data[PreproductionLabels.primary_production].data, 0.0),
-            "cohorts": fgroup_data[ConfigurationLabels.cohort].data,
-            "mask_temperature": np.nan_to_num(fgroup_data[PreproductionLabels.mask_temperature].data, False),
-            "timestep_number": fgroup_data[ConfigurationLabels.timesteps_number].data,
-            "export_preproduction": export_preproduction,
-        }
-        output_recruited, output_preproduction = time_loop(**param)
+        output_recruited, output_preproduction = time_loop(
+            primary_production=np.nan_to_num(fgroup_data[PreproductionLabels.primary_production].data, 0.0),
+            cohorts=fgroup_data[ConfigurationLabels.cohort].data,
+            mask_temperature=np.nan_to_num(fgroup_data[PreproductionLabels.mask_temperature].data, False),
+            timestep_number=fgroup_data[ConfigurationLabels.timesteps_number].data,
+            export_preproduction=export_preproduction,
+        )
+
         if export_preproduction:
             results_preproduction.append(
                 xr.DataArray(
