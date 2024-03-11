@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from enum import StrEnum
 from pathlib import Path
 from typing import IO, Callable
 
@@ -10,36 +9,14 @@ import xarray as xr
 from dask.distributed import Client, Future
 
 from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
-from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration, NoTransportLabels
+from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
+from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels, PreproductionLabels
 from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
 from seapodym_lmtl_python.logging.custom_logger import logger
 from seapodym_lmtl_python.model.base_model import BaseModel
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
-
-
-class ForcingLabels(StrEnum):
-    """
-    A single place to store all labels as :
-    - used in the NoTransportModel class
-    - declared in no_transport_parameters
-    module.
-    """
-
-    # Forcing
-    mask_global = "mask"
-    mask_by_fgroup = "mask_fgroup"
-    day_length = "day_length"
-    avg_temperature_by_fgroup = "average_temperature_by_fgroup"
-    primary_production_by_fgroup = "primary_production_by_fgroup"
-    min_temperature_by_cohort = "min_temperature_by_cohort"
-    mask_temperature = "mask_temperature"
-    cell_area = "cell_area"
-    mortality_field = "mortality_field"
-    # Parameters
-    temperature = "temperature"
-    primary_production = "primary_production"
-    energy_transfert = "energy_transfert"
+from seapodym_lmtl_python.production.production import compute_production
 
 
 class NoTransportModel(BaseModel):
@@ -106,21 +83,21 @@ class NoTransportModel(BaseModel):
             return self.client.submit(function, *args, **kargs)
 
         mask = apply_if_not_already_computed(
-            ForcingLabels.mask_global,
+            PreproductionLabels.mask_global,
             landmask.landmask_from_nan,
-            forcing=self.state[ForcingLabels.temperature],
+            forcing=self.state[PreproductionLabels.temperature],
         )
 
         mask_fgroup = apply_if_not_already_computed(
-            ForcingLabels.mask_by_fgroup,
+            PreproductionLabels.mask_by_fgroup,
             pre_production.mask_by_fgroup,
-            day_layers=self.state[NoTransportLabels.day_layer],
-            night_layers=self.state[NoTransportLabels.night_layer],
+            day_layers=self.state[ConfigurationLabels.day_layer],
+            night_layers=self.state[ConfigurationLabels.night_layer],
             mask=mask,
         )
 
         day_length = apply_if_not_already_computed(
-            ForcingLabels.day_length,
+            PreproductionLabels.day_length,
             pre_production.compute_daylength,
             time=self.state.cf["T"],
             latitude=self.state.cf["Y"],
@@ -128,66 +105,66 @@ class NoTransportModel(BaseModel):
         )
 
         avg_tmp = apply_if_not_already_computed(
-            ForcingLabels.avg_temperature_by_fgroup,
+            PreproductionLabels.avg_temperature_by_fgroup,
             pre_production.average_temperature_by_fgroup,
             daylength=day_length,
             mask=mask_fgroup,
-            day_layer=self.state[NoTransportLabels.day_layer],
-            night_layer=self.state[NoTransportLabels.day_layer],
-            temperature=self.state[ForcingLabels.temperature],
+            day_layer=self.state[ConfigurationLabels.day_layer],
+            night_layer=self.state[ConfigurationLabels.day_layer],
+            temperature=self.state[PreproductionLabels.temperature],
         )
 
         primary_production_by_fgroup = apply_if_not_already_computed(
-            ForcingLabels.primary_production_by_fgroup,
+            PreproductionLabels.primary_production_by_fgroup,
             pre_production.apply_coefficient_to_primary_production,
-            primary_production=self.state[ForcingLabels.primary_production],
-            functional_group_coefficient=self.state[NoTransportLabels.energy_transfert],
+            primary_production=self.state[PreproductionLabels.primary_production],
+            functional_group_coefficient=self.state[ConfigurationLabels.energy_transfert],
         )
 
         min_temperature_by_cohort = apply_if_not_already_computed(
-            ForcingLabels.min_temperature_by_cohort,
+            PreproductionLabels.min_temperature_by_cohort,
             pre_production.min_temperature_by_cohort,
-            mean_timestep=self.state[NoTransportLabels.mean_timestep],
-            tr_max=self.state[NoTransportLabels.temperature_recruitment_max],
-            tr_rate=self.state[NoTransportLabels.temperature_recruitment_rate],
+            mean_timestep=self.state[ConfigurationLabels.mean_timestep],
+            tr_max=self.state[ConfigurationLabels.temperature_recruitment_max],
+            tr_rate=self.state[ConfigurationLabels.temperature_recruitment_rate],
         )
 
         mask_temperature = apply_if_not_already_computed(
-            ForcingLabels.mask_temperature,
+            PreproductionLabels.mask_temperature,
             pre_production.mask_temperature_by_cohort_by_functional_group,
             min_temperature_by_cohort=min_temperature_by_cohort,
             average_temperature=avg_tmp,
         )
 
         cell_area = apply_if_not_already_computed(
-            ForcingLabels.cell_area,
+            PreproductionLabels.cell_area,
             pre_production.compute_cell_area,
             latitude=self.state.cf["Y"],
             longitude=self.state.cf["X"],
-            resolution=self.state[NoTransportLabels.resolution],
+            resolution=self.state[ConfigurationLabels.resolution],
         )
 
         mortality_field = apply_if_not_already_computed(
-            ForcingLabels.mortality_field,
+            PreproductionLabels.mortality_field,
             pre_production.compute_mortality_field,
             average_temperature=avg_tmp,
-            inv_lambda_max=self.state[NoTransportLabels.inv_lambda_max],
-            inv_lambda_rate=self.state[NoTransportLabels.inv_lambda_rate],
-            timestep=self.state[NoTransportLabels.timestep],
+            inv_lambda_max=self.state[ConfigurationLabels.inv_lambda_max],
+            inv_lambda_rate=self.state[ConfigurationLabels.inv_lambda_rate],
+            timestep=self.state[ConfigurationLabels.timestep],
         )
 
         # NOTE(Jules): Some forcing are not used in the production-process so we do not keep them in memory.
         results = self.client.gather(
             {
-                # ForcingLabels.mask_global: mask,
-                ForcingLabels.mask_by_fgroup: mask_fgroup,
-                # ForcingLabels.day_length: day_length,
-                # ForcingLabels.avg_temperature_by_fgroup: avg_tmp,
-                ForcingLabels.primary_production_by_fgroup: primary_production_by_fgroup,
-                # ForcingLabels.min_temperature_by_cohort: min_temperature_by_cohort,
-                ForcingLabels.mask_temperature: mask_temperature,
-                ForcingLabels.cell_area: cell_area,
-                ForcingLabels.mortality_field: mortality_field,
+                # PreproductionLabels.mask_global: mask,
+                PreproductionLabels.mask_by_fgroup: mask_fgroup,
+                # PreproductionLabels.day_length: day_length,
+                # PreproductionLabels.avg_temperature_by_fgroup: avg_tmp,
+                PreproductionLabels.primary_production_by_fgroup: primary_production_by_fgroup,
+                # PreproductionLabels.min_temperature_by_cohort: min_temperature_by_cohort,
+                PreproductionLabels.mask_temperature: mask_temperature,
+                PreproductionLabels.cell_area: cell_area,
+                PreproductionLabels.mortality_field: mortality_field,
             }
         )
 
@@ -195,6 +172,15 @@ class NoTransportModel(BaseModel):
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
+        # TODO(Jules): Manage chunk and export_preproduction parameters. Fixed for now:
+        chunk = {ConfigurationLabels.fgroup: 1}
+        export_preproduction = False
+
+        self.state = compute_production(
+            data=self.state,
+            chunk=chunk,
+            export_preproduction=export_preproduction,
+        )
 
     def post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""

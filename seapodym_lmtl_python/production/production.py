@@ -2,103 +2,38 @@
 
 from __future__ import annotations
 
-from typing import Callable
+from typing import Literal
 
+import numpy as np
 import xarray as xr
-from dask.distributed import Client
+from numba import jit
 
-
-def recruitment(pre_production: xr.DataArray, recruitment_mask: xr.DataArray) -> tuple[xr.DataArray, xr.DataArray]:
-    """
-    Define which part of the pre-production is recruited and return both recuitment and the remaining
-    pre-production.
-
-    Input
-    -----
-    - pre_production [functional_group, time{select(timestep)}, latitude, longitude, cohort_age]
-    - recruitment_mask [functional_group, time{select(timestep)}latitude, longitude, cohort_age] :
-        coming from the `mask_temperature_by_cohort_by_functional_group()` function.
-
-    Output
-    ------
-    - recruitment [functional_group, time{select(timestep)}, latitude, longitude, cohort_age]
-
-    """
-
-
-def remove_recruited(pre_production: xr.DataArray, recruitment_mask: xr.DataArray) -> xr.DataArray:
-    """
-    Remove the recruited part of the pre-production.
-
-    Input
-    -----
-    - pre_production [functional_group, time{select(timestep)}, latitude, longitude, cohort_age]
-    - recruitment_mask [functional_group, time{select(timestep)}, latitude, longitude, cohort_age] :
-        coming from the `mask_temperature_by_cohort_by_functional_group()` function.
-
-    Output
-    ------
-    - remaining_pre_production [functional_group, time{select(timestep)}, latitude, longitude, cohort_age]
-
-    """
-
-
-def next_preproduction(
-    next_preproduction: xr.DataArray,
-    current_unrecruited_preproduction: xr.DataArray,
-    max_age: int,
-) -> xr.DataArray:
-    """
-    Return the next pre-production dataarray.
-
-    Input
-    -----
-    - next_preproduction [functional_group, time{select(next(timestep))}, latitude, longitude, cohort_age]
-    - current_unrecruited_preproduction [functional_group, time{select(timestep)}, latitude, longitude, cohort_age]:
-        coming from the `recruitment()` function as remaining_pre_production.
-
-    Output
-    ------
-    - next_preproduction [functional_group, time{select(next(timestep))}, latitude, longitude, cohort_age]
-
-    """
-
-
-# --- Wrapper --- #
-
-
-def process(configuration: xr.Dataset, kernel: None | list[Callable]) -> xr.Dataset:
-    """
-    Wraps all the production functions.
-
-    Parameters
-    ----------
-    configuration : xr.Dataset
-        The model configuration that contains both forcing and parameters.
-    kernel : None | list[Callable]
-        The list of production functions to use. If None, the default list is used.
-
-    """
-    if kernel is None:
-        kernel = [recruitment, remove_recruited, next_preproduction]
-
-    # Run the production process
-    # ...   def loop_function():
-    # ...       for timestep in dataset.time :
-    # ...           Apply all functions to timestep
-    # ...
-    # ...   xarray.dataset.chunk()
-    # ...   xarray.dataset.map_block(loop_function)
-
-    return configuration
-
-
-# NOTE(Jules): Draft
+from seapodym_lmtl_python.configuration.no_transport.labels import (
+    ConfigurationLabels,
+    PreproductionLabels,
+    ProductionLabels,
+)
+from seapodym_lmtl_python.logging.custom_logger import logger
 
 
 @jit
 def expand_dims(data: np.ndarray, dim_len: int) -> np.ndarray:
-    """Add a new dimension to the DataArray and fill it with O."""
+    """
+    Add a new dimension to the DataArray and fill it with O.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        The data to expand.
+    dim_len : int
+        The length of the new dimension.
+
+    Returns
+    -------
+    expanded_data : np.ndarray
+        The expanded data.
+
+    """
     expanded_data = np.full((*data.shape, dim_len), 0)
     expanded_data[..., 0] = data
     return expanded_data
@@ -106,6 +41,23 @@ def expand_dims(data: np.ndarray, dim_len: int) -> np.ndarray:
 
 @jit
 def ageing(production: np.ndarray, nb_timestep_by_cohort: np.ndarray) -> np.ndarray:
+    """
+    Age the production by rolling over part of it to the next age. The proportion of production moved to the next age
+    cohort is defined by the inverse of the number of time steps per cohort.
+
+    Parameters
+    ----------
+    production : np.ndarray
+        The production to age.
+    nb_timestep_by_cohort : np.ndarray
+        The number of timestep by cohort.
+
+    Returns
+    -------
+    aged_production : np.ndarray
+        The aged production.
+
+    """
     coefficient_except_last = 1.0 / nb_timestep_by_cohort[:-1]
     production_except_last = production[..., :-1]
     first_as_zero = np.zeros((*production.shape[:-1], 1))
@@ -115,23 +67,51 @@ def ageing(production: np.ndarray, nb_timestep_by_cohort: np.ndarray) -> np.ndar
     return growing + staying
 
 
-# @jit(nopython=False, forceobj=True)
 @jit
 def time_loop(
-    primary_production: np.ndarray, cohorts: np.ndarray, mask_temperature: np.ndarray, timestep_number: np.ndarray
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    primary_production: np.ndarray,
+    cohorts: np.ndarray,
+    mask_temperature: np.ndarray,
+    timestep_number: np.ndarray,
+    *,
+    export_preproduction: bool = False,
+) -> tuple[np.ndarray, np.ndarray | None]:
     """
-    The process done during one timestep.
+    The processes done during the time range.
+
+    Parameters
+    ----------
+    primary_production : np.ndarray
+        The primary production.
+    cohorts : np.ndarray
+        The cohorts.
+    mask_temperature : np.ndarray
+        The temperature mask.
+    timestep_number : np.ndarray
+        The number of timestep.
+    export_preproduction : bool
+        If True, the pre-production is included in the output.
+
+    Returns
+    -------
+    output_recruited : np.ndarray
+        The recruited production.
+    output_preproduction : np.ndarray
+        The pre-production if `export_preproduction` is True, None otherwise.
+
 
     Warning:
     -------
     - Be sure to transform nan values into 0.
+    - The dimensions of the input arrays must be [Functional groups, Time, Latitude, Longitude, Depth, Cohort].
 
     """
-    next_prepoduction = np.zeros(mask_temperature.shape[1:])  # not time
-    output_recruited = np.empty(mask_temperature.shape)  # init my output
-    output_preproduction = np.empty(mask_temperature.shape)  # init my output
-    output_not_recruited = np.empty(mask_temperature.shape)  # init my output
+    # INIT OUTPUTS
+    output_recruited = np.empty(mask_temperature.shape)
+    if export_preproduction:
+        output_preproduction = np.empty(mask_temperature.shape)
+    # MAIN COMPUTATION
+    next_prepoduction = np.zeros(mask_temperature.shape[1:])  # without time dimension
     for timestep in range(primary_production.shape[0]):
         pre_production = expand_dims(primary_production[timestep], cohorts.size)
         pre_production = pre_production + next_prepoduction
@@ -139,59 +119,107 @@ def time_loop(
             not_recruited = np.where(~mask_temperature[timestep], pre_production, 0)
             next_prepoduction = ageing(not_recruited, timestep_number)
         recruited = np.where(mask_temperature[timestep], pre_production, 0)
+        # UPDATE OUTPUTS
         output_recruited[timestep] = recruited
-        output_not_recruited[timestep] = not_recruited
-        output_preproduction[timestep] = pre_production
-    return (output_recruited, output_not_recruited, output_preproduction)
+        if export_preproduction:
+            output_preproduction[timestep] = pre_production
+    return (output_recruited, output_preproduction if export_preproduction else None)
 
 
-def compute_preproduction_numba(data: xr.Dataset) -> xr.DataArray:
+def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: bool = False) -> xr.DataArray:
+    """
+    Compute the pre-production using numba jit.
+
+    Parameters
+    ----------
+    data : xr.Dataset
+        The input dataset.
+    export_preproduction : bool
+        If True, the pre-production is included in the output dataset.
+
+    Returns
+    -------
+    output : xr.Dataset
+        The output dataset.
+
+    """
     data.cf.transpose("functional_group", "T", "Y", "X", "Z", "cohort")
-
     results_recruited = []
-    results_not_recruited = []
-    results_preproduction = []
-    for fgroup in data.functional_group:
-        logger.info(f"Computing production for Cohort {int(fgroup)}")
-        fgroup_data = data.sel(functional_group=fgroup).dropna("cohort")
-        primary_production = np.nan_to_num(fgroup_data.primary_production.data, 0.0)
-        cohorts = fgroup_data.cohort.data
-        mask_temperature = np.nan_to_num(fgroup_data.mask_temperature.data, False)
-        timestep_number = fgroup_data.timesteps_number.data
+    if export_preproduction:
+        results_preproduction = []
 
-        output_recruited, output_not_recruited, output_preproduction = time_loop(
-            primary_production=primary_production,
-            cohorts=cohorts,
-            mask_temperature=mask_temperature,
-            timestep_number=timestep_number,
-        )
+    for fgroup in data[ConfigurationLabels.fgroup]:
+        logger.info(f"Computing production for Cohort {int(fgroup)}")
+        fgroup_data = data.sel({ConfigurationLabels.fgroup: fgroup}).dropna(ConfigurationLabels.cohort)
+
+        param = {
+            "primary_production": np.nan_to_num(fgroup_data[PreproductionLabels.primary_production].data, 0.0),
+            "cohorts": fgroup_data[ConfigurationLabels.cohort].data,
+            "mask_temperature": np.nan_to_num(fgroup_data[PreproductionLabels.mask_temperature].data, False),
+            "timestep_number": fgroup_data[ConfigurationLabels.timesteps_number].data,
+            "export_preproduction": export_preproduction,
+        }
+        output_recruited, output_preproduction = time_loop(**param)
+        if export_preproduction:
+            results_preproduction.append(
+                xr.DataArray(
+                    coords=fgroup_data[PreproductionLabels.mask_temperature].coords,
+                    dims=fgroup_data[PreproductionLabels.mask_temperature].dims,
+                    data=output_preproduction,
+                )
+            )
         results_recruited.append(
             xr.DataArray(
-                coords=fgroup_data.mask_temperature.coords,
-                dims=fgroup_data.mask_temperature.dims,
+                coords=fgroup_data[PreproductionLabels.mask_temperature].coords,
+                dims=fgroup_data[PreproductionLabels.mask_temperature].dims,
                 data=output_recruited,
             )
         )
-        results_not_recruited.append(
-            xr.DataArray(
-                coords=fgroup_data.mask_temperature.coords,
-                dims=fgroup_data.mask_temperature.dims,
-                data=output_not_recruited,
-            )
-        )
-        results_preproduction.append(
-            xr.DataArray(
-                coords=fgroup_data.mask_temperature.coords,
-                dims=fgroup_data.mask_temperature.dims,
-                data=output_preproduction,
-            )
-        )
-    res = xr.Dataset(
-        {
-            "recruited": xr.concat(results_recruited, dim="functional_group"),
-            "not_recruited": xr.concat(results_not_recruited, dim="functional_group"),
-            "preproduction": xr.concat(results_preproduction, dim="functional_group"),
-        },
-        coords=data.coords,
+
+    results = {
+        ProductionLabels.recruited: xr.concat(results_recruited, dim=ConfigurationLabels.fgroup),
+    }
+    if export_preproduction:
+        results[ProductionLabels.preproduction] = xr.concat(results_preproduction, dim=ConfigurationLabels.fgroup)
+    return xr.Dataset(results, coords=data.coords)
+
+
+def compute_production(
+    data: xr.Dataset, chunk: dict[str, int | Literal["auto"]] | None = None, *, export_preproduction: bool = False
+) -> xr.Dataset:
+    """
+    The main fonction to compute the production. It is a wrapper around the `compute_preproduction_numba` function.
+
+    Parameters
+    ----------
+    data : xr.Dataset
+        The input dataset.
+    chunk : dict[str, int | Literal["auto"]] | None
+        The chunk size for the computation. If None, the default chunk size is used {ConfigurationLabels.fgroup: 1}.
+    export_preproduction : bool
+        If True, the pre-production is included in the output dataset.
+
+    Returns
+    -------
+    output : xr.Dataset
+        The output dataset.
+
+    Warning:
+    --------
+    - Valide chunk keys are : `{ConfigurationLabels.fgroup:..., "X":..., "Y":...}`. Priority should be given to the
+    functional group dimension.
+
+    """
+    if chunk is None:
+        chunk = {ConfigurationLabels.fgroup: 1}
+    data = data.cf.chunk(chunk).unify_chunks()
+
+    template = xr.Dataset({ProductionLabels.recruited: data[PreproductionLabels.mask_temperature]}, coords=data.coords)
+    if export_preproduction:
+        template[ProductionLabels.preproduction] = data[PreproductionLabels.mask_temperature]
+
+    output = xr.map_blocks(
+        compute_preproduction_numba, data, kwargs={"export_preproduction": export_preproduction}, template=template
     )
-    return res
+    output = xr.merge([data, output])
+    return output.persist()

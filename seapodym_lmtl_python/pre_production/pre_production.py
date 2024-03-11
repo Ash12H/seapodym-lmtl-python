@@ -3,7 +3,7 @@
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportLabels
+from seapodym_lmtl_python.configuration.no_transport.configuration import ConfigurationLabels
 from seapodym_lmtl_python.pre_production.core import cell_area, day_length
 
 # TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
@@ -20,7 +20,7 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
     - mask_by_fgroup  [functional_group, latitude, longitude] -> boolean
     """
     masks = []
-    for i in day_layers[NoTransportLabels.fgroup]:
+    for i in day_layers[ConfigurationLabels.fgroup]:
         day_pos = day_layers.sel(functional_group=i)
         night_pos = night_layers.sel(functional_group=i)
 
@@ -30,11 +30,11 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
 
     return xr.DataArray(
         coords={
-            NoTransportLabels.fgroup: day_layers[NoTransportLabels.fgroup],
+            ConfigurationLabels.fgroup: day_layers[ConfigurationLabels.fgroup],
             mask.cf["Y"].name: mask.cf["Y"],
             mask.cf["X"].name: mask.cf["X"],
         },
-        dims=(NoTransportLabels.fgroup, mask.cf["Y"].name, mask.cf["X"].name),
+        dims=(ConfigurationLabels.fgroup, mask.cf["Y"].name, mask.cf["X"].name),
         data=masks,
         # TODO(Jules): Inherite from mask ?
         attrs={
@@ -87,15 +87,15 @@ def average_temperature_by_fgroup(
     - avg_temperature [functional_group, time, latitude, longitude]
     """
     average_temperature = []
-    for fgroup in day_layer[NoTransportLabels.fgroup]:
-        day_temperature = temperature.cf.sel(Z=day_layer.sel({NoTransportLabels.fgroup: fgroup}))
-        night_temperature = temperature.cf.sel(Z=night_layer.sel({NoTransportLabels.fgroup: fgroup}))
+    for fgroup in day_layer[ConfigurationLabels.fgroup]:
+        day_temperature = temperature.cf.sel(Z=day_layer.sel({ConfigurationLabels.fgroup: fgroup}))
+        night_temperature = temperature.cf.sel(Z=night_layer.sel({ConfigurationLabels.fgroup: fgroup}))
         mean_temperature = ((daylength * day_temperature) + ((24 - daylength) * night_temperature)) / 24
         if "Z" in mean_temperature.cf:
             mean_temperature = mean_temperature.cf.drop_vars("Z")
-        mean_temperature = mean_temperature.where(mask.sel({NoTransportLabels.fgroup: fgroup}))
+        mean_temperature = mean_temperature.where(mask.sel({ConfigurationLabels.fgroup: fgroup}))
         average_temperature.append(mean_temperature)
-    return xr.concat(average_temperature, dim=NoTransportLabels.fgroup)
+    return xr.concat(average_temperature, dim=ConfigurationLabels.fgroup)
 
 
 def apply_coefficient_to_primary_production(
@@ -113,7 +113,7 @@ def apply_coefficient_to_primary_production(
     ------
     - primary_production [functional_group, time, latitude, longitude]
     """
-    return xr.concat((i * primary_production for i in functional_group_coefficient), dim=NoTransportLabels.fgroup)
+    return xr.concat((i * primary_production for i in functional_group_coefficient), dim=ConfigurationLabels.fgroup)
 
 
 def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray, tr_rate: xr.DataArray) -> xr.DataArray:

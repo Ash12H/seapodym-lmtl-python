@@ -46,9 +46,7 @@ def compute_biomass(
 # --- Wrapper --- #
 
 
-def process(
-    client: Client, configuration: xr.Dataset, kernel: None | list[Callable]
-) -> xr.Dataset:
+def process(client: Client, configuration: xr.Dataset, kernel: None | list[Callable]) -> xr.Dataset:
     """
     Wraps all the post-production functions.
 

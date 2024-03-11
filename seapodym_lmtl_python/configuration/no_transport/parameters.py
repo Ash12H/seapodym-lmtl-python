@@ -11,7 +11,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import pandas as pd
 import xarray as xr
-from attrs import Attribute, field, frozen, validators, asdict
+from attrs import Attribute, field, frozen, validators
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 

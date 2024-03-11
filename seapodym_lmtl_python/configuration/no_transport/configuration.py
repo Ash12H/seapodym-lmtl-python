@@ -5,7 +5,6 @@ the forcings (lazily).
 
 from __future__ import annotations
 
-from enum import StrEnum
 from pathlib import Path
 from typing import IO
 
@@ -15,42 +14,13 @@ import numpy as np
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
+from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
     FunctionalGroupUnit,
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
     NoTransportParameters,
-    PathParameters,
 )
-from seapodym_lmtl_python.logging.custom_logger import logger
-
-
-class NoTransportLabels(StrEnum):
-    """
-    A single place to store all labels as :
-    - used in the NoTransportConfiguration class
-    - declared in no_transport_parameters
-    module.
-    """
-
-    # Functional group
-    fgroup = "functional_group"  # Equivalent to name
-    fgroup_name = "name"
-    energy_transfert = "energy_transfert"
-    inv_lambda_max = "inv_lambda_max"
-    inv_lambda_rate = "inv_lambda_rate"
-    temperature_recruitment_max = "temperature_recruitment_max"
-    temperature_recruitment_rate = "temperature_recruitment_rate"
-    day_layer = "day_layer"
-    night_layer = "night_layer"
-    # Cohorts
-    cohort = "cohort"  # New axis
-    timesteps_number = "timesteps_number"
-    min_timestep = "min_timestep"
-    max_timestep = "max_timestep"
-    mean_timestep = "mean_timestep"
-    timestep = "timestep"
-    resolution = "resolution"
 
 
 class NoTransportConfiguration(BaseConfiguration):
@@ -73,13 +43,12 @@ class NoTransportConfiguration(BaseConfiguration):
 
     def _load_forcings(self: NoTransportConfiguration, **kargs: dict) -> xr.Dataset:
         """Return the forcings as a xarray.Dataset."""
-
         if kargs is None:
             kargs = {}
 
         all_forcing = {
-            NoTransportLabels.timestep: self.parameters.timestep,
-            NoTransportLabels.resolution: self.parameters.resolution,
+            ConfigurationLabels.timestep: self.parameters.timestep,
+            ConfigurationLabels.resolution: self.parameters.resolution,
         }
 
         for forcing_name, forcing_value in attrs.asdict(self.parameters.path_parameters).items():
@@ -116,8 +85,8 @@ class NoTransportConfiguration(BaseConfiguration):
         f_group_coord_data = list(range(len(grps_param["name"])))
         f_group_coord = xr.DataArray(
             coords=(f_group_coord_data,),
-            dims=(NoTransportLabels.fgroup,),
-            name=NoTransportLabels.fgroup,
+            dims=(ConfigurationLabels.fgroup,),
+            name=ConfigurationLabels.fgroup,
             attrs={  # cf_xarray convention
                 "flag_values": f_group_coord_data,
                 "flag_meanings": " ".join(grps_param["name"]),
@@ -141,7 +110,7 @@ class NoTransportConfiguration(BaseConfiguration):
             return next(filter(lambda x: x.name == attribut, attrs.fields(param_class))).metadata
 
         def _generate_tuple(param_class: attrs.Attribute, name: str) -> tuple:
-            return ((NoTransportLabels.fgroup,), params[name], _sel_attrs_meta(param_class, name))
+            return ((ConfigurationLabels.fgroup,), params[name], _sel_attrs_meta(param_class, name))
 
         return {name: _generate_tuple(cls, name) for cls, name in classes_and_names}
 
@@ -152,17 +121,17 @@ class NoTransportConfiguration(BaseConfiguration):
         """
         (param_as_dict, f_group_coord) = self._build_fgroup_dataset__generate_param_coords()
         names_classes = [
-            (FunctionalGroupUnit, NoTransportLabels.fgroup_name),
-            (FunctionalGroupUnit, NoTransportLabels.energy_transfert),
-            (FunctionalGroupUnitRelationParameters, NoTransportLabels.inv_lambda_max),
-            (FunctionalGroupUnitRelationParameters, NoTransportLabels.inv_lambda_rate),
-            (FunctionalGroupUnitRelationParameters, NoTransportLabels.temperature_recruitment_max),
-            (FunctionalGroupUnitRelationParameters, NoTransportLabels.temperature_recruitment_rate),
-            (FunctionalGroupUnitMigratoryParameters, NoTransportLabels.day_layer),
-            (FunctionalGroupUnitMigratoryParameters, NoTransportLabels.night_layer),
+            (FunctionalGroupUnit, ConfigurationLabels.fgroup_name),
+            (FunctionalGroupUnit, ConfigurationLabels.energy_transfert),
+            (FunctionalGroupUnitRelationParameters, ConfigurationLabels.inv_lambda_max),
+            (FunctionalGroupUnitRelationParameters, ConfigurationLabels.inv_lambda_rate),
+            (FunctionalGroupUnitRelationParameters, ConfigurationLabels.temperature_recruitment_max),
+            (FunctionalGroupUnitRelationParameters, ConfigurationLabels.temperature_recruitment_rate),
+            (FunctionalGroupUnitMigratoryParameters, ConfigurationLabels.day_layer),
+            (FunctionalGroupUnitMigratoryParameters, ConfigurationLabels.night_layer),
         ]
         param_variables = self._build_fgroup_dataset__generate_variables(param_as_dict, names_classes)
-        return xr.Dataset(param_variables, coords={NoTransportLabels.fgroup: f_group_coord})
+        return xr.Dataset(param_variables, coords={ConfigurationLabels.fgroup: f_group_coord})
 
     def _build_cohort_dataset(self: NoTransportConfiguration, names: xr.DataArray) -> xr.Dataset:
         """Return the cohort parameters as a xarray.Dataset."""
@@ -174,13 +143,12 @@ class NoTransportConfiguration(BaseConfiguration):
             """
             cohort_index = np.arange(0, len(timesteps_number), 1, dtype=int)
             max_timestep = np.cumsum(timesteps_number)
-            # min_timestep = np.insert(max_timestep, 0, 0)[:-1]
             min_timestep = max_timestep - (np.asarray(timesteps_number) - 1)
             mean_timestep = (max_timestep + min_timestep) / 2
 
             data_vars = {
-                NoTransportLabels.timesteps_number: (
-                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                ConfigurationLabels.timesteps_number: (
+                    (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
                     [timesteps_number],
                     {
                         "description": (
@@ -189,30 +157,31 @@ class NoTransportConfiguration(BaseConfiguration):
                         )
                     },
                 ),
-                NoTransportLabels.min_timestep: (
-                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                ConfigurationLabels.min_timestep: (
+                    (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
                     [min_timestep],
                     {"description": "The minimum timestep index."},
                 ),
-                NoTransportLabels.max_timestep: (
-                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                ConfigurationLabels.max_timestep: (
+                    (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
                     [max_timestep],
                     {"description": "The maximum timestep index."},
                 ),
-                NoTransportLabels.mean_timestep: (
-                    (NoTransportLabels.fgroup, NoTransportLabels.cohort),
+                ConfigurationLabels.mean_timestep: (
+                    (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
                     [mean_timestep],
                     {"description": "The mean timestep index."},
                 ),
             }
 
             return xr.Dataset(
-                coords={NoTransportLabels.fgroup: fgroup, NoTransportLabels.cohort: cohort_index}, data_vars=data_vars
+                coords={ConfigurationLabels.fgroup: fgroup, ConfigurationLabels.cohort: cohort_index},
+                data_vars=data_vars,
             )
 
         all_fgroups = self.parameters.functional_groups_parameters.functional_groups
         all_cohorts_timesteps = [fgroup.functional_type.cohorts_timesteps for fgroup in all_fgroups]
-        all_index = [names[NoTransportLabels.fgroup][names == fgroup.name] for fgroup in all_fgroups]
+        all_index = [names[ConfigurationLabels.fgroup][names == fgroup.name] for fgroup in all_fgroups]
         return xr.merge(
             [_cohort_by_fgroup(grp_index, timesteps) for grp_index, timesteps in zip(all_index, all_cohorts_timesteps)]
         )
@@ -224,5 +193,5 @@ class NoTransportConfiguration(BaseConfiguration):
         """Return the configuration as a xarray.Dataset."""
         fgroup = self._build_fgroup_dataset()
         forcings = self._load_forcings()
-        cohorts = self._build_cohort_dataset(fgroup[NoTransportLabels.fgroup_name])
+        cohorts = self._build_cohort_dataset(fgroup[ConfigurationLabels.fgroup_name])
         return xr.merge([fgroup, forcings, cohorts])
