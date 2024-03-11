@@ -2,15 +2,9 @@
 
 from enum import StrEnum
 
-# TODO(Jules) : Organise by module (pre-prod, prod, post-prod, parameters, configuration ...)
-
 
 class ConfigurationLabels(StrEnum):
-    """
-    A single place to store all labels as :
-    - used in the configuration module.
-    - declared in parameters module.
-    """
+    """A single place to store all labels as declared in parameters module."""
 
     # Functional group
     fgroup = "functional_group"  # Equivalent to name
@@ -33,11 +27,7 @@ class ConfigurationLabels(StrEnum):
 
 
 class PreproductionLabels(StrEnum):
-    """
-    A single place to store all labels as :
-    - used in the model.
-    - declared in pre-production module.
-    """
+    """A single place to store all labels as declared in pre-production module."""
 
     # Pre-production
     mask_global = "mask"
@@ -55,11 +45,13 @@ class PreproductionLabels(StrEnum):
 
 
 class ProductionLabels(StrEnum):
-    """
-    A single place to store all labels as :
-    - used in the model.
-    - declared in production module.
-    """
+    """A single place to store all labels as declared in production module."""
 
     recruited = "recruited"
     preproduction = "preproduction"
+
+
+class PostproductionLabels(StrEnum):
+    """A single place to store all labels as declared in post-production module."""
+
+    biomass = "biomass"

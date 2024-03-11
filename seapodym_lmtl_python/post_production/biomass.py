@@ -9,6 +9,7 @@ from numba import jit
 
 from seapodym_lmtl_python.configuration.no_transport.labels import (
     ConfigurationLabels,
+    PostproductionLabels,
     PreproductionLabels,
     ProductionLabels,
 )
@@ -26,7 +27,6 @@ def biomass_sequence(recruited: np.ndarray, mortality: np.ndarray) -> np.ndarray
     biomass[:, 0, ...] = recruited[:, 0, ...]
     # TODO(Jules) : Add initialisation from configuration
     for timestep in range(1, recruited.shape[1]):
-        # TODO(Jules) : Check how to manage the ageing of aggregated cohorts
         # -> For now, we consider that the mortality is the same for all cohorts because mortality is implicite to
         # pre-production. We can use the sum of all cohorts to compute the production.
         biomass[:, timestep, ...] = recruited[:, timestep, ...] + (
@@ -36,6 +36,7 @@ def biomass_sequence(recruited: np.ndarray, mortality: np.ndarray) -> np.ndarray
 
 
 def compute_biomass(data: xr.Dataset) -> xr.DataArray:
+    """Wrap the biomass computation arround the Numba function `biomass_sequence`."""
     data = data.cf.transpose(ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort)
     recruited = data[ProductionLabels.recruited].sum(ConfigurationLabels.cohort)
     recruited = np.nan_to_num(recruited.data, 0)
@@ -48,4 +49,5 @@ def compute_biomass(data: xr.Dataset) -> xr.DataArray:
         attrs={
             # TODO(Jules)
         },
+        name=PostproductionLabels.biomass,
     )

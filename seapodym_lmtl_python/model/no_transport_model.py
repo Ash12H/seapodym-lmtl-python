@@ -14,6 +14,7 @@ from seapodym_lmtl_python.configuration.no_transport.labels import Configuration
 from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
 from seapodym_lmtl_python.logging.custom_logger import logger
 from seapodym_lmtl_python.model.base_model import BaseModel
+from seapodym_lmtl_python.post_production.biomass import compute_biomass
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
 from seapodym_lmtl_python.production.production import compute_production
@@ -184,6 +185,8 @@ class NoTransportModel(BaseModel):
 
     def post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""
+        biomass = xr.map_blocks(compute_biomass, self.state)
+        self.state = xr.merge([self.state, biomass])
 
     def save_output(self: NoTransportModel) -> None:
         """Save the outputs of the model."""
