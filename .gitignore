@@ -6,3 +6,5 @@ __pycache__
 
 notebooks/*Temporary*/*.ipynb
 .DS_Store
+
+docs/build
