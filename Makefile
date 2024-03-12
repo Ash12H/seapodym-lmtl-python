@@ -25,6 +25,7 @@ test:
 
 ## Generate the documentation using Sphinx
 generate_doc:
+	poetry export -f requirements.txt --with docs --output docs/requirements.txt
 	sphinx-apidoc seapodym_lmtl_python -o docs/source
 	sphinx-build -b html docs/source/ docs/build/html
 
