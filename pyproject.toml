@@ -29,7 +29,7 @@ pooch = "^1.8.1"
 pytest = "^8.0.1"
 
 
-[tool.poetry.group.doc.dependencies]
+[tool.poetry.group.docs.dependencies]
 sphinx = "^7.2.6"
 sphinx-material = "^0.0.36"
 
