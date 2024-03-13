@@ -34,30 +34,52 @@ class FunctionalGroupUnitRelationParameters:
         converter=float,
         metadata={"description": "Value of 1/lambda when temperature is 0°C."},
     )
-    inv_lambda_rate: float = field(
-        validator=[
-            validators.gt(0),
-        ],
-        converter=float,
-        metadata={"description": "Rate of the inverse of the mortality."},
-    )
+    inv_lambda_rate: float = field(converter=float, metadata={"description": "Rate of the inverse of the mortality."})
     temperature_recruitment_rate: float = field(
-        validator=[
-            validators.lt(0),
-        ],
-        converter=float,
-        metadata={"description": "Rate of the recruitment time."},
+        converter=float, metadata={"description": "Rate of the recruitment time."}
     )
     temperature_recruitment_max: float = field(
-        validator=[
-            validators.gt(0),
-        ],
+        validator=[validators.gt(0)],
         converter=float,
         metadata={"description": "Maximum value of the recruitment time (temperature is 0°C).", "units": "day"},
     )
     cohorts_timesteps: list[int] | None = field(
         metadata={"description": "The number of timesteps in the cohort. Useful for cohorts aggregation."},
     )
+
+    @temperature_recruitment_rate.validator
+    def _temperature_recruitment_rate_positive(
+        self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: float
+    ) -> None:
+        if value > 0:
+            message = (
+                f"Parameter {attribute.name} : {value} has a positive value. It means that the recruitment time "
+                "is increasing with temperature. Do you mean to use a negative value?"
+            )
+            logger.warning(message)
+        if value == 0:
+            message = (
+                f"Parameter {attribute.name} : {value} has a null value. It means that the recruitment time "
+                "is not affected by temperature. Do you really mean to use this value?"
+            )
+            logger.warning(message)
+
+    @inv_lambda_rate.validator
+    def _inv_lambda_rate_rate_positive(
+        self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: float
+    ) -> None:
+        if value < 0:
+            message = (
+                f"Parameter {attribute.name} : {value} has a negative value. It means that the mortality is decreasing "
+                "when temperature increase. Do you mean to use a positive value?"
+            )
+            logger.warning(message)
+        if value == 0:
+            message = (
+                f"Parameter {attribute.name} : {value} has a null value. It means that the mortality is not affected "
+                "by temperature. Do you really mean to use this value?"
+            )
+            logger.warning(message)
 
     @cohorts_timesteps.validator
     def _cohorts_timesteps_equal_tr_max(
@@ -66,7 +88,7 @@ class FunctionalGroupUnitRelationParameters:
         if np.sum(value) != np.ceil(self.temperature_recruitment_max):
             message = (
                 f"Parameter {attribute.name} : {value} does not sum (= {np.sum(value)}) to the maximum recruitment "
-                f"time {np.ceil(self.temperature_recruitment_max)}."
+                f"time {np.ceil(self.temperature_recruitment_max)} (ceiled value)."
             )
             raise ValueError(message)
 
@@ -98,9 +120,11 @@ class FunctionalGroupUnit:
     )
 
     functional_type: FunctionalGroupUnitRelationParameters = field(
-        metadata={"description": "Parameters linked to the relation between temperature and the functional group."}
+        validator=validators.instance_of(FunctionalGroupUnitRelationParameters),
+        metadata={"description": "Parameters linked to the relation between temperature and the functional group."},
     )
 
     migratory_type: FunctionalGroupUnitMigratoryParameters = field(
-        metadata={"description": "Parameters linked to the migratory behavior of the functional group."}
+        validator=validators.instance_of(FunctionalGroupUnitMigratoryParameters),
+        metadata={"description": "Parameters linked to the migratory behavior of the functional group."},
     )

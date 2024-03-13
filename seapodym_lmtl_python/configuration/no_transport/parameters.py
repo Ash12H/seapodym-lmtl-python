@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 @frozen(kw_only=True)
-class PathParameters:
+class ForcingParameters:
     """
     This data class is used to store access paths to forcing fields. You can inherit it to add further forcings, but in
     this case you'll need to add new behaviors to the functions and classes that follow.
@@ -52,7 +52,7 @@ class FunctionalGroups:
 class NoTransportParameters:
     """This is the main data class. It is used to store the model configuration parameters."""
 
-    path_parameters: PathParameters = field(metadata={"description": "All the paths to the forcings."})
+    path_parameters: ForcingParameters = field(metadata={"description": "All the paths to the forcings."})
 
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
