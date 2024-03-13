@@ -31,10 +31,9 @@ def _check_single_forcing_resolution(latitude: xr.DataArray, longitude: xr.DataA
     lat_resolution = lat_resolution.item()
     lon_resolution = lon_resolution.item()
 
-    if lat_resolution == lon_resolution:
-        return lat_resolution
-    msg = f"The latitude resolution ({lat_resolution}) of the forcing is not the same as longitude ({lon_resolution})."
-    logger.info(msg)
+    if lat_resolution != lon_resolution:
+        msg = f"The latitude resolution ({lat_resolution}) of the forcing is not the same as longitude ({lon_resolution})."
+        logger.info(msg)
     return (lat_resolution, lon_resolution)
 
 
@@ -65,6 +64,9 @@ def name_isin_forcing(instance: ForcingUnit, attribute: Attribute, value: str) -
             f"\nAccepted values are : {", ".join(list(xr.open_dataset(instance.forcing_path)))}"
         )
         raise ValueError(message)
+
+
+# TODO(Jules): Allow to directly pass a xarray.Dataset
 
 
 @frozen(kw_only=True)
@@ -105,9 +107,9 @@ class ForcingUnit:
         metadata={"description": "Name of the field in the forcing file."},
     )
 
-    resolution: float | tuple[float, float] = field(
+    resolution: tuple[float, float] = field(
         default=None,
-        metadata={"description": "Space resolution of the field as (lat, lon) or both if equals."},
+        metadata={"description": "Space resolution of the field as (lat, lon)."},
     )
 
     timestep: int = field(default=None, metadata={"description": "Timestep of the field in day(s)."})

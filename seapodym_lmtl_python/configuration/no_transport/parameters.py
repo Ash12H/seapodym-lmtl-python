@@ -40,6 +40,33 @@ class ForcingParameters:
         metadata={"description": "Path to the cell area field."},
     )
 
+    timestep: int | None = field(
+        init=False,
+        default=None,
+        metadata={"description": "Common timestep of the fields in day(s)."},
+    )
+
+    resolution: float | tuple[float, float] | None = field(
+        init=False,
+        default=None,
+        metadata={"description": "Common space resolution of the fields as (lat, lon) or both if equals."},
+    )
+
+    def __attrs_post_init__(self) -> None:
+        """This method is called after the initialization of the class. It is used to check the consistency of the
+        forcing fields."""
+        forcings = [self.temperature, self.primary_production, self.mask, self.day_length, self.cell_area]
+        forcings = [forcing for forcing in forcings if forcing is not None]
+        # timestep
+        timesteps = {forcing.timestep for forcing in forcings}
+        if len(timesteps) != 1:
+            msg = f"The forcings have different timesteps : {timesteps}."
+            raise ValueError(msg)
+        self.timestep = timesteps.pop()
+        # resolution
+        resolutions = {(forcing.resolution_lat, forcing.resolution_lon) for forcing in forcings}
+        # TODO(Jules): Finish this
+
 
 @frozen(kw_only=True)
 class FunctionalGroups:
@@ -57,40 +84,3 @@ class NoTransportParameters:
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
     )
-
-    timestep: int | None = field(
-        init=False,
-        default=None,
-        metadata={"description": "Common timestep of the fields in day(s)."},
-    )
-
-    resolution: float | tuple[float, float] | None = field(
-        default=None,
-        metadata={"description": "Common space resolution of the fields as (lat, lon) or both if equals."},
-    )
-
-    # TODO(Jules): Finish this work
-
-    # def __attrs_post_init__(self: NoTransportParameters) -> None:
-    #     timedelta = [
-    #         forcing.timestep
-    #         for forcing in asdict(self.path_parameters).values()
-    #         if forcing is not None and forcing.timestep is not None
-    #     ]
-
-    #     for forcing in ["temperature", "primary_production", "mask", "day_length", "cell_area"]:
-    #         data = getattr(self, forcing)
-
-    #     if len(set(timedelta)) != 1:
-    #         msg = (
-    #             f"The time axis is not regular. Differents values of timedelta are found: {timedelta}."
-    #             "\nCalendars will be interpolated in the rest of the simulation."
-    #         )
-    #         logger.warning(msg)
-    #         object.__setattr__(self, "timestep", min(timedelta))
-    #     else:
-    #         object.__setattr__(self, "timestep", timedelta[0])
-
-    #     # TODO(Jules): Do the same for space resolution
-
-    # # TODO(Jules): Validate timestep (ie. min_timestep) is multiple of cohort_timesteps

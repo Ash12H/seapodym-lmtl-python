@@ -68,7 +68,7 @@ class TestForcingUnit:
     def test_right_time_and_space_forcing(self, right_time_and_space_forcing_file: tuple[str, str]):
         forcing_path, forcing_name = right_time_and_space_forcing_file
         forcing_unit = ForcingUnit(forcing_path=forcing_path, name=forcing_name)
-        assert forcing_unit.resolution == 1
+        assert forcing_unit.resolution == (1, 1)
         assert forcing_unit.timestep == 1
 
     def test_wrong_time_right_space_forcing(self, wrong_time_right_space_forcing_file: tuple[str, str]):
