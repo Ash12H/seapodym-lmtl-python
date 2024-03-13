@@ -49,20 +49,17 @@ def _check_single_forcing_timestep(timeseries: pd.DatetimeIndex) -> float | tupl
     return timedelta[0]
 
 
-def _path_exists(instance: ForcingUnit, attribute: Attribute, value: Path) -> None:
-    """Check if the path exists. If not, raise a ValueError."""
-    if not value.exists():
-        message = f"Parameter {attribute.name} : {value} does not exist."
-        raise ValueError(message)
+def path_validation(path: Path) -> None:
+    """Check if the path exists and if the Dataset contains the specfied DataArray."""
+    if not path.exists():
+        msg = f"The path '{path}' does not exist."
+        raise FileExistsError(msg)
 
 
-def name_isin_forcing(instance: ForcingUnit, attribute: Attribute, value: str) -> None:
-    """Check if the name exists in the forcing file. If not, raise a ValueError."""
-    if value not in xr.open_dataset(instance.forcing_path):
-        message = (
-            f"Parameter {attribute.name} : {value} is not in the forcing file '{instance.forcing_path}'."
-            f"\nAccepted values are : {", ".join(list(xr.open_dataset(instance.forcing_path)))}"
-        )
+def name_isin_forcing(forcing: xr.Dataset, name: str) -> None:
+    """Check if the name exists in the forcing Dataset."""
+    if name not in forcing:
+        message = f"DataArray {name} is not in the Dataset.\nAccepted values are : {", ".join(list(forcing))}"
         raise ValueError(message)
 
 
@@ -72,11 +69,12 @@ def name_isin_forcing(instance: ForcingUnit, attribute: Attribute, value: str) -
 @frozen(kw_only=True)
 class ForcingUnit:
     """
+    TODO(Jules): Refactor.
     This data class is used to store access paths to a forcing field (read with xarray.open_dataset).
 
     Parameters
     ----------
-    forcing_path : Path
+    forcing : Path
         Path to the forcing.
     name : str
         Name of the field in the forcing file.
@@ -95,17 +93,16 @@ class ForcingUnit:
 
     """
 
-    forcing_path: Path = field(
-        converter=Path,
-        validator=_path_exists,
-        metadata={"description": "Path to the forcing."},
+    forcing: xr.DataArray = field(
+        converter=xr.DataArray,
+        metadata={"description": "Forcing field."},
     )
 
-    name: str = field(
-        converter=str,
-        validator=name_isin_forcing,
-        metadata={"description": "Name of the field in the forcing file."},
-    )
+    # name: str = field(
+    #     converter=str,
+    #     validator=name_isin_forcing,
+    #     metadata={"description": "Name of the field in the forcing file."},
+    # )
 
     resolution: tuple[float, float] = field(
         default=None,
@@ -117,14 +114,46 @@ class ForcingUnit:
     # NOTE(Jules):  For resolution and timestep, `default=None` because these attributes are automatically computed from
     #               the forcing file. However, they can be set manually.
 
+    @classmethod
+    def from_dataset(
+        cls: ForcingUnit,
+        forcing: xr.Dataset,
+        name: str,
+        resolution: tuple[float, float] | float | None,
+        timestep: int | None,
+    ) -> ForcingUnit:
+        """Create a ForcingUnit from a path and a name."""
+        name_isin_forcing(forcing, name)
+        forcing = forcing[name]
+
+        if resolution is not None:
+            resolution = float(resolution)
+        if isinstance(resolution, float):
+            resolution = (resolution, resolution)
+        if timestep is not None:
+            timestep = int(timestep)
+        return cls(forcing=forcing, resolution=resolution, timestep=timestep)
+
+    @classmethod
+    def from_path(
+        cls: ForcingUnit,
+        forcing: Path | str,
+        name: str,
+        resolution: tuple[float, float] | float | None,
+        timestep: int | None,
+    ) -> ForcingUnit:
+        """Create a ForcingUnit from a path and a name."""
+        forcing = Path(forcing)
+        path_validation(forcing)
+        return cls.from_dataset(xr.open_dataset(forcing), name, resolution, timestep)
+
     def __attrs_post_init__(self: ForcingUnit) -> None:
         """Setup the space and time resolutions."""
-        data = xr.open_dataset(self.forcing_path)[self.name]
 
-        if "X" in data.cf and "Y" in data.cf:
-            resolution = _check_single_forcing_resolution(latitude=data.cf["Y"], longitude=data.cf["X"])
+        if "X" in self.forcing.cf and "Y" in self.forcing.cf:
+            resolution = _check_single_forcing_resolution(latitude=self.forcing.cf["Y"], longitude=self.forcing.cf["X"])
             object.__setattr__(self, "resolution", resolution)
 
-        if "T" in data.cf:
-            timestep = _check_single_forcing_timestep(timeseries=data.cf.indexes["T"])
+        if "T" in self.forcing.cf:
+            timestep = _check_single_forcing_timestep(timeseries=self.forcing.cf.indexes["T"])
             object.__setattr__(self, "timestep", timestep)
