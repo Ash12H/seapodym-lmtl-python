@@ -8,7 +8,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import pandas as pd
 import xarray as xr
-from attrs import Attribute, field, frozen
+from attrs import field, frozen
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 
@@ -63,21 +63,16 @@ def name_isin_forcing(forcing: xr.Dataset, name: str) -> None:
         raise ValueError(message)
 
 
-# TODO(Jules): Allow to directly pass a xarray.Dataset
-
-
 @frozen(kw_only=True)
 class ForcingUnit:
     """
     TODO(Jules): Refactor.
-    This data class is used to store access paths to a forcing field (read with xarray.open_dataset).
+    This data class is used to store a forcing field and its resolution and timestep.
 
     Parameters
     ----------
-    forcing : Path
-        Path to the forcing.
-    name : str
-        Name of the field in the forcing file.
+    forcing : xr.DataArray
+        The forcing field.
     resolution : float | tuple[float, float]
         Space resolution of the field as (lat, lon) or both if equals.
     timestep : int
@@ -86,9 +81,9 @@ class ForcingUnit:
 
     Notes
     -----
-    - This class is used to store access paths to a forcing field (read with xarray.open_dataset). It also stores the
-    resolution and timestep of the field. If not provided, the resolution and timestep are automatically computed from
-    the forcing file. However, they can be set manually.
+    - This class is used to store a forcing field. It also stores the resolution and timestep of the field. If not
+    provided, the resolution and timestep are automatically computed from the forcing file. However, they can be set
+    manually.
     - Be sure to follow the CF conventions for the forcing file. To do so you can use the `cf_xarray` package.
 
     """
@@ -97,12 +92,6 @@ class ForcingUnit:
         converter=xr.DataArray,
         metadata={"description": "Forcing field."},
     )
-
-    # name: str = field(
-    #     converter=str,
-    #     validator=name_isin_forcing,
-    #     metadata={"description": "Name of the field in the forcing file."},
-    # )
 
     resolution: tuple[float, float] = field(
         default=None,
@@ -149,7 +138,6 @@ class ForcingUnit:
 
     def __attrs_post_init__(self: ForcingUnit) -> None:
         """Setup the space and time resolutions."""
-
         if "X" in self.forcing.cf and "Y" in self.forcing.cf:
             resolution = _check_single_forcing_resolution(latitude=self.forcing.cf["Y"], longitude=self.forcing.cf["X"])
             object.__setattr__(self, "resolution", resolution)
