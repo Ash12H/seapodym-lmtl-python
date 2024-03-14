@@ -11,14 +11,12 @@ import numpy as np
 from attrs import field, frozen, validators
 
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
 from seapodym_lmtl_python.exception.parameter_exception import (
     CohortTimestepConsistencyError,
     DifferentForcingTimestepError,
 )
 from seapodym_lmtl_python.logging.custom_logger import logger
-
-if TYPE_CHECKING:
-    from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
 
 
 @frozen(kw_only=True)
@@ -109,6 +107,15 @@ class FunctionalGroups:
 
     functional_groups: list[FunctionalGroupUnit] = field(metadata={"description": "List of all functional groups."})
 
+    @functional_groups.validator
+    def are_all_instance_of_functional_group_unit(
+        self: FunctionalGroups, attribute: str, value: list[FunctionalGroupUnit]
+    ) -> None:
+        """This method is used to check the consistency of the functional groups."""
+        if not all(isinstance(fgroup, FunctionalGroupUnit) for fgroup in value):
+            msg = "All the functional groups must be instance of FunctionalGroupUnit."
+            raise TypeError(msg)
+
 
 @frozen(kw_only=True)
 class NoTransportParameters:
@@ -121,6 +128,10 @@ class NoTransportParameters:
     )
 
     def __attrs_post_init__(self: NoTransportParameters) -> None:
+        """
+        Check that the timestep of the functional groups is consistent (ie. multiple of) with the timestep of the
+        forcings.
+        """
         global_timestep = self.path_parameters.timestep
         for fgroup in self.functional_groups_parameters.functional_groups:
             fgroup_timestep = fgroup.functional_type.cohorts_timesteps

@@ -3,8 +3,13 @@ import pytest
 import xarray as xr
 
 from seapodym_lmtl_python.cf_data import coordinates
+from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
-from seapodym_lmtl_python.configuration.no_transport.parameters import ForcingParameters
+from seapodym_lmtl_python.configuration.no_transport.parameters import (
+    ForcingParameters,
+    FunctionalGroups,
+    NoTransportParameters,
+)
 from seapodym_lmtl_python.exception.parameter_exception import DifferentForcingTimestepError
 
 time_1 = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
@@ -82,3 +87,30 @@ class TestForcingParameters:
                 temperature=forcing_time_1_space_1,
                 primary_production=forcing_time_2_space_1,
             )
+
+
+class TestNoTransportParameters:
+    def test_no_transport_parameters_initialization(self, forcing_time_1_space_1):
+        f_param = ForcingParameters(
+            temperature=forcing_time_1_space_1,
+            primary_production=forcing_time_1_space_1,
+        )
+        g_param = FunctionalGroups(
+            functional_groups=[
+                parameter_functional_group.FunctionalGroupUnit(
+                    name="phytoplankton",
+                    energy_transfert=0.5,
+                    functional_type=parameter_functional_group.FunctionalGroupUnitRelationParameters(
+                        cohorts_timesteps=[1, 2, 3, 3, 1],
+                        inv_lambda_max=10,
+                        inv_lambda_rate=0.5,
+                        temperature_recruitment_max=10,
+                        temperature_recruitment_rate=-0.5,
+                    ),
+                    migratory_type=parameter_functional_group.FunctionalGroupUnitMigratoryParameters(
+                        day_layer=1, night_layer=1
+                    ),
+                )
+            ],
+        )
+        NoTransportParameters(path_parameters=f_param, functional_groups_parameters=g_param)
