@@ -8,7 +8,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import pandas as pd
 import xarray as xr
-from attrs import field, frozen
+from attrs import field, frozen, validators
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 
@@ -98,7 +98,11 @@ class ForcingUnit:
         metadata={"description": "Space resolution of the field as (lat, lon)."},
     )
 
-    timestep: int = field(default=None, metadata={"description": "Timestep of the field in day(s)."})
+    timestep: int | None = field(
+        default=None,
+        validator=validators.optional(validators.instance_of(int)),
+        metadata={"description": "Timestep of the field in day(s)."},
+    )
 
     # NOTE(Jules):  For resolution and timestep, `default=None` because these attributes are automatically computed from
     #               the forcing file. However, they can be set manually.

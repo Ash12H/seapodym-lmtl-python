@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from typing import Iterable
+
 import numpy as np
 from attrs import Attribute, field, frozen, validators
 
+from seapodym_lmtl_python.exception.parameter_exception import TimestepInDaysError
 from seapodym_lmtl_python.logging.custom_logger import logger
 
 
@@ -83,8 +86,10 @@ class FunctionalGroupUnitRelationParameters:
 
     @cohorts_timesteps.validator
     def _cohorts_timesteps_equal_tr_max(
-        self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: list[int]
+        self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: Iterable[int]
     ) -> None:
+        if not np.all(np.asarray(value) % 1 == 0):
+            raise TimestepInDaysError(value)
         if np.sum(value) != np.ceil(self.temperature_recruitment_max):
             message = (
                 f"Parameter {attribute.name} : {value} does not sum (= {np.sum(value)}) to the maximum recruitment "

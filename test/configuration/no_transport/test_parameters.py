@@ -5,6 +5,7 @@ import xarray as xr
 from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import ForcingParameters
+from seapodym_lmtl_python.exception.parameter_exception import DifferentForcingTimestepError
 
 time_1 = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
 time_2 = coordinates.new_time(xr.cftime_range(start="2020", freq="2D", periods=2))
@@ -76,7 +77,7 @@ class TestForcingParameters:
     def test_forcing_parameters_initialization_with_different_time(
         self, forcing_time_1_space_1, forcing_time_2_space_1
     ):
-        with pytest.raises(ValueError):
+        with pytest.raises(DifferentForcingTimestepError):
             ForcingParameters(
                 temperature=forcing_time_1_space_1,
                 primary_production=forcing_time_2_space_1,
