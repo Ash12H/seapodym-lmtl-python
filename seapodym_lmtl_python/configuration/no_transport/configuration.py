@@ -6,7 +6,7 @@ the forcings (lazily).
 from __future__ import annotations
 
 from pathlib import Path
-from typing import IO
+from typing import IO, TYPE_CHECKING
 
 import attrs
 import cf_xarray  # noqa: F401
@@ -15,12 +15,14 @@ import xarray as xr
 
 from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
 from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
-from seapodym_lmtl_python.configuration.no_transport.parameters import (
+from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import (
     FunctionalGroupUnit,
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
-    NoTransportParameters,
 )
+
+if TYPE_CHECKING:
+    from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
 
 
 class NoTransportConfiguration(BaseConfiguration):

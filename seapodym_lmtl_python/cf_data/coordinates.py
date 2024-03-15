@@ -37,58 +37,43 @@ class SeaLayers(Enum):
 
 def new_latitude(latitude_data: np.ndarray) -> xr.DataArray:
     """Create a new latitude coordinate."""
-    return xr.DataArray(
-        coords={"latitude": latitude_data},
+    attributs = {"long_name": "latitude", "standard_name": "latitude", "units": "degrees_north", "axis": "Y"}
+    latitude = xr.DataArray(
+        coords=[("latitude", latitude_data, attributs)],
         dims=["latitude"],
-        data=latitude_data,
-        attrs={
-            "long_name": "latitude",
-            "standard_name": "latitude",
-            "units": "degrees_north",
-            "axis": "Y",
-        },
     )
+    return latitude.cf["Y"]
 
 
 def new_longitude(longitude_data: Iterable) -> xr.DataArray:
     """Create a new longitude coordinate."""
-    return xr.DataArray(
-        coords={"longitude": longitude_data},
+    attributs = {"long_name": "longitude", "standard_name": "longitude", "units": "degrees_east", "axis": "X"}
+    longitude = xr.DataArray(
+        coords=[("longitude", longitude_data, attributs)],
         dims=["longitude"],
-        data=longitude_data,
-        attrs={
-            "long_name": "longitude",
-            "standard_name": "longitude",
-            "units": "degrees_east",
-            "axis": "X",
-        },
     )
+    return longitude.cf["X"]
 
 
 def new_layer(layer_data: Iterable | None = None) -> xr.DataArray:
     """Create a new layer coordinate."""
     if layer_data is None:
         layer_data = [layer.depth for layer in SeaLayers]
-    return xr.DataArray(
-        coords={"layer": layer_data},
-        dims=["layer"],
-        data=layer_data,
-        attrs={
-            "long_name": "layer",
-            "standard_name": "layer",
-            "positive": "down",
-            "axis": "Z",
-            "flag_values": layer_data,
-            "flag_meanings": " ".join([layer.standard_name for layer in SeaLayers]),
-        },
-    )
+    attributs = {
+        "long_name": "layer",
+        "standard_name": "layer",
+        "positive": "down",
+        "axis": "Z",
+        "flag_values": layer_data,
+        "flag_meanings": " ".join([layer.standard_name for layer in SeaLayers]),
+    }
+    layer = xr.DataArray(coords=(("layer", layer_data, attributs),), dims=["layer"])
+    return layer.cf["Z"]
 
 
 def new_time(time_data: Iterable) -> xr.DataArray:
     """Create a new time coordinate."""
-    return xr.DataArray(
-        coords={"time": time_data},
-        dims=["time"],
-        data=time_data,
-        attrs={"long_name": "time", "standard_name": "time", "axis": "T"},
+    time = xr.DataArray(
+        coords=[("time", time_data, {"long_name": "time", "standard_name": "time", "axis": "T"})], dims=["time"]
     )
+    return time.cf["T"]
