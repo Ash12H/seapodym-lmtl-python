@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 
 def indent_message(msg: str) -> list[str]:
@@ -39,13 +40,23 @@ console_handler.setFormatter(CustomFormatter(fmt="%(asctime)s :: %(name)s ::  %(
 logger.addHandler(console_handler)
 
 
+def set_critical() -> None:
+    logger.setLevel(logging.CRITICAL)
+    warnings.filterwarnings("ignore")
+
+
+def set_error() -> None:
+    logger.setLevel(logging.ERROR)
+    warnings.filterwarnings("ignore")
+
+
+def set_warning() -> None:
+    logger.setLevel(logging.WARNING)
+
+
 def set_verbose() -> None:
     logger.setLevel(logging.INFO)
 
 
 def set_debug() -> None:
     logger.setLevel(logging.DEBUG)
-
-
-def set_default() -> None:
-    logger.setLevel(logging.WARNING)

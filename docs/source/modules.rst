@@ -1,5 +1,5 @@
-seapodym_lmtl_python
-====================
+Modules
+=======
 
 .. toctree::
    :maxdepth: 2
