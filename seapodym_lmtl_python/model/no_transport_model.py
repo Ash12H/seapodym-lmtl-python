@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import IO, Callable
+from typing import IO, TYPE_CHECKING, Callable
 
 import xarray as xr
-from dask.distributed import Client, Future
 
 from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
@@ -18,6 +16,11 @@ from seapodym_lmtl_python.post_production.biomass import compute_biomass
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
 from seapodym_lmtl_python.production.production import compute_production
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from dask.distributed import Client, Future
 
 
 class NoTransportModel(BaseModel):

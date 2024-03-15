@@ -14,6 +14,7 @@ class TestTimeLoop:
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
+            initial_production=None,
             export_preproduction=True,
         )
         assert isinstance(output_recruited, np.ndarray)
@@ -51,6 +52,7 @@ class TestTimeLoop:
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
+            initial_production=None,
             export_preproduction=True,
         )
         assert isinstance(output_recruited, np.ndarray)
@@ -88,6 +90,7 @@ class TestTimeLoop:
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
+            initial_production=None,
             export_preproduction=True,
         )
         assert isinstance(output_recruited, np.ndarray)
@@ -123,10 +126,10 @@ class TestTimeLoop:
         mask_temperature = np.array([True, False, True, False])
         timestep_number = np.array([1, 1, 1, 1])
         with pytest.raises(TypingError):
-            time_loop(list(primary_production), cohorts, mask_temperature, timestep_number)
+            time_loop(list(primary_production), cohorts, mask_temperature, timestep_number, None)
         with pytest.raises(TypingError):
-            time_loop(primary_production, list(cohorts), mask_temperature, timestep_number)
+            time_loop(primary_production, list(cohorts), mask_temperature, timestep_number, None)
         with pytest.raises(TypingError):
-            time_loop(primary_production, cohorts, list(mask_temperature), timestep_number)
+            time_loop(primary_production, cohorts, list(mask_temperature), timestep_number, None)
         with pytest.raises(TypingError):
-            time_loop(primary_production, cohorts, mask_temperature, list(timestep_number))
+            time_loop(primary_production, cohorts, mask_temperature, list(timestep_number), None)
