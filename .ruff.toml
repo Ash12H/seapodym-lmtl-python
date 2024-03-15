@@ -7,7 +7,7 @@ ignore = [
     "D212",
     "D401",
     "D404",
-    "PD004",        
+    "PD004",
     "PD010",
     "PD013",
     "S314",
@@ -29,4 +29,4 @@ indent-width = 4
 
 [lint.extend-per-file-ignores]
 # Using assert in test with pytest is allowed
-"test/*" = ["S101"]
+"test/*" = ["S101", "SLF001"]

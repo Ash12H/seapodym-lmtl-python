@@ -70,9 +70,9 @@ def ageing(production: np.ndarray, nb_timestep_by_cohort: np.ndarray) -> np.ndar
 @jit
 def time_loop(
     primary_production: np.ndarray,
-    cohorts: np.ndarray,
     mask_temperature: np.ndarray,
     timestep_number: np.ndarray,
+    initial_production: np.ndarray | None,
     *,
     export_preproduction: bool = False,
 ) -> tuple[np.ndarray, np.ndarray | None]:
@@ -82,28 +82,29 @@ def time_loop(
     Parameters
     ----------
     primary_production : np.ndarray
-        The primary production.
-    cohorts : np.ndarray
-        The cohorts.
+        The primary production. Dims : [T, X, Y].
     mask_temperature : np.ndarray
-        The temperature mask.
+        The temperature mask. Dims : [T, X, Y, Cohort].
     timestep_number : np.ndarray
-        The number of timestep.
+        The number of timestep. Dims : [Cohort]
+    initial_production : np.ndarray | None
+        The initial production. Dims : [X, Y, Cohort]
+        If None is given then initial_production is set to `np.zeros((T.size, Y.size, X.size))`.
     export_preproduction : bool
         If True, the pre-production is included in the output.
 
     Returns
     -------
     output_recruited : np.ndarray
-        The recruited production.
+        The recruited production. Dims : [T, X, Y, Cohort]
     output_preproduction : np.ndarray
-        The pre-production if `export_preproduction` is True, None otherwise.
+        The pre-production if `export_preproduction` is True, None otherwise. Dims : [T, X, Y, Cohort]
 
 
     Warning:
     -------
     - Be sure to transform nan values into 0.
-    - The dimensions of the input arrays must be [Functional groups, Time, Latitude, Longitude, Depth, Cohort].
+    - The dimensions order of the input arrays must be [Time, Latitude, Longitude, Cohort].
 
     """
     # INIT OUTPUTS
@@ -111,9 +112,11 @@ def time_loop(
     if export_preproduction:
         output_preproduction = np.empty(mask_temperature.shape)
     # MAIN COMPUTATION
-    next_prepoduction = np.zeros(mask_temperature.shape[1:])  # without time dimension
+    next_prepoduction = np.zeros(mask_temperature.shape[1:]) if initial_production is None else initial_production
+    # TODO(Jules) : Add initialisation from configuration
+    # next_prepoduction = initial_biomass(ie. t=-1)
     for timestep in range(primary_production.shape[0]):
-        pre_production = expand_dims(primary_production[timestep], cohorts.size)
+        pre_production = expand_dims(primary_production[timestep], timestep_number.size)
         pre_production = pre_production + next_prepoduction
         if timestep < primary_production.shape[0] - 1:
             not_recruited = np.where(~mask_temperature[timestep], pre_production, 0)
@@ -154,9 +157,10 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: bool 
 
         output_recruited, output_preproduction = time_loop(
             primary_production=np.nan_to_num(fgroup_data[PreproductionLabels.primary_production].data, 0.0),
-            cohorts=fgroup_data[ConfigurationLabels.cohort].data,
             mask_temperature=np.nan_to_num(fgroup_data[PreproductionLabels.mask_temperature].data, False),
             timestep_number=fgroup_data[ConfigurationLabels.timesteps_number].data,
+            # TODO(Jules) : Add initialisation from configuration (ie. initial_production)
+            initial_production=None,
             export_preproduction=export_preproduction,
         )
 

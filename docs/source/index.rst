@@ -7,8 +7,12 @@ Welcome to Seapopym's documentation!
 ====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
+
+   
+   modules
+   examples
 
 
 
