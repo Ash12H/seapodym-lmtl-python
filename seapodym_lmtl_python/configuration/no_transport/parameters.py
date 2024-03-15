@@ -121,7 +121,7 @@ class FunctionalGroups:
 class NoTransportParameters:
     """This is the main data class. It is used to store the model configuration parameters."""
 
-    path_parameters: ForcingParameters = field(metadata={"description": "All the paths to the forcings."})
+    forcing_parameters: ForcingParameters = field(metadata={"description": "All the paths to the forcings."})
 
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
@@ -132,7 +132,7 @@ class NoTransportParameters:
         Check that the timestep of the functional groups is consistent (ie. multiple of) with the timestep of the
         forcings.
         """
-        global_timestep = self.path_parameters.timestep
+        global_timestep = self.forcing_parameters.timestep
         for fgroup in self.functional_groups_parameters.functional_groups:
             fgroup_timestep = fgroup.functional_type.cohorts_timesteps
             if not np.all([(ts % global_timestep) == 0 for ts in fgroup_timestep]):

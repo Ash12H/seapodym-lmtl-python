@@ -23,7 +23,8 @@ class ConfigurationLabels(StrEnum):
     max_timestep = "max_timestep"
     mean_timestep = "mean_timestep"
     timestep = "timestep"
-    resolution = "resolution"
+    resolution_latitude = "resolution_latitude"
+    resolution_longitude = "resolution_longitude"
 
 
 class PreproductionLabels(StrEnum):

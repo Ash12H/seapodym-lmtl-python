@@ -49,17 +49,13 @@ class NoTransportConfiguration(BaseConfiguration):
             kargs = {}
 
         all_forcing = {
-            ConfigurationLabels.timestep: self.parameters.timestep,
-            ConfigurationLabels.resolution: self.parameters.resolution,
+            forcing_key: forcing_value["forcing"]
+            for forcing_key, forcing_value in attrs.asdict(self.parameters.forcing_parameters).items()
+            if forcing_value is not None and forcing_key not in ["timestep", "resolution"]
         }
-
-        for forcing_name, forcing_value in attrs.asdict(self.parameters.path_parameters).items():
-            if forcing_value is not None:
-                data = xr.open_dataset(
-                    forcing_value["forcing_path"],
-                    **kargs,
-                )[forcing_value["name"]]
-                all_forcing[forcing_name] = data
+        all_forcing[ConfigurationLabels.timestep] = self.parameters.forcing_parameters.timestep
+        all_forcing[ConfigurationLabels.resolution_latitude] = self.parameters.forcing_parameters.resolution[0]
+        all_forcing[ConfigurationLabels.resolution_longitude] = self.parameters.forcing_parameters.resolution[1]
 
         return xr.Dataset(all_forcing)
 
@@ -187,9 +183,6 @@ class NoTransportConfiguration(BaseConfiguration):
         return xr.merge(
             [_cohort_by_fgroup(grp_index, timesteps) for grp_index, timesteps in zip(all_index, all_cohorts_timesteps)]
         )
-
-    # TODO(Jules): Add the validation process
-    # https://github.com/users/Ash12H/projects/3?pane=issue&itemId=54978078
 
     def as_dataset(self: NoTransportConfiguration) -> xr.Dataset:
         """Return the configuration as a xarray.Dataset."""

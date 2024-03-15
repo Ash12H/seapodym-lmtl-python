@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Iterable
 
 import cf_xarray  # noqa: F401
 import numpy as np
 import pandas as pd
 import xarray as xr
-from attrs import field, frozen, validators
+from attrs import field, frozen, validators, converters
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 
@@ -71,11 +72,11 @@ class ForcingUnit:
 
     Parameters
     ----------
-    forcing : xr.DataArray
-        The forcing field.
-    resolution : float | tuple[float, float]
-        Space resolution of the field as (lat, lon) or both if equals.
-    timestep : int
+    forcing: xr.DataArray
+        Forcing field.
+    resolution: tuple[float, float] | None
+        Space resolution of the field as (lat, lon).
+    timestep: int | None
         Timestep of the field in day(s).
 
 
@@ -93,14 +94,17 @@ class ForcingUnit:
         metadata={"description": "Forcing field."},
     )
 
-    resolution: tuple[float, float] = field(
+    resolution: Iterable[float, float] | float | None = field(
         default=None,
+        converter=converters.optional(
+            lambda x: tuple(float(item) for item in x) if isinstance(x, Iterable) else float(x)
+        ),
         metadata={"description": "Space resolution of the field as (lat, lon)."},
     )
 
     timestep: int | None = field(
         default=None,
-        validator=validators.optional(validators.instance_of(int)),
+        converter=converters.optional(int),
         metadata={"description": "Timestep of the field in day(s)."},
     )
 
@@ -120,9 +124,11 @@ class ForcingUnit:
         forcing = forcing[name]
 
         if resolution is not None:
-            resolution = float(resolution)
-        if isinstance(resolution, float):
-            resolution = (resolution, resolution)
+            if isinstance(resolution, Iterable):
+                resolution = tuple(float(item) for item in resolution)
+            else:
+                resolution = (float(resolution), float(resolution))
+
         if timestep is not None:
             timestep = int(timestep)
         return cls(forcing=forcing, resolution=resolution, timestep=timestep)
@@ -132,8 +138,8 @@ class ForcingUnit:
         cls: ForcingUnit,
         forcing: Path | str,
         name: str,
-        resolution: tuple[float, float] | float | None,
-        timestep: int | None,
+        resolution: tuple[float, float] | float | None = None,
+        timestep: int | None = None,
     ) -> ForcingUnit:
         """Create a ForcingUnit from a path and a name."""
         forcing = Path(forcing)
@@ -142,10 +148,13 @@ class ForcingUnit:
 
     def __attrs_post_init__(self: ForcingUnit) -> None:
         """Setup the space and time resolutions."""
-        if "X" in self.forcing.cf and "Y" in self.forcing.cf:
+        if self.resolution is not None:
+            if not isinstance(self.resolution, Iterable):
+                object.__setattr__(self, "resolution", (float(self.resolution), float(self.resolution)))
+        elif "X" in self.forcing.cf and "Y" in self.forcing.cf:
             resolution = _check_single_forcing_resolution(latitude=self.forcing.cf["Y"], longitude=self.forcing.cf["X"])
             object.__setattr__(self, "resolution", resolution)
 
-        if "T" in self.forcing.cf:
+        if self.timestep is None and "T" in self.forcing.cf:
             timestep = _check_single_forcing_timestep(timeseries=self.forcing.cf.indexes["T"])
             object.__setattr__(self, "timestep", timestep)

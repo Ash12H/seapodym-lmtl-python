@@ -91,10 +91,7 @@ class TestForcingParameters:
 
 class TestNoTransportParameters:
     def test_no_transport_parameters_initialization(self, forcing_time_1_space_1):
-        f_param = ForcingParameters(
-            temperature=forcing_time_1_space_1,
-            primary_production=forcing_time_1_space_1,
-        )
+        f_param = ForcingParameters(temperature=forcing_time_1_space_1, primary_production=forcing_time_1_space_1)
         g_param = FunctionalGroups(
             functional_groups=[
                 parameter_functional_group.FunctionalGroupUnit(
@@ -113,4 +110,4 @@ class TestNoTransportParameters:
                 )
             ],
         )
-        NoTransportParameters(path_parameters=f_param, functional_groups_parameters=g_param)
+        NoTransportParameters(forcing_parameters=f_param, functional_groups_parameters=g_param)
