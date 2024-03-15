@@ -31,7 +31,8 @@ pytest = "^8.0.1"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^7.2.6"
-sphinx-material = "^0.0.36"
+nbsphinx = "^0.9.3"
+sphinx-rtd-theme = "^2.0.0"
 
 [build-system]
 requires = ["poetry-core"]
