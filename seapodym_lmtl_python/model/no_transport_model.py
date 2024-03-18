@@ -41,6 +41,7 @@ class NoTransportModel(BaseModel):
             msg = "The configuration must be an instance of NoTransportConfiguration or NoTransportParameters."
             raise TypeError(msg)
         self._client = client
+        self.state = None
 
     @property
     def configuration(self: NoTransportModel) -> NoTransportConfiguration | None:

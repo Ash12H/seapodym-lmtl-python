@@ -9,7 +9,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import pandas as pd
 import xarray as xr
-from attrs import field, frozen, validators, converters
+from attrs import converters, field, frozen
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 
@@ -51,7 +51,7 @@ def _check_single_forcing_timestep(timeseries: pd.DatetimeIndex) -> float | tupl
 
 
 def path_validation(path: Path) -> None:
-    """Check if the path exists and if the Dataset contains the specfied DataArray."""
+    """Check if the path exists."""
     if not path.exists():
         msg = f"The path '{path}' does not exist."
         raise FileExistsError(msg)
