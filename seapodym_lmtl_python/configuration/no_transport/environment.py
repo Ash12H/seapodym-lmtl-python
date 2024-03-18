@@ -3,8 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Iterable
 
+import numpy as np
 from attrs import define, field, validators
 from dask.distributed import Client, LocalCluster
+
+from seapodym_lmtl_python.logging.custom_logger import logger
 
 
 @define
@@ -69,7 +72,6 @@ class ClientParameter:
         default="auto", metadata={"description": "The memory limit of each worker."}
     )
     client: Client | None = field(init=False, default=None, metadata={"description": "The Dask client."})
-    cluster: LocalCluster | None = field(init=False, default=None, metadata={"description": "The Dask cluster."})
 
     @classmethod
     def from_address(cls: ClientParameter, address: str) -> ClientParameter:
@@ -80,37 +82,42 @@ class ClientParameter:
         -------
         ```python
         client = Client()
-        client_param = ClientParameter.from_address(address=client.cluster.scheduler_address)
+        client_param = ClientParameter.from_address(address=client.scheduler.address)
         print(client_param.client)
         ```
 
         """
         client = Client(address=address)
-        workers = client.client.cluster.workers
-        client_param = ClientParameter(
-            n_workers=len(workers), threads_per_worker=workers[0].nthreads, memory_limit=workers[0].memory_limit
-        )
+        workers = client.scheduler_info()["workers"]
+        infos = ((w_info["nthreads"], w_info["memory_limit"]) for w_info in workers.values())
+        nthreads, memory_limit = tuple(map(list, zip(*infos)))
+
+        n_workers = int(len(nthreads))
+        nthreads = int(np.mean(nthreads))
+        memory_limit = int(np.mean(memory_limit))
+
+        client_param = ClientParameter(n_workers=n_workers, threads_per_worker=nthreads, memory_limit=memory_limit)
         client_param.client = client
         return client_param
 
     def initialize_client(self: ClientParameter) -> None:
         """Initialize the client."""
-        if self.address is not None:
-            self.client = Client(self.address)
-        else:
-            self.cluster = LocalCluster(
+        if self.client is None:
+            self.client = Client(
                 n_workers=self.n_workers,
                 threads_per_worker=self.threads_per_worker,
                 memory_limit=self.memory_limit,
             )
-            self.client = Client(self.cluster)
+        else:
+            msg = "Trying to initialize an already initialized client."
+            logger.info(msg)
 
     def close_client(self: ClientParameter) -> None:
         """Close the client."""
         if self.client is not None:
             self.client.close()
-        if self.cluster is not None:
-            self.cluster.close()
+            del self.client
+            self.client = None
 
 
 @define
