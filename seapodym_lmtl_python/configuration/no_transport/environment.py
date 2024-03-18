@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Iterable
 
 from attrs import define, field, validators
+from dask.distributed import Client, LocalCluster
 
 
 @define
@@ -47,13 +48,13 @@ class ChunkParameter:
 
 @define
 class ClientParameter:
-    """For more information about this class check the Dask documentation about LocalCluster and Client."""
+    """
+    If an address is provided, the client will be initialized with this address and other parameters will be ignored.
+    If no address is provided, a LocalCluster will be initialized with the other parameters.
 
-    adress: str | None = field(
-        default=None,
-        validator=validators.optional(validators.instance_of(str)),
-        metadata={"description": "The adress of the dask scheduler."},
-    )
+    For more information about this class check the Dask documentation about LocalCluster and Client.
+    """
+
     n_workers: int | None = field(
         default=None,
         validator=validators.optional(validators.instance_of(int)),
@@ -65,9 +66,51 @@ class ClientParameter:
         metadata={"description": "The number of threads per worker."},
     )
     memory_limit: str | int | float = field(
-        default="auto",
-        metadata={"description": "The memory limit of each worker."},
+        default="auto", metadata={"description": "The memory limit of each worker."}
     )
+    client: Client | None = field(init=False, default=None, metadata={"description": "The Dask client."})
+    cluster: LocalCluster | None = field(init=False, default=None, metadata={"description": "The Dask cluster."})
+
+    @classmethod
+    def from_address(cls: ClientParameter, address: str) -> ClientParameter:
+        """
+        Create a ClientParameter from an address.
+
+        Example:
+        -------
+        ```python
+        client = Client()
+        client_param = ClientParameter.from_address(address=client.cluster.scheduler_address)
+        print(client_param.client)
+        ```
+
+        """
+        client = Client(address=address)
+        workers = client.client.cluster.workers
+        client_param = ClientParameter(
+            n_workers=len(workers), threads_per_worker=workers[0].nthreads, memory_limit=workers[0].memory_limit
+        )
+        client_param.client = client
+        return client_param
+
+    def initialize_client(self: ClientParameter) -> None:
+        """Initialize the client."""
+        if self.address is not None:
+            self.client = Client(self.address)
+        else:
+            self.cluster = LocalCluster(
+                n_workers=self.n_workers,
+                threads_per_worker=self.threads_per_worker,
+                memory_limit=self.memory_limit,
+            )
+            self.client = Client(self.cluster)
+
+    def close_client(self: ClientParameter) -> None:
+        """Close the client."""
+        if self.client is not None:
+            self.client.close()
+        if self.cluster is not None:
+            self.cluster.close()
 
 
 @define
@@ -115,15 +158,18 @@ class PreProductionParameter(BaseOuputForcingParameter):
 class OutputParameter:
     """The output parameter that manage the backup of the output forcings."""
 
-    biomass: BiomassParameter = field(
+    biomass: BiomassParameter | None = field(
+        factory=BiomassParameter,
         validator=validators.instance_of(BiomassParameter),
         metadata={"description": "The output parameter for the biomass forcing."},
     )
-    production: ProductionParameter = field(
+    production: ProductionParameter | None = field(
+        factory=ProductionParameter,
         validator=validators.instance_of(ProductionParameter),
         metadata={"description": "The output parameter for the production forcing."},
     )
-    pre_production: PreProductionParameter = field(
+    pre_production: PreProductionParameter | None = field(
+        factory=PreProductionParameter,
         validator=validators.instance_of(PreProductionParameter),
         metadata={"description": "The output parameter for the pre-production forcing."},
     )
@@ -137,17 +183,17 @@ class OutputParameter:
 class EnvironmentParameter:
     """Manage the different environment parameters of the simulation."""
 
-    chunk: ChunkParameter = field(
+    chunk: ChunkParameter | None = field(
         factory=ChunkParameter,
         validator=validators.instance_of(ChunkParameter),
         metadata={"description": "The chunk size of the different dimensions."},
     )
-    client: ClientParameter = field(
+    client: ClientParameter | None = field(
         factory=ClientParameter,
         validator=validators.instance_of(ClientParameter),
         metadata={"description": "The client parameter."},
     )
-    output: OutputParameter = field(
+    output: OutputParameter | None = field(
         factory=OutputParameter,
         validator=validators.instance_of(OutputParameter),
         metadata={"description": "The output parameter."},
