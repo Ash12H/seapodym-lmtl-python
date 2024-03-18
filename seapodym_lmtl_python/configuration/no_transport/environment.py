@@ -184,6 +184,7 @@ class OutputParameter:
         metadata={"description": "The output parameter for the pre-production forcing."},
     )
 
+    # TODO(Jules): Is it useful ?
     def shared_path(self: OutputParameter) -> bool:
         """Check if the path are shared between the different output forcing."""
         return self.biomass.path == self.production.path and self.production.path == self.pre_production.path
