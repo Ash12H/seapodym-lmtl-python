@@ -14,16 +14,19 @@ from seapodym_lmtl_python.logging.custom_logger import logger
 class ChunkParameter:
     """The chunk size of the different dimensions."""
 
-    functional_group: str | int = field(
+    functional_group: str | int | None = field(
         default="auto",
+        validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the functional group dimension."},
     )
     latitude: str | int | None = field(
         default=None,
+        validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the latitude dimension."},
     )
     longitude: str | int | None = field(
         default=None,
+        validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the longitude dimension."},
     )
     time: None = field(
@@ -37,15 +40,15 @@ class ChunkParameter:
         },
     )
 
-    def as_dict(self: ChunkParameter, *, with_fgroup: bool = False) -> dict:
+    def as_dict(self: ChunkParameter, *, with_fgroup: bool = True) -> dict:
         """Format to a dictionary as expected by xarray."""
         chunks = {}
+        if with_fgroup:
+            chunks["functional_group"] = self.functional_group
         if self.latitude is not None:
             chunks["latitude"] = self.latitude
         if self.longitude is not None:
             chunks["longitude"] = self.longitude
-        if with_fgroup:
-            chunks["functional_group"] = self.functional_group
         return chunks
 
 
