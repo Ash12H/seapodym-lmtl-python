@@ -1,16 +1,15 @@
 from pathlib import Path
 
-import pytest
 from dask.distributed import Client
 
-from seapodym_lmtl_python.configuration.no_transport.environment import (
+from seapodym_lmtl_python.configuration.no_transport.parameter_environment import (
     BaseOuputForcingParameter,
-    BiomassParameter,
     ChunkParameter,
     ClientParameter,
     EnvironmentParameter,
     OutputParameter,
     PreProductionParameter,
+    BiomassParameter,
     ProductionParameter,
 )
 
@@ -114,19 +113,29 @@ class TestPreProductionParameter:
 
 
 class TestOutputParameter:
-    def test_shared_path(self):
+    def test_default_values(self):
         output_param = OutputParameter()
-        output_param.biomass.path = "/path/to/outputs"
-        output_param.production.path = "/path/to/outputs"
-        output_param.pre_production.path = "/path/to/outputs"
+        assert output_param.biomass is not None
+        assert isinstance(output_param.biomass, BiomassParameter)
+        assert output_param.production is not None
+        assert isinstance(output_param.production, ProductionParameter)
+        assert output_param.pre_production is not None
+        assert isinstance(output_param.pre_production, PreProductionParameter)
 
+    def test_shared_path_as_default(self):
+        output_param = OutputParameter(
+            biomass=BiomassParameter(),
+            production=ProductionParameter(),
+            pre_production=PreProductionParameter(),
+        )
         assert output_param.shared_path()
 
     def test_not_shared_path(self):
-        output_param = OutputParameter()
-        output_param.biomass.path = "/path/to/outputs1"
-        output_param.production.path = "/path/to/outputs2"
-        output_param.pre_production.path = "/path/to/outputs3"
+        output_param = OutputParameter(
+            biomass=BiomassParameter(path="/path/to/outputs1"),
+            production=ProductionParameter(path="/path/to/outputs2"),
+            pre_production=PreProductionParameter(path="/path/to/outputs3"),
+        )
 
         assert not output_param.shared_path()
 

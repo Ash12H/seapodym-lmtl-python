@@ -6,6 +6,7 @@ from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
 from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
+from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
     ForcingParameters,

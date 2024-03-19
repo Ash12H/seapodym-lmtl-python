@@ -4,13 +4,13 @@ from pathlib import Path
 from typing import Iterable
 
 import numpy as np
-from attrs import define, field, validators
-from dask.distributed import Client, LocalCluster
+from attrs import define, field, frozen, validators
+from dask.distributed import Client
 
 from seapodym_lmtl_python.logging.custom_logger import logger
 
 
-@define
+@frozen
 class ChunkParameter:
     """The chunk size of the different dimensions."""
 
@@ -123,7 +123,7 @@ class ClientParameter:
             self.client = None
 
 
-@define
+@frozen(kw_only=True)
 class BaseOuputForcingParameter:
     """A base class for the output forcing parameter."""
 
@@ -144,17 +144,17 @@ class BaseOuputForcingParameter:
     )
 
 
-@define
+@frozen(kw_only=True)
 class BiomassParameter(BaseOuputForcingParameter):
     """The output parameter for the biomass forcing."""
 
 
-@define
+@frozen(kw_only=True)
 class ProductionParameter(BaseOuputForcingParameter):
     """The output parameter for the production forcing."""
 
 
-@define
+@frozen(kw_only=True)
 class PreProductionParameter(BaseOuputForcingParameter):
     """The output parameter for the pre-production forcing (i.e. with cohorts)."""
 
@@ -164,21 +164,21 @@ class PreProductionParameter(BaseOuputForcingParameter):
     )
 
 
-@define
+@frozen(kw_only=True)
 class OutputParameter:
     """The output parameter that manage the backup of the output forcings."""
 
-    biomass: BiomassParameter | None = field(
+    biomass: BiomassParameter = field(
         factory=BiomassParameter,
         validator=validators.instance_of(BiomassParameter),
         metadata={"description": "The output parameter for the biomass forcing."},
     )
-    production: ProductionParameter | None = field(
+    production: ProductionParameter = field(
         factory=ProductionParameter,
         validator=validators.instance_of(ProductionParameter),
         metadata={"description": "The output parameter for the production forcing."},
     )
-    pre_production: PreProductionParameter | None = field(
+    pre_production: PreProductionParameter = field(
         factory=PreProductionParameter,
         validator=validators.instance_of(PreProductionParameter),
         metadata={"description": "The output parameter for the pre-production forcing."},
@@ -190,21 +190,21 @@ class OutputParameter:
         return self.biomass.path == self.production.path and self.production.path == self.pre_production.path
 
 
-@define
+@frozen(kw_only=True)
 class EnvironmentParameter:
     """Manage the different environment parameters of the simulation."""
 
-    chunk: ChunkParameter | None = field(
+    chunk: ChunkParameter = field(
         factory=ChunkParameter,
         validator=validators.instance_of(ChunkParameter),
         metadata={"description": "The chunk size of the different dimensions."},
     )
-    client: ClientParameter | None = field(
+    client: ClientParameter = field(
         factory=ClientParameter,
         validator=validators.instance_of(ClientParameter),
         metadata={"description": "The client parameter."},
     )
-    output: OutputParameter | None = field(
+    output: OutputParameter = field(
         factory=OutputParameter,
         validator=validators.instance_of(OutputParameter),
         metadata={"description": "The output parameter."},

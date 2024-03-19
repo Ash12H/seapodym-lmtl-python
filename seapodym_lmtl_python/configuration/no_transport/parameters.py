@@ -8,6 +8,7 @@ from __future__ import annotations
 import numpy as np
 from attrs import field, frozen, validators
 
+from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
 from seapodym_lmtl_python.exception.parameter_exception import (
@@ -123,6 +124,10 @@ class NoTransportParameters:
 
     functional_groups_parameters: FunctionalGroups = field(
         metadata={"description": "Parameters of all functional groups."}
+    )
+
+    environment_parameters: EnvironmentParameter = field(
+        factory=EnvironmentParameter, metadata={"description": "Parameters of the environment."}
     )
 
     def __attrs_post_init__(self: NoTransportParameters) -> None:
