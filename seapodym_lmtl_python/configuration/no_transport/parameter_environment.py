@@ -113,7 +113,7 @@ class ClientParameter:
             )
         else:
             msg = "Trying to initialize an already initialized client."
-            logger.info(msg)
+            logger.warning(msg)
 
     def close_client(self: ClientParameter) -> None:
         """Close the client."""

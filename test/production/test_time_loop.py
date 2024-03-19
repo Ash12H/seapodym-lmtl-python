@@ -165,3 +165,26 @@ class TestTimeLoop:
             time_loop(primary_production, cohorts, list(mask_temperature), timestep_number, None)
         with pytest.raises(TypingError):
             time_loop(primary_production, cohorts, mask_temperature, list(timestep_number), None)
+
+    def test_time_loop_with_initial_conditions(self):
+        time_len = 5
+        export_preproduction = np.arange(time_len, dtype=int)
+        primary_production = np.tile(np.array([1]), (time_len, 1, 1))  # T, X, Y
+        mask_temperature = np.tile(np.array([False, False, False, False]), (time_len, 1, 1, 1))  # T, X, Y, C
+        timestep_number = np.array([1, 1, 1, 1])  # C
+        initial_production = np.array([[[1.0, 0.0, 0.0, 0.0]]])
+        _, output_preproduction = time_loop(
+            primary_production=primary_production,
+            mask_temperature=mask_temperature,
+            timestep_number=timestep_number,
+            initial_production=initial_production,
+            export_preproduction=export_preproduction,
+        )
+        expected = [
+            [[[2.0, 0.0, 0.0, 0.0]]],
+            [[[1.0, 2.0, 0.0, 0.0]]],
+            [[[1.0, 1.0, 2.0, 0.0]]],
+            [[[1.0, 1.0, 1.0, 2.0]]],
+            [[[1.0, 1.0, 1.0, 3.0]]],
+        ]
+        assert np.all(output_preproduction == expected)
