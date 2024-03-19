@@ -6,16 +6,44 @@ from seapodym_lmtl_python.production.production import time_loop
 
 
 class TestTimeLoop:
-    def test_time_loop_without_recruitment(self):
+    def test_time_loop_without_preproduction(self):
         primary_production = np.tile(np.array([1]), (5, 1, 1))  # T, X, Y
         mask_temperature = np.tile(np.array([False, False, False, False]), (5, 1, 1, 1))  # T, X, Y, C
+        timestep_number = np.array([1, 1, 1, 1])  # C
+        output_recruited, _ = time_loop(
+            primary_production=primary_production,
+            mask_temperature=mask_temperature,
+            timestep_number=timestep_number,
+            initial_production=None,
+            export_preproduction=None,
+        )
+        assert isinstance(output_recruited, np.ndarray)
+
+    def test_time_loop_with_preproduction(self):
+        primary_production = np.tile(np.array([1]), (5, 1, 1))  # T, X, Y
+        mask_temperature = np.tile(np.array([False, False, False, False]), (5, 1, 1, 1))  # T, X, Y, C
+        timestep_number = np.array([1, 1, 1, 1])  # C
+        output_recruited, _ = time_loop(
+            primary_production=primary_production,
+            mask_temperature=mask_temperature,
+            timestep_number=timestep_number,
+            initial_production=None,
+            export_preproduction=np.array([0]),
+        )
+        assert isinstance(output_recruited, np.ndarray)
+
+    def test_time_loop_without_recruitment(self):
+        time_len = 5
+        export_preproduction = np.arange(time_len, dtype=int)
+        primary_production = np.tile(np.array([1]), (time_len, 1, 1))  # T, X, Y
+        mask_temperature = np.tile(np.array([False, False, False, False]), (time_len, 1, 1, 1))  # T, X, Y, C
         timestep_number = np.array([1, 1, 1, 1])  # C
         output_recruited, output_preproduction = time_loop(
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
             initial_production=None,
-            export_preproduction=True,
+            export_preproduction=export_preproduction,
         )
         assert isinstance(output_recruited, np.ndarray)
         assert isinstance(output_preproduction, np.ndarray)
@@ -45,15 +73,17 @@ class TestTimeLoop:
         assert np.allclose(output_preproduction, expected_output_preproduction)
 
     def test_time_loop_with_instant_recruitment(self):
-        primary_production = np.tile(np.array([1]), (5, 1, 1))  # T, X, Y
-        mask_temperature = np.tile(np.array([True, True, True, True]), (5, 1, 1, 1))  # T, X, Y, C
+        time_len = 5
+        export_preproduction = np.arange(time_len, dtype=int)
+        primary_production = np.tile(np.array([1]), (time_len, 1, 1))  # T, X, Y
+        mask_temperature = np.tile(np.array([True, True, True, True]), (time_len, 1, 1, 1))  # T, X, Y, C
         timestep_number = np.array([1, 1, 1, 1])  # C
         output_recruited, output_preproduction = time_loop(
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
             initial_production=None,
-            export_preproduction=True,
+            export_preproduction=export_preproduction,
         )
         assert isinstance(output_recruited, np.ndarray)
         assert isinstance(output_preproduction, np.ndarray)
@@ -83,15 +113,17 @@ class TestTimeLoop:
         assert np.allclose(output_preproduction, expected_output_preproduction)
 
     def test_time_loop_with_delayed_recruitment(self):
-        primary_production = np.tile(np.array([1]), (5, 1, 1))  # T, X, Y
-        mask_temperature = np.tile(np.array([False, True, True, True]), (5, 1, 1, 1))  # T, X, Y, C
+        time_len = 5
+        export_preproduction = np.arange(time_len, dtype=int)
+        primary_production = np.tile(np.array([1]), (time_len, 1, 1))  # T, X, Y
+        mask_temperature = np.tile(np.array([False, True, True, True]), (time_len, 1, 1, 1))  # T, X, Y, C
         timestep_number = np.array([1, 1, 1, 1])  # C
         output_recruited, output_preproduction = time_loop(
             primary_production=primary_production,
             mask_temperature=mask_temperature,
             timestep_number=timestep_number,
             initial_production=None,
-            export_preproduction=True,
+            export_preproduction=export_preproduction,
         )
         assert isinstance(output_recruited, np.ndarray)
         assert isinstance(output_preproduction, np.ndarray)

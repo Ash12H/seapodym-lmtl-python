@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import IO, TYPE_CHECKING, Callable
 
+import numpy as np
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
@@ -27,9 +28,7 @@ class NoTransportModel(BaseModel):
     """Implement the LMTL model without the transport (Advection-Diffusion)."""
 
     def __init__(
-        self: NoTransportModel,
-        configuration: NoTransportConfiguration | NoTransportParameters | None = None,
-        client: Client | None = None,
+        self: NoTransportModel, configuration: NoTransportConfiguration | NoTransportParameters | None = None
     ) -> None:
         """The constructor of the model allows the user to overcome the default parameters and client behaviors."""
         super().__init__()
@@ -40,7 +39,6 @@ class NoTransportModel(BaseModel):
         else:
             msg = "The configuration must be an instance of NoTransportConfiguration or NoTransportParameters."
             raise TypeError(msg)
-        self._client = client
         self.state = None
 
     @property
@@ -51,31 +49,19 @@ class NoTransportModel(BaseModel):
     @property
     def client(self: NoTransportModel) -> Client | None:
         """The dask Client getter."""
-        return self._client
-
-    @client.setter
-    def client(self: NoTransportModel, client: Client) -> None:
-        """The dask Client setter."""
-        if self._client is not None:
-            warning_message = (
-                f"The model has already a client running at '{self._client.dashboard_link}'."
-                f"\nWe are then closing it and starting the new one at '{client.dashboard_link}'"
-            )
-            logger.warning(warning_message)
-            self._client.close()
-            self._client = client
-        self._client = client
+        return self._configuration.environment_parameters.client.client
 
     @classmethod
     def parse(cls: NoTransportModel, configuration_file: str | Path | IO) -> NoTransportModel:
         return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
 
     def initialize(self: NoTransportModel) -> None:
-        self.client = no_transport_client.init_client_locally(self.configuration)
+        self.configuration.environment_parameters.client.initialize_client()
 
     def generate_configuration(self: NoTransportModel) -> None:
-        self.state: xr.Dataset = self.configuration.as_dataset()
+        self.state: xr.Dataset = self.configuration.model_parameters
 
+    # TODO(Jules): Rename this method to save_state ?
     def save_configuration(self: NoTransportModel) -> None:
         """Save the configuration."""
 
@@ -181,8 +167,24 @@ class NoTransportModel(BaseModel):
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
         # TODO(Jules): Manage chunk and export_preproduction parameters. Fixed for now:
-        chunk = {ConfigurationLabels.fgroup: 1}
-        export_preproduction = False
+        chunk = self.configuration.environment_parameters.chunk.as_dict()
+
+        timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
+        data = self.state.cf["T"]
+
+        if timestamps is None:
+            export_preproduction = None
+        elif timestamps == "all":
+            export_preproduction = np.arange(data.size)
+        else:
+            if np.all([isinstance(x, int) for x in timestamps]):
+                selected_dates = data.isel(time=timestamps)
+            elif np.all([isinstance(x, str) for x in timestamps]):
+                selected_dates = data.sel(time=timestamps, method="nearest")
+            else:
+                msg = "The timestamps must be either 'all', a list of integers or a list of strings."
+                raise TypeError(msg)
+            export_preproduction = np.arange(data.size)[data.isin(selected_dates)]
 
         self.state = compute_production(
             data=self.state,

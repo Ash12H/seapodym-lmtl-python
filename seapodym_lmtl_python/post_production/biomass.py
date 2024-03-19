@@ -4,6 +4,7 @@ They are run after the production process.
 """
 from __future__ import annotations
 
+import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 from numba import jit

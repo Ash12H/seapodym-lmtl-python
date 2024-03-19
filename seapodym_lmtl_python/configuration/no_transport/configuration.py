@@ -8,11 +8,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import IO, TYPE_CHECKING
 
-import attrs
 import xarray as xr
 
 from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
 from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset import as_dataset
+from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 
 if TYPE_CHECKING:
     from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
@@ -26,7 +26,7 @@ class NoTransportConfiguration(BaseConfiguration):
         self._parameters = parameters
 
     @property
-    def model_parameters(self: NoTransportConfiguration) -> NoTransportParameters:
+    def model_parameters(self: NoTransportConfiguration) -> xr.Dataset:
         """The xarray.Dataset that stores all the model parameters and forcing."""
         return as_dataset(
             functional_groups=self._parameters.functional_groups_parameters.functional_groups,
@@ -34,7 +34,7 @@ class NoTransportConfiguration(BaseConfiguration):
         )
 
     @property
-    def environment_parameters(self: NoTransportConfiguration) -> attrs.Attribute:
+    def environment_parameters(self: NoTransportConfiguration) -> EnvironmentParameter:
         """The attrs dataclass that stores all the environment parameters."""
         return self._parameters.environment_parameters
 
