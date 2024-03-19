@@ -4,6 +4,7 @@ import xarray as xr
 
 from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
+from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
     ForcingParameters,
@@ -110,4 +111,7 @@ class TestNoTransportParameters:
                 )
             ],
         )
-        NoTransportParameters(forcing_parameters=f_param, functional_groups_parameters=g_param)
+        e_param = EnvironmentParameter()
+        NoTransportParameters(
+            forcing_parameters=f_param, functional_groups_parameters=g_param, environment_parameters=e_param
+        )

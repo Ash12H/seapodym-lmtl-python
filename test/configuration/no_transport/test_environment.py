@@ -4,12 +4,12 @@ from dask.distributed import Client
 
 from seapodym_lmtl_python.configuration.no_transport.parameter_environment import (
     BaseOuputForcingParameter,
+    BiomassParameter,
     ChunkParameter,
     ClientParameter,
     EnvironmentParameter,
     OutputParameter,
     PreProductionParameter,
-    BiomassParameter,
     ProductionParameter,
 )
 
