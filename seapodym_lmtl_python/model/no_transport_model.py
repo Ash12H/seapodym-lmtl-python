@@ -202,4 +202,4 @@ class NoTransportModel(BaseModel):
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""
-        no_transport_client.close_client_locally(self.client)
+        self.configuration.environment_parameters.client.close_client()

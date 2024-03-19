@@ -22,6 +22,9 @@ class TestClientParameter:
         assert isinstance(client_param.client, Client)
         client_param.close_client()
         assert client_param.client is None
+        client_param.initialize_client()
+        assert isinstance(client_param.client, Client)
+        client_param.close_client()
 
     def test_from_address(self):
         client = Client(n_workers=1, threads_per_worker=1, memory_limit="1GiB")

@@ -117,10 +117,18 @@ class ClientParameter:
 
     def close_client(self: ClientParameter) -> None:
         """Close the client."""
-        if self.client is not None:
-            self.client.close()
-            del self.client
-            self.client = None
+        if self.client is None:
+            msg = "Trying to close an already closed client."
+            logger.warning(msg)
+            return
+        if self.client.cluster is None:
+            msg = "The client has no cluster to close. If you are using a remote cluster, you should close it manually."
+            logger.warning(msg)
+        else:
+            self.client.cluster.close()
+        self.client.close()
+        del self.client
+        self.client = None
 
 
 @frozen(kw_only=True)
