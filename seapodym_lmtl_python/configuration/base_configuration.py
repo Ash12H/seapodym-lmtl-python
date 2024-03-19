@@ -17,16 +17,14 @@ class BaseConfiguration(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def parameters(self: BaseConfiguration) -> attrs.Attribute:
-        """The attrs dataclass that stores all the model parameters."""
-        return self._parameters
+    def model_parameters(self: BaseConfiguration) -> xr.Dataset:
+        """The xarray.Dataset that stores all the model parameters and forcing."""
+
+    @property
+    @abc.abstractmethod
+    def environment_parameters(self: BaseConfiguration) -> attrs.Attribute:
+        """The attrs dataclass that stores all the environment parameters."""
 
     @abc.abstractclassmethod
-    def parse(
-        cls: BaseConfiguration, configuration_file: str | Path | IO
-    ) -> BaseConfiguration:
+    def parse(cls: BaseConfiguration, configuration_file: str | Path | IO) -> BaseConfiguration:
         """Parse the configuration file and create a BaseConfiguration object."""
-
-    @abc.abstractmethod
-    def as_dataset(self: BaseConfiguration) -> xr.Dataset:
-        """Return the configuration as a xarray.Dataset."""

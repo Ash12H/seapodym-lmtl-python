@@ -5,7 +5,6 @@ import xarray as xr
 from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
 from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
@@ -49,7 +48,17 @@ def fgroup_param():
 
 class TestNoTransportConfiguration:
     def test_parameters(self, forcing_param, fgroup_param):
-        param = NoTransportParameters(functional_groups_parameters=fgroup_param, forcing_parameters=forcing_param)
+        param = NoTransportParameters(
+            functional_groups_parameters=fgroup_param,
+            forcing_parameters=forcing_param,
+            environment_parameters=EnvironmentParameter(),
+        )
         configuration = NoTransportConfiguration(parameters=param)
-        assert configuration.parameters is not None
-        assert isinstance(configuration.parameters, NoTransportParameters)
+
+        m_param = configuration.model_parameters
+        assert m_param is not None
+        assert isinstance(m_param, xr.Dataset)
+
+        e_param = configuration.environment_parameters
+        assert e_param is not None
+        assert isinstance(e_param, EnvironmentParameter)

@@ -3,7 +3,7 @@
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.configuration import ConfigurationLabels
+from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
 from seapodym_lmtl_python.pre_production.core import cell_area, day_length
 
 # TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
