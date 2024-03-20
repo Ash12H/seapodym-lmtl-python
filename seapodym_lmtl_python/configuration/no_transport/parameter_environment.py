@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Literal
 
 import numpy as np
 from attrs import define, field, frozen, validators
@@ -166,7 +166,7 @@ class ProductionParameter(BaseOuputForcingParameter):
 class PreProductionParameter(BaseOuputForcingParameter):
     """The output parameter for the pre-production forcing (i.e. with cohorts)."""
 
-    timestamps: Iterable[str] | Iterable[int] = field(
+    timestamps: Iterable[str] | Iterable[int] | Literal["all"] = field(
         default=[-1],
         metadata={"description": "The timestamps for the pre-production forcing."},
     )

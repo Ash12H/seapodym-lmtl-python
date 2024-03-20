@@ -25,6 +25,8 @@ class ConfigurationLabels(StrEnum):
     timestep = "timestep"
     resolution_latitude = "resolution_latitude"
     resolution_longitude = "resolution_longitude"
+    initial_condition_production = "initial_condition_production"
+    initial_condition_biomass = "initial_condition_biomass"
 
 
 class PreproductionLabels(StrEnum):

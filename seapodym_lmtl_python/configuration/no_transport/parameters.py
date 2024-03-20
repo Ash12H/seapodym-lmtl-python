@@ -49,6 +49,19 @@ class ForcingParameters:
         metadata={"description": "Path to the cell area field."},
     )
 
+    # TODO(Jules): Check that None or both init_cond fields are present in the dataclass
+    initial_condition_production: ForcingUnit | None = field(
+        default=None,
+        validator=validators.optional(validators.instance_of(ForcingUnit)),
+        metadata={"description": "Path to the initial condition production field.", "dims": "Fgroup, <Y, X,> Cohort"},
+    )
+
+    initial_condition_biomass: ForcingUnit | None = field(
+        default=None,
+        validator=validators.optional(validators.instance_of(ForcingUnit)),
+        metadata={"description": "Path to the initial condition biomass field.", "dims": "Fgroup, <Y, X>"},
+    )
+
     timestep: int | None = field(
         init=False,
         default=None,

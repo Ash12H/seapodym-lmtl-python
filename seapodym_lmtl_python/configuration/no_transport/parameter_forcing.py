@@ -151,10 +151,11 @@ class ForcingUnit:
         if self.resolution is not None:
             if not isinstance(self.resolution, Iterable):
                 object.__setattr__(self, "resolution", (float(self.resolution), float(self.resolution)))
-        elif "X" in self.forcing.cf and "Y" in self.forcing.cf:
+        elif ("X" in self.forcing.cf.indexes) and ("Y" in self.forcing.cf.indexes):
             resolution = _check_single_forcing_resolution(latitude=self.forcing.cf["Y"], longitude=self.forcing.cf["X"])
             object.__setattr__(self, "resolution", resolution)
 
-        if self.timestep is None and "T" in self.forcing.cf:
-            timestep = _check_single_forcing_timestep(timeseries=self.forcing.cf.indexes["T"])
+        if (self.timestep is None) and ("T" in self.forcing.cf.indexes):
+            data = self.forcing.cf.dropna("T")
+            timestep = _check_single_forcing_timestep(timeseries=data.cf.indexes["T"])
             object.__setattr__(self, "timestep", timestep)

@@ -166,17 +166,19 @@ class NoTransportModel(BaseModel):
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
-        # TODO(Jules): Manage chunk and export_preproduction parameters. Fixed for now:
-        chunk = self.configuration.environment_parameters.chunk.as_dict()
 
-        timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
-        data = self.state.cf["T"]
+        def _preproduction_converter() -> np.ndarray | None:
+            """
+            The production process requires a specific format, we then convert parameters to a np.ndarray that contains
+            the indices of the timestamps to export. None is returned if no timestamps are required.
+            """
+            timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
+            data = self.state.cf["T"]
 
-        if timestamps is None:
-            export_preproduction = None
-        elif timestamps == "all":
-            export_preproduction = np.arange(data.size)
-        else:
+            if timestamps is None:
+                return None
+            if timestamps == "all":
+                return np.arange(data.size)
             if np.all([isinstance(x, int) for x in timestamps]):
                 selected_dates = data.isel(time=timestamps)
             elif np.all([isinstance(x, str) for x in timestamps]):
@@ -184,18 +186,18 @@ class NoTransportModel(BaseModel):
             else:
                 msg = "The timestamps must be either 'all', a list of integers or a list of strings."
                 raise TypeError(msg)
-            export_preproduction = np.arange(data.size)[data.isin(selected_dates)]
+            return np.arange(data.size)[data.isin(selected_dates)]
 
         self.state = compute_production(
             data=self.state,
-            chunk=chunk,
-            export_preproduction=export_preproduction,
+            chunk=self.configuration.environment_parameters.chunk.as_dict(),
+            export_preproduction=_preproduction_converter(),
         )
 
     def post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""
         biomass = xr.map_blocks(compute_biomass, self.state)
-        self.state = xr.merge([self.state, biomass])
+        self.state = xr.merge([self.state, biomass]).persist()
 
     def save_output(self: NoTransportModel) -> None:
         """Save the outputs of the model."""

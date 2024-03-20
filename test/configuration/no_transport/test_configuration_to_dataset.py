@@ -20,13 +20,15 @@ from seapodym_lmtl_python.configuration.no_transport.parameters import (
     NoTransportParameters,
 )
 
+time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
+latitude = coordinates.new_latitude(np.array([0, 1, 2]))
+longitude = coordinates.new_longitude(np.array([0, 1, 2]))
+fgroup = np.array([0])
+cohort = np.array([0, 1, 2])
+
 
 @pytest.fixture()
 def forcing_param():
-    time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
-    latitude = coordinates.new_latitude(np.array([0, 1, 2]))
-    longitude = coordinates.new_longitude(np.array([0, 1, 2]))
-
     forcing = ForcingUnit(
         forcing=xr.DataArray(
             dims=("time", "latitude", "longitude"),
@@ -35,6 +37,59 @@ def forcing_param():
         )
     )
     return ForcingParameters(temperature=forcing, primary_production=forcing)
+
+
+@pytest.fixture()
+def forcing_param_with_init():
+    init_cond_biomass = ForcingUnit(
+        forcing=xr.DataArray(
+            dims=("functional_group", "latitude", "longitude"),
+            coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude},
+            data=np.full((fgroup.size, latitude.size, longitude.size), 0, dtype=float),
+        )
+    )
+    init_cond_production = ForcingUnit(
+        forcing=xr.DataArray(
+            dims=("functional_group", "latitude", "longitude", "cohort"),
+            coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude, "cohort": cohort},
+            data=np.full((fgroup.size, latitude.size, longitude.size, cohort.size), 0, dtype=float),
+        )
+    )
+    forcing = ForcingUnit(
+        forcing=xr.DataArray(
+            dims=("time", "latitude", "longitude"),
+            coords={"time": time, "latitude": latitude, "longitude": longitude},
+            data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
+        )
+    )
+    return ForcingParameters(
+        temperature=forcing,
+        primary_production=forcing,
+        initial_condition_biomass=init_cond_biomass,
+        initial_condition_production=init_cond_production,
+    )
+
+
+@pytest.fixture()
+def init_cond_biomass():
+    return ForcingUnit(
+        forcing=xr.DataArray(
+            dims=("functional_group", "latitude", "longitude"),
+            coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude},
+            data=np.full((fgroup.size, latitude.size, longitude.size), 0, dtype=float),
+        )
+    )
+
+
+@pytest.fixture()
+def init_cond_production():
+    return ForcingUnit(
+        forcing=xr.DataArray(
+            dims=("functional_group", "latitude", "longitude", "cohort"),
+            coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude, "cohort": cohort},
+            data=np.full((fgroup.size, latitude.size, longitude.size, cohort.size), 0, dtype=float),
+        )
+    )
 
 
 @pytest.fixture()
@@ -94,4 +149,17 @@ class TestConfigurationToDataset:
 
     def test_as_dataset(self, forcing_param, fgroup_param):
         dataset = as_dataset(forcing_parameters=forcing_param, functional_groups=fgroup_param)
-        assert np.all([label in dataset for label in ConfigurationLabels])
+
+        expected = set(ConfigurationLabels) - {
+            ConfigurationLabels.initial_condition_biomass,
+            ConfigurationLabels.initial_condition_production,
+        }
+
+        assert np.all([label in dataset for label in expected])
+
+    def test_as_dataset_with_initial_conditions(self, forcing_param_with_init, fgroup_param):
+        dataset = as_dataset(forcing_parameters=forcing_param_with_init, functional_groups=fgroup_param)
+
+        expected = set(ConfigurationLabels)
+
+        assert np.all([label in dataset for label in expected])
