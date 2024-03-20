@@ -57,14 +57,26 @@ def biomass_sequence(recruited: np.ndarray, mortality: np.ndarray, initial_condi
 
 def compute_biomass(data: xr.Dataset) -> xr.DataArray:
     """Wrap the biomass computation arround the Numba function `biomass_sequence`."""
+
+    def _format_fields(data: xr.Dataset) -> xr.Dataset:
+        """Format the fields to be used in the biomass computation"""
+        return np.nan_to_num(data.data, 0.0).astype(np.float64)
+
     data = data.cf.transpose(ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort)
     recruited = data[ProductionLabels.recruited].sum(ConfigurationLabels.cohort)
-    recruited = np.nan_to_num(recruited.data, 0)
-    mortality = np.nan_to_num(data[PreproductionLabels.mortality_field].data, 0)
-    # TODO(Jules) : Add initialisation from configuration
+    recruited = _format_fields(recruited)
+    mortality = _format_fields(data[PreproductionLabels.mortality_field])
+    if ConfigurationLabels.initial_condition_biomass in data:
+        initial_conditions = _format_fields(data[ConfigurationLabels.initial_condition_biomass])
+    else:
+        initial_conditions = None
+
     biomass = biomass_sequence(
-        recruited=recruited.astype(np.float64), mortality=mortality.astype(np.float64), initial_conditions=None
+        recruited=recruited.astype(np.float64),
+        mortality=mortality.astype(np.float64),
+        initial_conditions=initial_conditions,
     )
+
     return xr.DataArray(
         biomass,
         coords=data[PreproductionLabels.mortality_field].coords,

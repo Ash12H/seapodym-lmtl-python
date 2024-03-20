@@ -1,10 +1,11 @@
-.venv
-
 # Cache
 .ruff_cache
 __pycache__
 
-notebooks/*Temporary*/*.ipynb
+# User
+.venv
+notebooks
 .DS_Store
 
+# Build
 docs/build
