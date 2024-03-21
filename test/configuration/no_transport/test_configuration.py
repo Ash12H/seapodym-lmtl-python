@@ -1,4 +1,6 @@
 import numpy as np
+import pint
+import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
@@ -20,14 +22,20 @@ def forcing_param():
     latitude = coordinates.new_latitude(np.array([0, 1, 2]))
     longitude = coordinates.new_longitude(np.array([0, 1, 2]))
 
-    forcing = ForcingUnit(
-        forcing=xr.DataArray(
-            dims=("time", "latitude", "longitude"),
-            coords={"time": time, "latitude": latitude, "longitude": longitude},
-            data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
-        )
+    temperature = xr.DataArray(
+        dims=("time", "latitude", "longitude"),
+        coords={"time": time, "latitude": latitude, "longitude": longitude},
+        data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
+        attrs={"units": pint.application_registry("degC").units},
+        name="temperature",
     )
-    return ForcingParameters(temperature=forcing, primary_production=forcing)
+    primary_production = temperature.copy()
+    primary_production.attrs["units"] = pint.application_registry("kg / m^2 / day").units
+    primary_production.name = "primary_production"
+
+    temperature = ForcingUnit(forcing=temperature)
+    primary_production = ForcingUnit(forcing=primary_production)
+    return ForcingParameters(temperature=temperature, primary_production=primary_production)
 
 
 @pytest.fixture()
@@ -49,8 +57,8 @@ def fgroup_param():
 class TestNoTransportConfiguration:
     def test_parameters(self, forcing_param, fgroup_param):
         param = NoTransportParameters(
-            functional_groups_parameters=fgroup_param,
             forcing_parameters=forcing_param,
+            functional_groups_parameters=fgroup_param,
             environment_parameters=EnvironmentParameter(),
         )
         configuration = NoTransportConfiguration(parameters=param)

@@ -6,8 +6,10 @@ attributes.
 from __future__ import annotations
 
 import numpy as np
+import pint
 from attrs import field, frozen, validators
 
+from seapodym_lmtl_python.cf_data.units import check_units
 from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
@@ -75,42 +77,53 @@ class ForcingParameters:
         metadata={"description": "Common space resolution of the fields as (lat, lon) or both if equals."},
     )
 
+    def _set_timestep(self: ForcingParameters, forcings: list[ForcingUnit]) -> None:
+        timesteps = {field.timestep for field in forcings}
+        if len(timesteps) != 1:
+            as_dict = dict(zip([field.forcing.name for field in forcings], [field.timestep for field in forcings]))
+            if len(as_dict) != len(timesteps):  # If there are duplicates in the forcing names or None values
+                timesteps = as_dict
+            raise DifferentForcingTimestepError(timesteps)
+        object.__setattr__(self, "timestep", timesteps.pop())
+
+    def _set_resolution(self: ForcingParameters, forcings: list[ForcingUnit]) -> tuple[float, float]:
+        resolutions = {(field.resolution[0], field.resolution[1]) for field in forcings}
+        if len(resolutions) != 1:
+            min_lat = min(lat for lat, _ in resolutions)
+            min_lon = min(lon for _, lon in resolutions)
+            msg = (
+                f"The forcings have different resolutions : {resolutions}."
+                f"\nBe aware that stranges behaviors may occur because minimum resolution is taken : "
+                f"{(min_lat,min_lon)}"
+                f"\nYou can extrapolate the fields to the same resolution using the xarray package."
+            )
+            logger.warning(msg)
+        else:
+            min_lat, min_lon = resolutions.pop()
+        object.__setattr__(self, "resolution", (min_lat, min_lon))
+
+    def _check_units(self: ForcingParameters) -> ForcingUnit:
+        self.temperature.with_units(pint.application_registry("degC"), in_place=True)
+        self.primary_production.with_units(pint.application_registry("kg / m2 / d"), in_place=True)
+        if self.day_length is not None:
+            self.day_length.with_units(pint.application_registry("day"), in_place=True)
+        if self.cell_area is not None:
+            self.cell_area.with_units(pint.application_registry("m2"), in_place=True)
+        if self.initial_condition_production is not None:
+            self.initial_condition_production.with_units(pint.application_registry("kg / m2 / d"), in_place=True)
+        if self.initial_condition_biomass is not None:
+            self.initial_condition_biomass.with_units(pint.application_registry("kg / m2"), in_place=True)
+
     def __attrs_post_init__(self: ForcingParameters) -> None:
         """
         This method is called after the initialization of the class. It is used to check the consistency of the
         forcing fields.
         """
-
-        def _check_timestep(forcings: list[ForcingUnit]) -> int:
-            timesteps = {field.timestep for field in forcings}
-            if len(timesteps) != 1:
-                as_dict = dict(zip([field.forcing.name for field in forcings], [field.timestep for field in forcings]))
-                if len(as_dict) != len(timesteps):  # If there are duplicates in the forcing names or None values
-                    timesteps = as_dict
-                raise DifferentForcingTimestepError(timesteps)
-            return timesteps.pop()
-
-        def _check_resolution(forcings: list[ForcingUnit]) -> tuple[float, float]:
-            resolutions = {(field.resolution[0], field.resolution[1]) for field in forcings}
-            if len(resolutions) != 1:
-                min_lat = min(lat for lat, _ in resolutions)
-                min_lon = min(lon for _, lon in resolutions)
-                msg = (
-                    f"The forcings have different resolutions : {resolutions}."
-                    f"\nBe aware that stranges behaviors may occur because minimum resolution is taken : "
-                    f"{(min_lat,min_lon)}"
-                    f"\nYou can extrapolate the fields to the same resolution using the xarray package."
-                )
-                logger.warning(msg)
-            else:
-                min_lat, min_lon = resolutions.pop()
-            return (min_lat, min_lon)
-
         forcings = [self.temperature, self.primary_production, self.mask, self.day_length, self.cell_area]
         forcings = [field for field in forcings if field is not None]
-
-        object.__setattr__(self, "timestep", _check_timestep(forcings))
-        object.__setattr__(self, "resolution", _check_resolution(forcings))
+        self._set_timestep(forcings)
+        self._set_resolution(forcings)
+        self._check_units()
 
 
 @frozen(kw_only=True)

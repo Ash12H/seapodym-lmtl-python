@@ -11,6 +11,7 @@ import pandas as pd
 import xarray as xr
 from attrs import converters, field, frozen
 
+from seapodym_lmtl_python.cf_data.units import check_units
 from seapodym_lmtl_python.logging.custom_logger import logger
 
 DECIMALS = 5  # ie. 1e-5 degrees which is equivalent to ~1m at the equator
@@ -159,3 +160,10 @@ class ForcingUnit:
             data = self.forcing.cf.dropna("T")
             timestep = _check_single_forcing_timestep(timeseries=data.cf.indexes["T"])
             object.__setattr__(self, "timestep", timestep)
+
+    def with_units(self: ForcingUnit, units: str, *, in_place: bool = False) -> ForcingUnit:
+        """Ensure that the forcing has the correct units. It is both a validator and a converter."""
+        if in_place:
+            object.__setattr__(self, "forcing", check_units(self.forcing, units))
+            return self
+        return ForcingUnit(forcing=check_units(self.forcing, units), resolution=self.resolution, timestep=self.timestep)

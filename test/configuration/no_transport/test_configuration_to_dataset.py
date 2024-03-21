@@ -1,10 +1,11 @@
 import numpy as np
+import pint
+import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
 from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
-from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
 from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset import (
     _as_dataset__build_cohort_dataset,
     _as_dataset__build_fgroup_dataset,
@@ -12,12 +13,10 @@ from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset im
     as_dataset,
 )
 from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
-from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
     ForcingParameters,
     FunctionalGroups,
-    NoTransportParameters,
 )
 
 time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
@@ -29,14 +28,20 @@ cohort = np.array([0, 1, 2])
 
 @pytest.fixture()
 def forcing_param():
-    forcing = ForcingUnit(
-        forcing=xr.DataArray(
-            dims=("time", "latitude", "longitude"),
-            coords={"time": time, "latitude": latitude, "longitude": longitude},
-            data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
-        )
+    temperature = xr.DataArray(
+        dims=("time", "latitude", "longitude"),
+        coords={"time": time, "latitude": latitude, "longitude": longitude},
+        data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
+        attrs={"units": pint.application_registry("degC").units},
+        name="temperature",
     )
-    return ForcingParameters(temperature=forcing, primary_production=forcing)
+    primary_production = temperature.copy()
+    primary_production.attrs["units"] = pint.application_registry("kg / m^2 / day").units
+    primary_production.name = "primary_production"
+
+    temperature = ForcingUnit(forcing=temperature)
+    primary_production = ForcingUnit(forcing=primary_production)
+    return ForcingParameters(temperature=temperature, primary_production=primary_production)
 
 
 @pytest.fixture()
@@ -46,6 +51,8 @@ def forcing_param_with_init():
             dims=("functional_group", "latitude", "longitude"),
             coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude},
             data=np.full((fgroup.size, latitude.size, longitude.size), 0, dtype=float),
+            attrs={"units": pint.application_registry("kg / m^2").units},
+            name="initial_condition_biomass",
         )
     )
     init_cond_production = ForcingUnit(
@@ -53,18 +60,25 @@ def forcing_param_with_init():
             dims=("functional_group", "latitude", "longitude", "cohort"),
             coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude, "cohort": cohort},
             data=np.full((fgroup.size, latitude.size, longitude.size, cohort.size), 0, dtype=float),
+            attrs={"units": pint.application_registry("kg / m^2 / day").units},
+            name="initial_condition_production",
         )
     )
-    forcing = ForcingUnit(
-        forcing=xr.DataArray(
-            dims=("time", "latitude", "longitude"),
-            coords={"time": time, "latitude": latitude, "longitude": longitude},
-            data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
-        )
+    temperature = xr.DataArray(
+        dims=("time", "latitude", "longitude"),
+        coords={"time": time, "latitude": latitude, "longitude": longitude},
+        data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
+        attrs={"units": pint.application_registry("degC").units},
+        name="temperature",
     )
+    primary_production = temperature.copy()
+    primary_production.attrs["units"] = pint.application_registry("kg / m^2 / day").units
+    primary_production.name = "primary_production"
+    temperature = ForcingUnit(forcing=temperature)
+    primary_production = ForcingUnit(forcing=primary_production)
     return ForcingParameters(
-        temperature=forcing,
-        primary_production=forcing,
+        temperature=temperature,
+        primary_production=primary_production,
         initial_condition_biomass=init_cond_biomass,
         initial_condition_production=init_cond_production,
     )
