@@ -5,7 +5,10 @@ from __future__ import annotations
 import dask.array as da
 import numpy as np
 import pandas as pd
+import pint
 import xarray as xr
+
+DAY_IN_HOUR = pint.application_registry("day").to("hour").magnitude
 
 
 def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> float:
@@ -22,7 +25,7 @@ def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> fl
     Returns
     -------
     float
-        The day length in hours.
+        The day length in HOURS.
 
     """
     # revolution angle for the day of the year
@@ -37,7 +40,7 @@ def day_length_forsythe(latitude: float, day_of_the_year: int, p: int = 0) -> fl
 
     arg = np.clip(arg, -1.0, 1.0)
 
-    return 24.0 - (24.0 / np.pi) * np.arccos(arg)
+    return DAY_IN_HOUR - (DAY_IN_HOUR / np.pi) * np.arccos(arg)
 
 
 def mesh_day_length(
@@ -100,16 +103,17 @@ def mesh_day_length(
     else:
         data = day_length_forsythe(cell_latitude, cell_time, p=angle_horizon_sun)
 
-    attributes = {
-        "long_name": "Day length",
-        "standard_name": "day_length",
-        "description": f"Day length at the surface using Forsythe's method with p={angle_horizon_sun}",
-        "units": "hour",
-    }
-    return xr.DataArray(
+    mesh_in_hour = xr.DataArray(
         coords={"time": time, "latitude": latitude, "longitude": longitude},
         dims=["time", "latitude", "longitude"],
         data=data,
         name="day_length",
-        attrs=attributes,
+        attrs={
+            "long_name": "Day length",
+            "standard_name": "day_length",
+            "description": f"Day length at the surface using Forsythe's method with p={angle_horizon_sun}",
+            "units": "hour",
+        },
     )
+
+    return mesh_in_hour.pint.quantify().pint.to("day").pint.dequantify()

@@ -1,5 +1,7 @@
 import cf_xarray  # noqa: F401
 import numpy as np
+import pint
+import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
@@ -18,10 +20,14 @@ layer = coordinates.new_layer()
 
 @pytest.fixture()
 def daylength():
-    return xr.DataArray(
-        dims=("time", "latitude", "longitude"),
-        coords={"time": time, "latitude": latitude, "longitude": longitude},
-        data=np.full((time.size, latitude.size, longitude.size), 12, dtype=float),
+    return (
+        xr.DataArray(
+            dims=("time", "latitude", "longitude"),
+            coords={"time": time, "latitude": latitude, "longitude": longitude},
+            data=np.full((time.size, latitude.size, longitude.size), 0.5, dtype=float),
+        )
+        .pint.quantify("day")
+        .pint.dequantify()
     )
 
 
@@ -56,11 +62,12 @@ def night_layer():
 def temperature():
     data = [np.full((time.size, latitude.size, longitude.size), i, dtype=float) for i in range(layer.size)]
     data = np.stack(data, axis=-1)
-    return xr.DataArray(
+    data = xr.DataArray(
         dims=("time", "latitude", "longitude", "layer"),
         coords={"time": time, "latitude": latitude, "longitude": longitude, "layer": layer},
         data=data,
     )
+    return (data * pint.application_registry("degC")).pint.dequantify()
 
 
 class TestMaskByFgroup:

@@ -35,28 +35,34 @@ class CustomFormatter(logging.Formatter):
 
 
 logger = logging.getLogger("Seapodym")  # Root logger
+logger.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(CustomFormatter(fmt="%(asctime)s :: %(name)s ::  %(levelname)s ::%(message)s\n"))
 logger.addHandler(console_handler)
 
 
 def set_critical() -> None:
-    logger.setLevel(logging.CRITICAL)
+    logging.getLogger().setLevel(logging.CRITICAL)
+    logging.getLogger("Seapodym").setLevel(logging.CRITICAL)
     warnings.filterwarnings("ignore")
 
 
 def set_error() -> None:
-    logger.setLevel(logging.ERROR)
+    logging.getLogger().setLevel(logging.ERROR)
+    logging.getLogger("Seapodym").setLevel(logging.ERROR)
     warnings.filterwarnings("ignore")
 
 
 def set_warning() -> None:
-    logger.setLevel(logging.WARNING)
+    logging.getLogger().setLevel(logging.WARNING)
+    logging.getLogger("Seapodym").setLevel(logging.WARNING)
 
 
 def set_verbose() -> None:
-    logger.setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger("Seapodym").setLevel(logging.INFO)
 
 
 def set_debug() -> None:
-    logger.setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger("Seapodym").setLevel(logging.DEBUG)

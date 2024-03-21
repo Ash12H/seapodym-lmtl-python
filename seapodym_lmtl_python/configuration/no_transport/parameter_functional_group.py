@@ -116,7 +116,7 @@ class FunctionalGroupUnitRelationParameters:
 class FunctionalGroupUnit:
     """Represent a functional group."""
 
-    name: str = field(metadata={"description": "The name of the function group."})
+    name: str = field(metadata={"description": "The name of the functional group."})
 
     energy_transfert: float = field(
         validator=[validators.ge(0), validators.le(1)],
