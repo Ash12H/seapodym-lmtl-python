@@ -3,13 +3,6 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-# --------------------------------------------------------------------------------- #
-# NOTE(Jules): This import is necessary to work with cf_xarray Datasets. DO NOT REMOVE
-import cf_xarray.units  # noqa: F401
-
-# --------------------------------------------------------------------------------- #
-import pint
-
 
 class ConfigurationLabels(StrEnum):
     """A single place to store all labels as declared in parameters module."""
@@ -30,17 +23,19 @@ class ConfigurationLabels(StrEnum):
     min_timestep = "min_timestep"
     max_timestep = "max_timestep"
     mean_timestep = "mean_timestep"
+    # Forcing
     timestep = "timestep"
     resolution_latitude = "resolution_latitude"
     resolution_longitude = "resolution_longitude"
     initial_condition_production = "initial_condition_production"
     initial_condition_biomass = "initial_condition_biomass"
+    temperature = "temperature"
+    primary_production = "primary_production"
 
 
 class PreproductionLabels(StrEnum):
     """A single place to store all labels as declared in pre-production module."""
 
-    # Pre-production
     mask_global = "mask"
     mask_by_fgroup = "mask_fgroup"
     day_length = "day_length"
@@ -50,9 +45,6 @@ class PreproductionLabels(StrEnum):
     mask_temperature = "mask_temperature"
     cell_area = "cell_area"
     mortality_field = "mortality_field"
-    # Parameters
-    temperature = "temperature"
-    primary_production = "primary_production"
 
 
 class ProductionLabels(StrEnum):
@@ -66,23 +58,3 @@ class PostproductionLabels(StrEnum):
     """A single place to store all labels as declared in post-production module."""
 
     biomass = "biomass"
-
-
-class StandardUnitsLabels(StrEnum):
-    """Unit of measurement as used in the model."""
-
-    height = "meter"
-    weight = "kilogram"
-    temperature = "celsius"
-    time = "day"
-    biomass = "kilogram / meter**2"
-    production = "kilogram / meter**2 / day"
-
-    def __init__(self: StandardUnitsLabels, unit_as_str: str) -> None:
-        """Prevent the instantiation of this class."""
-        self._units = pint.application_registry(unit_as_str).units
-
-    @property
-    def units(self: StandardUnitsLabels) -> pint.Unit:
-        """Convert the string unit to the equivalent pint unit."""
-        return self._units

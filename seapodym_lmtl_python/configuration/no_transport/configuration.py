@@ -5,17 +5,18 @@ the forcings (lazily).
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import IO, TYPE_CHECKING
-
-import xarray as xr
 
 from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
 from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset import as_dataset
-from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 
 if TYPE_CHECKING:
-    from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
+    from pathlib import Path
+
+    import xarray as xr
+
+    from seapodym_lmtl_python.configuration.no_transport.parameter import NoTransportParameters
+    from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 
 
 class NoTransportConfiguration(BaseConfiguration):

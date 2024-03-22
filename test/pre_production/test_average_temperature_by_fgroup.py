@@ -5,9 +5,9 @@ import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.cf_data import coordinates
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
 from seapodym_lmtl_python.pre_production.pre_production import average_temperature_by_fgroup
+from seapodym_lmtl_python.standard import coordinates
+from seapodym_lmtl_python.standard.labels import ConfigurationLabels
 
 time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=1))
 latitude = coordinates.new_latitude(np.array([0]))

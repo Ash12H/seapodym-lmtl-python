@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.pre_production.core import landmask
+from seapodym_lmtl_python.standard import coordinates
 
 
 @pytest.fixture()
@@ -12,9 +12,7 @@ def simple_forcing() -> xr.DataArray:
     coords_layer = coordinates.new_layer()
     coords_latitude = coordinates.new_latitude(np.arange(0, 10, 1))
     coords_longitude = coordinates.new_longitude(np.arange(0, 10, 1))
-    coords_time = coordinates.new_time(
-        xr.cftime_range(start="2000-01-01", end="2000-01-10", freq="D")
-    )
+    coords_time = coordinates.new_time(xr.cftime_range(start="2000-01-01", end="2000-01-10", freq="D"))
     forcing = xr.DataArray(
         coords={
             "time": coords_time,
@@ -39,7 +37,6 @@ def simple_forcing() -> xr.DataArray:
 
 
 class TestLandmask:
-
     def test_landmask(self, simple_forcing):
         mask = landmask.landmask_from_nan(simple_forcing)
         # Keep spatial dimensions only

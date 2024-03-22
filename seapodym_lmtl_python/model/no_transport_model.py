@@ -7,20 +7,14 @@ from typing import IO, TYPE_CHECKING, Callable
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
-from seapodym_lmtl_python.configuration.no_transport.labels import (
-    ConfigurationLabels,
-    PostproductionLabels,
-    PreproductionLabels,
-)
-from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
-from seapodym_lmtl_python.logging.custom_logger import logger
+from seapodym_lmtl_python.configuration.no_transport.parameter import NoTransportParameters
 from seapodym_lmtl_python.model.base_model import BaseModel
 from seapodym_lmtl_python.post_production.biomass import compute_biomass
 from seapodym_lmtl_python.pre_production import pre_production
 from seapodym_lmtl_python.pre_production.core import landmask
 from seapodym_lmtl_python.production.production import compute_production
+from seapodym_lmtl_python.standard.labels import ConfigurationLabels, PreproductionLabels
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -80,7 +74,7 @@ class NoTransportModel(BaseModel):
         mask = apply_if_not_already_computed(
             PreproductionLabels.mask_global,
             landmask.landmask_from_nan,
-            forcing=self.state[PreproductionLabels.temperature],
+            forcing=self.state[ConfigurationLabels.temperature],
         )
 
         mask_fgroup = apply_if_not_already_computed(
@@ -106,7 +100,7 @@ class NoTransportModel(BaseModel):
             mask=mask_fgroup,
             day_layer=self.state[ConfigurationLabels.day_layer],
             night_layer=self.state[ConfigurationLabels.day_layer],
-            temperature=self.state[PreproductionLabels.temperature],
+            temperature=self.state[ConfigurationLabels.temperature],
         )
 
         primary_production_by_fgroup = apply_if_not_already_computed(

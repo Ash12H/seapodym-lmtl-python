@@ -8,7 +8,7 @@ import pandas as pd
 import pint
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
+from seapodym_lmtl_python.standard.units import StandardUnitsLabels
 
 DAY_IN_HOUR = pint.application_registry("day").to("hour").magnitude
 

@@ -9,13 +9,13 @@ import numpy as np
 import xarray as xr
 from numba import jit
 
-from seapodym_lmtl_python.configuration.no_transport.labels import (
+from seapodym_lmtl_python.standard.labels import (
     ConfigurationLabels,
     PostproductionLabels,
     PreproductionLabels,
     ProductionLabels,
-    StandardUnitsLabels,
 )
+from seapodym_lmtl_python.standard.units import StandardUnitsLabels
 
 
 @jit()

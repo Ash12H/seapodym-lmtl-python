@@ -8,15 +8,15 @@ import attrs
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
 from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import (
     FunctionalGroupUnit,
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
 )
+from seapodym_lmtl_python.standard.labels import ConfigurationLabels
 
 if TYPE_CHECKING:
-    from seapodym_lmtl_python.configuration.no_transport.parameters import ForcingParameters
+    from seapodym_lmtl_python.configuration.no_transport.parameter import ForcingParameters
 
 
 def _as_dataset__load_forcings(forcing_parameters: ForcingParameters) -> xr.Dataset:

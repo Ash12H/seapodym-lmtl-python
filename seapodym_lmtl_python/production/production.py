@@ -9,13 +9,13 @@ import numpy as np
 import xarray as xr
 from numba import jit
 
-from seapodym_lmtl_python.configuration.no_transport.labels import (
+from seapodym_lmtl_python.logging.custom_logger import logger
+from seapodym_lmtl_python.standard.labels import (
     ConfigurationLabels,
     PreproductionLabels,
     ProductionLabels,
-    StandardUnitsLabels,
 )
-from seapodym_lmtl_python.logging.custom_logger import logger
+from seapodym_lmtl_python.standard.units import StandardUnitsLabels
 
 
 @jit
@@ -145,7 +145,6 @@ def _init_forcing(fgroup_data: xr.Dataset, export_preproduction: np.ndarray | No
 
     return {
         "primary_production": standardize_forcing(fgroup_data[PreproductionLabels.primary_production_by_fgroup]),
-        # "primary_production": standardize_forcing(fgroup_data[PreproductionLabels.primary_production]),
         "mask_temperature": standardize_forcing(fgroup_data[PreproductionLabels.mask_temperature]),
         "timestep_number": standardize_forcing(fgroup_data[ConfigurationLabels.timesteps_number], False, bool),
         "initial_production": initial_condition,

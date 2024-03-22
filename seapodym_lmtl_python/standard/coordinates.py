@@ -9,6 +9,8 @@ import cf_xarray.units  # noqa: F401
 import pint_xarray  # noqa: F401
 import xarray as xr
 
+from seapodym_lmtl_python.standard.labels import ConfigurationLabels
+
 if TYPE_CHECKING:
     import numpy as np
 
@@ -33,6 +35,12 @@ class SeaLayers(Enum):
     def depth(self: SeaLayers) -> Literal[1, 2, 3]:
         """Return the depth of the sea layer."""
         return self.value[1]
+
+
+def list_available_dims(data: xr.Dataset | xr.DataArray) -> list[str]:
+    """Return the standard name of all available coordinates in the data."""
+    all_coordinates = [ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort]
+    return [coord for coord in all_coordinates if coord in data.cf]
 
 
 def new_latitude(latitude_data: np.ndarray) -> xr.DataArray:

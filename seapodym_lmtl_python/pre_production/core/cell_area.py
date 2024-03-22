@@ -7,7 +7,7 @@ from typing import Iterable
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
+from seapodym_lmtl_python.standard.units import StandardUnitsLabels
 
 EARTH_RADIUS = 6_371_000 * StandardUnitsLabels.height.units
 

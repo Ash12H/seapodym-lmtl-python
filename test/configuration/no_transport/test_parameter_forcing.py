@@ -6,8 +6,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.cf_data import coordinates
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapodym_lmtl_python.standard import coordinates
 
 
 def _right_time_and_space_forcing() -> xr.DataArray:

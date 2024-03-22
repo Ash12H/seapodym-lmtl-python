@@ -8,7 +8,6 @@ from __future__ import annotations
 import numpy as np
 from attrs import field, frozen, validators
 
-from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
 from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
@@ -17,6 +16,7 @@ from seapodym_lmtl_python.exception.parameter_exception import (
     DifferentForcingTimestepError,
 )
 from seapodym_lmtl_python.logging.custom_logger import logger
+from seapodym_lmtl_python.standard.units import StandardUnitsLabels
 
 
 @frozen(kw_only=True)
