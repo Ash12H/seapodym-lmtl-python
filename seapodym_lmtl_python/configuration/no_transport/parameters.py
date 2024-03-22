@@ -6,10 +6,9 @@ attributes.
 from __future__ import annotations
 
 import numpy as np
-import pint
 from attrs import field, frozen, validators
 
-from seapodym_lmtl_python.cf_data.units import check_units
+from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
 from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
@@ -103,16 +102,16 @@ class ForcingParameters:
         object.__setattr__(self, "resolution", (min_lat, min_lon))
 
     def _check_units(self: ForcingParameters) -> ForcingUnit:
-        self.temperature.with_units(pint.application_registry("degC"), in_place=True)
-        self.primary_production.with_units(pint.application_registry("kg / m2 / d"), in_place=True)
+        self.temperature.with_units(StandardUnitsLabels.temperature.units, in_place=True)
+        self.primary_production.with_units(StandardUnitsLabels.production.units, in_place=True)
         if self.day_length is not None:
-            self.day_length.with_units(pint.application_registry("day"), in_place=True)
+            self.day_length.with_units(StandardUnitsLabels.time.units, in_place=True)
         if self.cell_area is not None:
-            self.cell_area.with_units(pint.application_registry("m2"), in_place=True)
+            self.cell_area.with_units(StandardUnitsLabels.height.units**2, in_place=True)
         if self.initial_condition_production is not None:
-            self.initial_condition_production.with_units(pint.application_registry("kg / m2 / d"), in_place=True)
+            self.initial_condition_production.with_units(StandardUnitsLabels.production.units, in_place=True)
         if self.initial_condition_biomass is not None:
-            self.initial_condition_biomass.with_units(pint.application_registry("kg / m2"), in_place=True)
+            self.initial_condition_biomass.with_units(StandardUnitsLabels.biomass.units, in_place=True)
 
     def __attrs_post_init__(self: ForcingParameters) -> None:
         """

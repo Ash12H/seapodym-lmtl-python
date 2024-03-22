@@ -248,5 +248,15 @@ def compute_production(
     output = xr.map_blocks(
         compute_preproduction_numba, data, kwargs={"export_preproduction": export_preproduction}, template=template
     )
-    output = xr.merge([data, output])
+    output = xr.merge([data, output], combine_attrs="drop")
+    output.name = ProductionLabels.production
+    output = output.assign_attrs(
+        {
+            "standard_name": "production",
+            "long_name": "Production by cohort.",
+            "description": "Population recruited by cohort.",
+            "units": "kg / m-2 / day",
+        }
+    )
+    # TODO(Jules): Add attributs to the output dataset.
     return output.persist()

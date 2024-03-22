@@ -2,16 +2,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pint
 import xarray as xr
 
 from seapodym_lmtl_python.cf_data.units import check_units
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
+from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels, StandardUnitsLabels
 from seapodym_lmtl_python.pre_production.core import cell_area, day_length
-
-# TODO(Jules): standardize the parameters names(inv_lambda_max, inv_lambda_rate, tr_max, tr_rate, ...)
-
-# --- Pre production functions --- #
 
 
 def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: xr.DataArray) -> xr.DataArray:
@@ -90,8 +85,8 @@ def average_temperature_by_fgroup(
     ------
     - avg_temperature [functional_group, time, latitude, longitude] in degC
     """
-    temperature = check_units(temperature, pint.application_registry("degC"))
-    daylength = check_units(daylength, pint.application_registry("day"))
+    temperature = check_units(temperature, StandardUnitsLabels.temperature.units)
+    daylength = check_units(daylength, StandardUnitsLabels.time.units)
 
     average_temperature = []
     for fgroup in day_layer[ConfigurationLabels.fgroup]:
@@ -112,7 +107,7 @@ def average_temperature_by_fgroup(
             "description": (
                 "Average temperature by functional group according to their layer position during day and night."
             ),
-            "units": str(pint.application_registry("degC").units),
+            "units": str(StandardUnitsLabels.temperature.units),
         }
     )
 
@@ -132,7 +127,7 @@ def apply_coefficient_to_primary_production(
     ------
     - primary_production [functional_group, time, latitude, longitude]
     """
-    primary_production = check_units(primary_production, pint.application_registry("kg * m^-2 * day^-1"))
+    primary_production = check_units(primary_production, StandardUnitsLabels.production.units)
     pp_by_fgroup_gen = (i * primary_production for i in functional_group_coefficient)
     pp_by_fgroup = xr.concat(pp_by_fgroup_gen, dim=ConfigurationLabels.fgroup, combine_attrs="drop")
     pp_by_fgroup.name = "primary_production_by_fgroup"
@@ -141,7 +136,7 @@ def apply_coefficient_to_primary_production(
             "standard_name": "primary production",
             "long_name": "primary production by functional group",
             "description": "Primary production by functional group according to their energy transfert coefficient.",
-            "units": str(pint.application_registry("kg * m^-2 * day^-1").units),
+            "units": str(StandardUnitsLabels.production.units),
         }
     )
 
@@ -168,7 +163,7 @@ def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray,
             "standard_name": "minimum temperature",
             "long_name": "minimum temperature by cohort",
             "description": "Minimum temperature to recruit a cohort according to its age.",
-            "units": str(pint.application_registry("degC").units),
+            "units": str(StandardUnitsLabels.temperature.units),
         }
     )
 
@@ -197,8 +192,8 @@ def mask_temperature_by_cohort_by_functional_group(
     layer. We therefore have a function with a high cost in terms of computation and memory space.
 
     """
-    average_temperature = check_units(average_temperature, pint.application_registry("degC"))
-    min_temperature_by_cohort = check_units(min_temperature_by_cohort, pint.application_registry("degC"))
+    average_temperature = check_units(average_temperature, StandardUnitsLabels.temperature.units)
+    min_temperature_by_cohort = check_units(min_temperature_by_cohort, StandardUnitsLabels.temperature.units)
     mask_temperature_by_fgroup = average_temperature >= min_temperature_by_cohort
     mask_temperature_by_fgroup.name = "mask_temperature_by_cohort_by_functional_group"
     return mask_temperature_by_fgroup.assign_attrs(
@@ -237,7 +232,7 @@ def compute_cell_area(
             "standard_name": "cell_area",
             "long_name": "cell area",
             "description": "Cell area computed from the latitude and longitude centroid.",
-            "units": str(pint.application_registry("m^2").units),
+            "units": str(StandardUnitsLabels.height.units**2),
         }
     )
 
@@ -262,7 +257,7 @@ def compute_mortality_field(
     ------
     - mortality_field [functional_group, time, latitude, longitude]
     """
-    average_temperature = check_units(average_temperature, pint.application_registry("degC"))
+    average_temperature = check_units(average_temperature, StandardUnitsLabels.temperature)
     mortality_field = np.exp(-timestep * (np.exp(inv_lambda_rate * average_temperature) / inv_lambda_max))
     mortality_field.name = "mortality_field"
     return mortality_field.assign_attrs(

@@ -9,7 +9,11 @@ import xarray as xr
 
 from seapodym_lmtl_python.configuration.no_transport import client as no_transport_client
 from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels, PreproductionLabels
+from seapodym_lmtl_python.configuration.no_transport.labels import (
+    ConfigurationLabels,
+    PostproductionLabels,
+    PreproductionLabels,
+)
 from seapodym_lmtl_python.configuration.no_transport.parameters import NoTransportParameters
 from seapodym_lmtl_python.logging.custom_logger import logger
 from seapodym_lmtl_python.model.base_model import BaseModel
@@ -201,6 +205,11 @@ class NoTransportModel(BaseModel):
 
     def save_output(self: NoTransportModel) -> None:
         """Save the outputs of the model."""
+        # 1. biomass
+        # param_biomass = self.configuration.environment_parameters.output.biomass
+        # biomass_field = self.state[PostproductionLabels.biomass]
+
+        # 2. production
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""

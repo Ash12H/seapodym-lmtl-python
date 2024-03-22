@@ -1,6 +1,4 @@
 import numpy as np
-import pint
-import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
@@ -12,7 +10,7 @@ from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset im
     _as_dataset__load_forcings,
     as_dataset,
 )
-from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels
+from seapodym_lmtl_python.configuration.no_transport.labels import ConfigurationLabels, StandardUnitsLabels
 from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
 from seapodym_lmtl_python.configuration.no_transport.parameters import (
     ForcingParameters,
@@ -32,11 +30,11 @@ def forcing_param():
         dims=("time", "latitude", "longitude"),
         coords={"time": time, "latitude": latitude, "longitude": longitude},
         data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
-        attrs={"units": pint.application_registry("degC").units},
+        attrs={"units": str(StandardUnitsLabels.temperature.units)},
         name="temperature",
     )
     primary_production = temperature.copy()
-    primary_production.attrs["units"] = pint.application_registry("kg / m^2 / day").units
+    primary_production.attrs["units"] = str(StandardUnitsLabels.production.units)
     primary_production.name = "primary_production"
 
     temperature = ForcingUnit(forcing=temperature)
@@ -51,7 +49,7 @@ def forcing_param_with_init():
             dims=("functional_group", "latitude", "longitude"),
             coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude},
             data=np.full((fgroup.size, latitude.size, longitude.size), 0, dtype=float),
-            attrs={"units": pint.application_registry("kg / m^2").units},
+            attrs={"units": str(StandardUnitsLabels.biomass.units)},
             name="initial_condition_biomass",
         )
     )
@@ -60,7 +58,7 @@ def forcing_param_with_init():
             dims=("functional_group", "latitude", "longitude", "cohort"),
             coords={"functional_group": fgroup, "latitude": latitude, "longitude": longitude, "cohort": cohort},
             data=np.full((fgroup.size, latitude.size, longitude.size, cohort.size), 0, dtype=float),
-            attrs={"units": pint.application_registry("kg / m^2 / day").units},
+            attrs={"units": str(StandardUnitsLabels.production.units)},
             name="initial_condition_production",
         )
     )
@@ -68,11 +66,11 @@ def forcing_param_with_init():
         dims=("time", "latitude", "longitude"),
         coords={"time": time, "latitude": latitude, "longitude": longitude},
         data=np.full((time.size, latitude.size, longitude.size), 0, dtype=float),
-        attrs={"units": pint.application_registry("degC").units},
+        attrs={"units": str(StandardUnitsLabels.temperature.units)},
         name="temperature",
     )
     primary_production = temperature.copy()
-    primary_production.attrs["units"] = pint.application_registry("kg / m^2 / day").units
+    primary_production.attrs["units"] = StandardUnitsLabels.production.units
     primary_production.name = "primary_production"
     temperature = ForcingUnit(forcing=temperature)
     primary_production = ForcingUnit(forcing=primary_production)

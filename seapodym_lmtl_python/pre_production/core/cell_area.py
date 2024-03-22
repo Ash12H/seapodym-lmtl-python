@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from typing import Iterable
 
-import cf_xarray.units  # noqa: F401
 import numpy as np
-import pint
-import pint_xarray  # noqa: F401
 import xarray as xr
 
-EARTH_RADIUS = 6_371_000 * pint.application_registry.meters
+from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
+
+EARTH_RADIUS = 6_371_000 * StandardUnitsLabels.height.units
 
 
 def haversine_distance(min_latitude: float, max_latitude: float, min_longitude: float, max_longitude: float) -> float:
@@ -129,7 +128,7 @@ def mesh_cell_area(
         attrs={
             "long_name": "area of grid cell",
             "standard_name": "cell_area",
-            "units": "meter**2",
+            "units": str(StandardUnitsLabels.height.units**2),
         },
         data=mesh_cell_area,
     )

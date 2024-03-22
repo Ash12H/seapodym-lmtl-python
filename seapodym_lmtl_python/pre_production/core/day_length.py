@@ -8,6 +8,8 @@ import pandas as pd
 import pint
 import xarray as xr
 
+from seapodym_lmtl_python.configuration.no_transport.labels import StandardUnitsLabels
+
 DAY_IN_HOUR = pint.application_registry("day").to("hour").magnitude
 
 
@@ -116,4 +118,4 @@ def mesh_day_length(
         },
     )
 
-    return mesh_in_hour.pint.quantify().pint.to("day").pint.dequantify()
+    return mesh_in_hour.pint.quantify().pint.to(StandardUnitsLabels.time.units).pint.dequantify()
