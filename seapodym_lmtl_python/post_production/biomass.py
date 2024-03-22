@@ -14,6 +14,7 @@ from seapodym_lmtl_python.configuration.no_transport.labels import (
     PostproductionLabels,
     PreproductionLabels,
     ProductionLabels,
+    StandardUnitsLabels,
 )
 
 
@@ -82,7 +83,9 @@ def compute_biomass(data: xr.Dataset) -> xr.DataArray:
         coords=data[PreproductionLabels.mortality_field].coords,
         dims=data[PreproductionLabels.mortality_field].dims,
         attrs={
-            # TODO(Jules)
+            "long_name": "biomass",
+            "units": str(StandardUnitsLabels.biomass.units),
+            "description": "The biomass of the recruited individuals.",
         },
         name=PostproductionLabels.biomass,
     )

@@ -3,6 +3,11 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+# --------------------------------------------------------------------------------- #
+# NOTE(Jules): This import is necessary to work with cf_xarray Datasets. DO NOT REMOVE
+import cf_xarray.units  # noqa: F401
+
+# --------------------------------------------------------------------------------- #
 import pint
 
 
@@ -68,10 +73,10 @@ class StandardUnitsLabels(StrEnum):
 
     height = "meter"
     weight = "kilogram"
-    temperature = "degC"
+    temperature = "celsius"
     time = "day"
-    biomass = "kilogram / meter^2"
-    production = "kilogram / meter^2 / day"
+    biomass = "kilogram / meter**2"
+    production = "kilogram / meter**2 / day"
 
     def __init__(self: StandardUnitsLabels, unit_as_str: str) -> None:
         """Prevent the instantiation of this class."""

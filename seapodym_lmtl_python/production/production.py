@@ -13,6 +13,7 @@ from seapodym_lmtl_python.configuration.no_transport.labels import (
     ConfigurationLabels,
     PreproductionLabels,
     ProductionLabels,
+    StandardUnitsLabels,
 )
 from seapodym_lmtl_python.logging.custom_logger import logger
 
@@ -199,9 +200,13 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: np.nd
         if export_preproduction is not None:
             results_preproduction.append(_format_pre_prod(fgroup_data, export_preproduction, output_preproduction))
 
-    results = {ProductionLabels.recruited: xr.concat(results_recruited, dim=ConfigurationLabels.fgroup)}
+    results = {
+        ProductionLabels.recruited: xr.concat(results_recruited, dim=ConfigurationLabels.fgroup, combine_attrs="drop")
+    }
     if export_preproduction is not None:
-        results[ProductionLabels.preproduction] = xr.concat(results_preproduction, dim=ConfigurationLabels.fgroup)
+        results[ProductionLabels.preproduction] = xr.concat(
+            results_preproduction, dim=ConfigurationLabels.fgroup, combine_attrs="drop"
+        )
     return xr.Dataset(results, coords=data.coords)
 
 
@@ -239,7 +244,10 @@ def compute_production(
         chunk = {ConfigurationLabels.fgroup: 1}
     data = data.cf.chunk(chunk).unify_chunks()
 
-    template = xr.Dataset({ProductionLabels.recruited: data[PreproductionLabels.mask_temperature]}, coords=data.coords)
+    template = xr.Dataset(
+        {ProductionLabels.recruited: data[PreproductionLabels.mask_temperature]},
+        coords=data.coords,
+    )
     if export_preproduction is not None:
         template[ProductionLabels.preproduction] = data[PreproductionLabels.mask_temperature].cf.isel(
             T=export_preproduction
@@ -248,15 +256,24 @@ def compute_production(
     output = xr.map_blocks(
         compute_preproduction_numba, data, kwargs={"export_preproduction": export_preproduction}, template=template
     )
-    output = xr.merge([data, output], combine_attrs="drop")
-    output.name = ProductionLabels.production
-    output = output.assign_attrs(
-        {
-            "standard_name": "production",
-            "long_name": "Production by cohort.",
-            "description": "Population recruited by cohort.",
-            "units": "kg / m-2 / day",
+
+    attrs_recruited = {
+        "standard_name": "production",
+        "long_name": "production",
+        "units": str(StandardUnitsLabels.production.units),
+    }
+    output[ProductionLabels.recruited].attrs.clear()
+    output[ProductionLabels.recruited].attrs.update(attrs_recruited)
+
+    if export_preproduction is not None:
+        attrs_preproduction = {
+            "standard_name": "pre-production",
+            "long_name": "pre-production",
+            "description": "The entire population before recruitment, divided into cohorts.",
+            "units": str(StandardUnitsLabels.production.units),
         }
-    )
-    # TODO(Jules): Add attributs to the output dataset.
+        output[ProductionLabels.preproduction].attrs.clear()
+        output[ProductionLabels.preproduction].attrs.update(attrs_preproduction)
+
+    output = xr.merge([data, output])
     return output.persist()
