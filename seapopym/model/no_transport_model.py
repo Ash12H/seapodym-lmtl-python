@@ -9,11 +9,11 @@ import xarray as xr
 
 from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
 from seapopym.configuration.no_transport.parameter import NoTransportParameters
+from seapopym.function.core import landmask
+from seapopym.function.generator import pre_production
+from seapopym.function.generator.biomass import compute_biomass
+from seapopym.function.generator.production import compute_production
 from seapopym.model.base_model import BaseModel
-from seapopym.post_production.biomass import compute_biomass
-from seapopym.pre_production import pre_production
-from seapopym.pre_production.core import landmask
-from seapopym.production.production import compute_production
 from seapopym.standard.labels import ConfigurationLabels, PreproductionLabels
 
 if TYPE_CHECKING:

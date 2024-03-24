@@ -4,14 +4,14 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.configuration.no_transport import parameter_functional_group
+from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
     NoTransportParameters,
 )
-from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
-from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.configuration.parameters.parameter_environment import EnvironmentParameter
+from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
 from seapopym.exception.parameter_exception import DifferentForcingTimestepError
 from seapopym.standard import coordinates
 

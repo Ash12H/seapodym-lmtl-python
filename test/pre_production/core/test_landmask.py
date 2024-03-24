@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.core import landmask
+from seapopym.function.core import landmask
 from seapopym.standard import coordinates
 
 

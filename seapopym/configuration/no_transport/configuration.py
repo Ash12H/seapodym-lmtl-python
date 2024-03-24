@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     import xarray as xr
 
     from seapopym.configuration.no_transport.parameter import NoTransportParameters
-    from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
+    from seapopym.configuration.parameters.parameter_environment import EnvironmentParameter
 
 
 class NoTransportConfiguration(BaseConfiguration):

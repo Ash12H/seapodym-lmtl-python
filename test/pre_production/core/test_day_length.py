@@ -3,7 +3,7 @@ import pint
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.core.day_length import day_length_forsythe
+from seapopym.function.core.day_length import day_length_forsythe
 from seapopym.standard import coordinates
 
 

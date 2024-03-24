@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
 from seapopym.standard import coordinates
 
 

@@ -2,8 +2,8 @@
 
 import xarray as xr
 
-from seapopym.pre_production import pre_production
-from seapopym.pre_production.core.landmask import landmask_from_nan
+from seapopym.function.generator import pre_production
+from seapopym.function.core.landmask import landmask_from_nan
 from seapopym.standard.coordinates import list_available_dims
 from seapopym.standard.labels import ConfigurationLabels, PreproductionLabels
 

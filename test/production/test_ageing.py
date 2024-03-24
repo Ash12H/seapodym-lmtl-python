@@ -1,6 +1,6 @@
 import numpy as np
 
-from seapopym.production.production import ageing
+from seapopym.function.generator.production import ageing
 
 
 class TestAgeing:

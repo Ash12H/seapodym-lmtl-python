@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.pre_production import mask_by_fgroup
+from seapopym.function.generator.pre_production import mask_by_fgroup
 from seapopym.standard.labels import ConfigurationLabels
 
 

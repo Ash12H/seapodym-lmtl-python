@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.configuration.no_transport import parameter_functional_group
+from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.no_transport.configuration_to_dataset import (
     _as_dataset__build_cohort_dataset,
     _as_dataset__build_fgroup_dataset,
@@ -13,7 +13,7 @@ from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
 )
-from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
 from seapopym.standard import coordinates
 from seapopym.standard.labels import ConfigurationLabels
 from seapopym.standard.units import StandardUnitsLabels

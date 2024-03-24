@@ -4,7 +4,8 @@ from __future__ import annotations
 import numpy as np
 import xarray as xr
 
-from seapopym.pre_production.core import cell_area, day_length
+from seapopym.function.core import cell_area
+from seapopym.function.core import day_length
 from seapopym.standard.labels import ConfigurationLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
 

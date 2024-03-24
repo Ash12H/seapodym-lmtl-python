@@ -8,9 +8,9 @@ from __future__ import annotations
 import numpy as np
 from attrs import field, frozen, validators
 
-from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
-from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
-from seapopym.configuration.no_transport.parameter_functional_group import FunctionalGroupUnit
+from seapopym.configuration.parameters.parameter_environment import EnvironmentParameter
+from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
+from seapopym.configuration.parameters.parameter_functional_group import FunctionalGroupUnit
 from seapopym.exception.parameter_exception import (
     CohortTimestepConsistencyError,
     DifferentForcingTimestepError,

@@ -11,8 +11,8 @@ import pandas as pd
 import xarray as xr
 from attrs import converters, field, frozen
 
-from seapopym.standard.units import check_units
 from seapopym.logging.custom_logger import logger
+from seapopym.standard.units import check_units
 
 DECIMALS = 5  # ie. 1e-5 degrees which is equivalent to ~1m at the equator
 

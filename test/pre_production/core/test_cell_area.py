@@ -3,7 +3,7 @@ import pint
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.core import cell_area
+from seapopym.function.core import cell_area
 from seapopym.standard import coordinates
 
 

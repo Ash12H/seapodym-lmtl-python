@@ -5,7 +5,7 @@ import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.pre_production import average_temperature_by_fgroup
+from seapopym.function.generator.pre_production import average_temperature_by_fgroup
 from seapopym.standard import coordinates
 from seapopym.standard.labels import ConfigurationLabels
 

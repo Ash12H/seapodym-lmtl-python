@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.pre_production.pre_production import compute_daylength
+from seapopym.function.generator.pre_production import compute_daylength
 from seapopym.standard import coordinates
 from seapopym.standard.labels import ConfigurationLabels
 
