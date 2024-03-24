@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production.core import landmask
-from seapodym_lmtl_python.standard import coordinates
+from seapopym.pre_production.core import landmask
+from seapopym.standard import coordinates
 
 
 @pytest.fixture()

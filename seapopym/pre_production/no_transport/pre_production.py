@@ -2,10 +2,10 @@
 
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production import pre_production
-from seapodym_lmtl_python.pre_production.core.landmask import landmask_from_nan
-from seapodym_lmtl_python.standard.coordinates import list_available_dims
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels, PreproductionLabels
+from seapopym.pre_production import pre_production
+from seapopym.pre_production.core.landmask import landmask_from_nan
+from seapopym.standard.coordinates import list_available_dims
+from seapopym.standard.labels import ConfigurationLabels, PreproductionLabels
 
 
 def mask_global(state: xr.Dataset):

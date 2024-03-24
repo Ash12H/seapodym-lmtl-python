@@ -12,7 +12,7 @@ import cf_xarray.units  # noqa: F401
 import pint
 import pint_xarray  # noqa: F401
 
-from seapodym_lmtl_python.logging.custom_logger import logger
+from seapopym.logging.custom_logger import logger
 
 if TYPE_CHECKING:
     import xarray as xr

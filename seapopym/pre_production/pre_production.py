@@ -4,9 +4,9 @@ from __future__ import annotations
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production.core import cell_area, day_length
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels
-from seapodym_lmtl_python.standard.units import StandardUnitsLabels, check_units
+from seapopym.pre_production.core import cell_area, day_length
+from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
 def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: xr.DataArray) -> xr.DataArray:

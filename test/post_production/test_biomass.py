@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from seapodym_lmtl_python.post_production.biomass import biomass_sequence
+from seapopym.post_production.biomass import biomass_sequence
 
 
 @pytest.fixture()

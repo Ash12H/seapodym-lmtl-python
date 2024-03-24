@@ -3,8 +3,8 @@ import pint
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production.core import cell_area
-from seapodym_lmtl_python.standard import coordinates
+from seapopym.pre_production.core import cell_area
+from seapopym.standard import coordinates
 
 
 @pytest.fixture()

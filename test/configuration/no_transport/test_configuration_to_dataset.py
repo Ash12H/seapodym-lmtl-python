@@ -2,21 +2,21 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
-from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset import (
+from seapopym.configuration.no_transport import parameter_functional_group
+from seapopym.configuration.no_transport.configuration_to_dataset import (
     _as_dataset__build_cohort_dataset,
     _as_dataset__build_fgroup_dataset,
     _as_dataset__load_forcings,
     as_dataset,
 )
-from seapodym_lmtl_python.configuration.no_transport.parameter import (
+from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
 )
-from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
-from seapodym_lmtl_python.standard import coordinates
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels
-from seapodym_lmtl_python.standard.units import StandardUnitsLabels
+from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.standard import coordinates
+from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.units import StandardUnitsLabels
 
 time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
 latitude = coordinates.new_latitude(np.array([0, 1, 2]))

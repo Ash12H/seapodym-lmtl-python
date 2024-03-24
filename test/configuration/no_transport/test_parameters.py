@@ -4,16 +4,16 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
-from seapodym_lmtl_python.configuration.no_transport.parameter import (
+from seapopym.configuration.no_transport import parameter_functional_group
+from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
     NoTransportParameters,
 )
-from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
-from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
-from seapodym_lmtl_python.exception.parameter_exception import DifferentForcingTimestepError
-from seapodym_lmtl_python.standard import coordinates
+from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
+from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.exception.parameter_exception import DifferentForcingTimestepError
+from seapopym.standard import coordinates
 
 time_1 = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
 time_2 = coordinates.new_time(xr.cftime_range(start="2020", freq="2D", periods=2))

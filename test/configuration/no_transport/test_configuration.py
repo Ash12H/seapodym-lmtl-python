@@ -2,17 +2,17 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport import parameter_functional_group
-from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
-from seapodym_lmtl_python.configuration.no_transport.parameter import (
+from seapopym.configuration.no_transport import parameter_functional_group
+from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
+from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
     NoTransportParameters,
 )
-from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
-from seapodym_lmtl_python.configuration.no_transport.parameter_forcing import ForcingUnit
-from seapodym_lmtl_python.standard import coordinates
-from seapodym_lmtl_python.standard.units import StandardUnitsLabels
+from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
+from seapopym.configuration.no_transport.parameter_forcing import ForcingUnit
+from seapopym.standard import coordinates
+from seapopym.standard.units import StandardUnitsLabels
 
 
 @pytest.fixture()

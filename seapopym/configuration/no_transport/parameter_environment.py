@@ -7,7 +7,7 @@ import numpy as np
 from attrs import define, field, frozen, validators
 from dask.distributed import Client
 
-from seapodym_lmtl_python.logging.custom_logger import logger
+from seapopym.logging.custom_logger import logger
 
 
 @frozen

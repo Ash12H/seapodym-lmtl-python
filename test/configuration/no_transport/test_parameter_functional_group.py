@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from seapodym_lmtl_python.configuration.no_transport.parameter_functional_group import (
+from seapopym.configuration.no_transport.parameter_functional_group import (
     FunctionalGroupUnit,
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,

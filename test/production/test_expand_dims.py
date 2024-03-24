@@ -1,6 +1,6 @@
 import numpy as np
 
-from seapodym_lmtl_python.production.production import expand_dims
+from seapopym.production.production import expand_dims
 
 
 class TestExpandDims:

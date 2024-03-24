@@ -9,7 +9,7 @@ import cf_xarray.units  # noqa: F401
 import pint_xarray  # noqa: F401
 import xarray as xr
 
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import ConfigurationLabels
 
 if TYPE_CHECKING:
     import numpy as np

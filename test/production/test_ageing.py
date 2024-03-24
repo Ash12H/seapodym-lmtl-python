@@ -1,6 +1,6 @@
 import numpy as np
 
-from seapodym_lmtl_python.production.production import ageing
+from seapopym.production.production import ageing
 
 
 class TestAgeing:

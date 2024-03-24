@@ -3,8 +3,8 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production.pre_production import mask_by_fgroup
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels
+from seapopym.pre_production.pre_production import mask_by_fgroup
+from seapopym.standard.labels import ConfigurationLabels
 
 
 @pytest.fixture()

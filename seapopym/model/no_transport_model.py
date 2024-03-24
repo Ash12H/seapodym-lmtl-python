@@ -7,14 +7,14 @@ from typing import IO, TYPE_CHECKING, Callable
 import numpy as np
 import xarray as xr
 
-from seapodym_lmtl_python.configuration.no_transport.configuration import NoTransportConfiguration
-from seapodym_lmtl_python.configuration.no_transport.parameter import NoTransportParameters
-from seapodym_lmtl_python.model.base_model import BaseModel
-from seapodym_lmtl_python.post_production.biomass import compute_biomass
-from seapodym_lmtl_python.pre_production import pre_production
-from seapodym_lmtl_python.pre_production.core import landmask
-from seapodym_lmtl_python.production.production import compute_production
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels, PreproductionLabels
+from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
+from seapopym.configuration.no_transport.parameter import NoTransportParameters
+from seapopym.model.base_model import BaseModel
+from seapopym.post_production.biomass import compute_biomass
+from seapopym.pre_production import pre_production
+from seapopym.pre_production.core import landmask
+from seapopym.production.production import compute_production
+from seapopym.standard.labels import ConfigurationLabels, PreproductionLabels
 
 if TYPE_CHECKING:
     from pathlib import Path

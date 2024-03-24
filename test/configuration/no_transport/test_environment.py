@@ -2,7 +2,7 @@ from pathlib import Path
 
 from dask.distributed import Client
 
-from seapodym_lmtl_python.configuration.no_transport.parameter_environment import (
+from seapopym.configuration.no_transport.parameter_environment import (
     BaseOuputForcingParameter,
     BiomassParameter,
     ChunkParameter,

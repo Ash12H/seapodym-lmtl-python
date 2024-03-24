@@ -7,16 +7,16 @@ from __future__ import annotations
 
 from typing import IO, TYPE_CHECKING
 
-from seapodym_lmtl_python.configuration.base_configuration import BaseConfiguration
-from seapodym_lmtl_python.configuration.no_transport.configuration_to_dataset import as_dataset
+from seapopym.configuration.base_configuration import BaseConfiguration
+from seapopym.configuration.no_transport.configuration_to_dataset import as_dataset
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     import xarray as xr
 
-    from seapodym_lmtl_python.configuration.no_transport.parameter import NoTransportParameters
-    from seapodym_lmtl_python.configuration.no_transport.parameter_environment import EnvironmentParameter
+    from seapopym.configuration.no_transport.parameter import NoTransportParameters
+    from seapopym.configuration.no_transport.parameter_environment import EnvironmentParameter
 
 
 class NoTransportConfiguration(BaseConfiguration):

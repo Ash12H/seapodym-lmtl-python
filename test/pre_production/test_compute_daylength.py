@@ -3,9 +3,9 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapodym_lmtl_python.pre_production.pre_production import compute_daylength
-from seapodym_lmtl_python.standard import coordinates
-from seapodym_lmtl_python.standard.labels import ConfigurationLabels
+from seapopym.pre_production.pre_production import compute_daylength
+from seapopym.standard import coordinates
+from seapopym.standard.labels import ConfigurationLabels
 
 
 @pytest.fixture()

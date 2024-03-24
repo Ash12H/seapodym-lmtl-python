@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numba.core.errors import TypingError
 
-from seapodym_lmtl_python.production.production import time_loop
+from seapopym.production.production import time_loop
 
 
 class TestTimeLoop:

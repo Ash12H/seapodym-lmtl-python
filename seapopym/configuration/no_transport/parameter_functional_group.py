@@ -7,8 +7,8 @@ from typing import Iterable
 import numpy as np
 from attrs import Attribute, field, frozen, validators
 
-from seapodym_lmtl_python.exception.parameter_exception import TimestepInDaysError
-from seapodym_lmtl_python.logging.custom_logger import logger
+from seapopym.exception.parameter_exception import TimestepInDaysError
+from seapopym.logging.custom_logger import logger
 
 
 @frozen(kw_only=True)
