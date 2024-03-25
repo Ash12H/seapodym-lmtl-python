@@ -5,7 +5,7 @@ import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
 
-from seapopym.function.generator.pre_production import average_temperature_by_fgroup
+from seapopym.function.generator.pre_production import average_temperature
 from seapopym.standard import coordinates
 from seapopym.standard.labels import CoordinatesLabels
 
@@ -81,7 +81,7 @@ class TestMaskByFgroup:
         night_layer: xr.DataArray,
         temperature: xr.DataArray,
     ):
-        fgroup_mask = average_temperature_by_fgroup(
+        fgroup_mask = average_temperature(
             daylength=daylength, mask=mask, day_layer=day_layer, night_layer=night_layer, temperature=temperature
         )
 

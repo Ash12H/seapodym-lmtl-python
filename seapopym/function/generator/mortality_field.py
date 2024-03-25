@@ -16,7 +16,7 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
 
     Depend on
     ---------
-    - average_temperature_by_fgroup()
+    - average_temperature()
 
     Input
     ------

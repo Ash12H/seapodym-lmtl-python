@@ -11,16 +11,16 @@ from seapopym.standard.units import StandardUnitsLabels, check_units
 
 def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
     """
-    It uses the min_temperature_by_cohort.
+    It uses the min_temperature.
 
     Depend on
     ---------
-    - min_temperature_by_cohort()
-    - average_temperature_by_fgroup()
+    - min_temperature()
+    - average_temperature()
 
     Input
     -----
-    - min_temperature_by_cohort [cohort_age]
+    - min_temperature [cohort_age]
     - average_temperature [functional_group, time, latitude, longitude]
 
     Output
@@ -34,10 +34,8 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
     average_temperature = check_units(
         state[PreproductionLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
     )
-    min_temperature_by_cohort = check_units(
-        state[PreproductionLabels.min_temperature_by_cohort], StandardUnitsLabels.temperature.units
-    )
-    mask_temperature_by_fgroup = average_temperature >= min_temperature_by_cohort
+    min_temperature = check_units(state[PreproductionLabels.min_temperature], StandardUnitsLabels.temperature.units)
+    mask_temperature_by_fgroup = average_temperature >= min_temperature
     mask_temperature_by_fgroup.name = "mask_temperature_by_cohort_by_functional_group"
     return mask_temperature_by_fgroup
 

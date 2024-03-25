@@ -62,7 +62,7 @@ def compute_daylength(time: xr.DataArray, latitude: xr.DataArray, longitude: xr.
     return day_length.mesh_day_length(time, latitude, longitude)
 
 
-def average_temperature_by_fgroup(
+def average_temperature(
     daylength: xr.DataArray,
     mask: xr.DataArray,
     day_layer: xr.DataArray,
@@ -99,7 +99,7 @@ def average_temperature_by_fgroup(
         average_temperature.append(mean_temperature)
 
     average_temperature = xr.concat(average_temperature, dim=CoordinatesLabels.functional_group, combine_attrs="drop")
-    average_temperature.name = "average_temperature_by_fgroup"
+    average_temperature.name = "average_temperature"
     return average_temperature.assign_attrs(
         {
             "long_name": "average sea temperature by fonctional group",
@@ -141,7 +141,7 @@ def apply_coefficient_to_primary_production(
     )
 
 
-def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray, tr_rate: xr.DataArray) -> xr.DataArray:
+def min_temperature(mean_timestep: xr.DataArray, tr_max: xr.DataArray, tr_rate: xr.DataArray) -> xr.DataArray:
     """
     Define the minimal temperature of a cohort to be recruited.
 
@@ -153,11 +153,11 @@ def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray,
 
     Output
     ------
-    - min_temperature_by_cohort [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
+    - min_temperature [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
     minimum temperature as value.
     """
     result = np.log(mean_timestep / tr_max) / tr_rate
-    result.name = "min_temperature_by_cohort"
+    result.name = "min_temperature"
     return result.assign_attrs(
         {
             "standard_name": "minimum temperature",
@@ -169,19 +169,19 @@ def min_temperature_by_cohort(mean_timestep: xr.DataArray, tr_max: xr.DataArray,
 
 
 def mask_temperature_by_cohort_by_functional_group(
-    min_temperature_by_cohort: xr.DataArray, average_temperature: xr.DataArray
+    min_temperature: xr.DataArray, average_temperature: xr.DataArray
 ) -> xr.DataArray:
     """
-    It uses the min_temperature_by_cohort.
+    It uses the min_temperature.
 
     Depend on
     ---------
-    - min_temperature_by_cohort()
-    - average_temperature_by_fgroup()
+    - min_temperature()
+    - average_temperature()
 
     Input
     -----
-    - min_temperature_by_cohort [cohort_age]
+    - min_temperature [cohort_age]
     - average_temperature [functional_group, time, latitude, longitude]
 
     Output
@@ -193,8 +193,8 @@ def mask_temperature_by_cohort_by_functional_group(
 
     """
     average_temperature = check_units(average_temperature, StandardUnitsLabels.temperature.units)
-    min_temperature_by_cohort = check_units(min_temperature_by_cohort, StandardUnitsLabels.temperature.units)
-    mask_temperature_by_fgroup = average_temperature >= min_temperature_by_cohort
+    min_temperature = check_units(min_temperature, StandardUnitsLabels.temperature.units)
+    mask_temperature_by_fgroup = average_temperature >= min_temperature
     mask_temperature_by_fgroup.name = "mask_temperature_by_cohort_by_functional_group"
     return mask_temperature_by_fgroup.assign_attrs(
         {
@@ -245,7 +245,7 @@ def compute_mortality_field(
 
     Depend on
     ---------
-    - average_temperature_by_fgroup()
+    - average_temperature()
 
     Input
     ------

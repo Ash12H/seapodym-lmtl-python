@@ -43,11 +43,11 @@ def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
         average_temperature.append(mean_temperature)
 
     average_temperature = xr.concat(average_temperature, dim=CoordinatesLabels.functional_group, combine_attrs="drop")
-    average_temperature.name = "average_temperature_by_fgroup"
+    average_temperature.name = "average_temperature"
     return average_temperature
 
 
-def average_temperature_by_fgroup(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def average_temperature(state: xr.Dataset, chunk: dict) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
     template_avg_temperature = generate_template(

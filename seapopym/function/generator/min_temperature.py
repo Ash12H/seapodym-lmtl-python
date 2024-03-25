@@ -21,18 +21,18 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
 
     Output
     ------
-    - min_temperature_by_cohort [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
+    - min_temperature [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
     minimum temperature as value.
     """
     result = (
         np.log(state[ConfigurationLabels.mean_timestep] / state[ConfigurationLabels.temperature_recruitment_max])
         / state[ConfigurationLabels.temperature_recruitment_rate]
     )
-    result.name = "min_temperature_by_cohort"
+    result.name = "min_temperature"
     return result
 
 
-def min_temperature_by_cohort(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def min_temperature(state: xr.Dataset, chunk: dict) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.cohort]
     template_min_temperature = generate_template(
