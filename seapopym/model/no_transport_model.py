@@ -106,7 +106,7 @@ class NoTransportModel(BaseModel):
         primary_production_by_fgroup = apply_if_not_already_computed(
             PreproductionLabels.primary_production_by_fgroup,
             pre_production.apply_coefficient_to_primary_production,
-            primary_production=self.state[PreproductionLabels.primary_production],
+            primary_production=self.state[ConfigurationLabels.primary_production],
             functional_group_coefficient=self.state[ConfigurationLabels.energy_transfert],
         )
 

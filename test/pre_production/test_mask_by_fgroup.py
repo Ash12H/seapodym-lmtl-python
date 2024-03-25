@@ -4,14 +4,14 @@ import pytest
 import xarray as xr
 
 from seapopym.function.generator.pre_production import mask_by_fgroup
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import CoordinatesLabels
 
 
 @pytest.fixture()
 def day_layers():
     return xr.DataArray(
-        dims=(ConfigurationLabels.fgroup,),
-        coords={ConfigurationLabels.fgroup: np.arange(4)},
+        dims=(CoordinatesLabels.functional_group,),
+        coords={CoordinatesLabels.functional_group: np.arange(4)},
         data=np.array([1, 1, 2, 2], dtype=int),
     )
 
@@ -19,8 +19,8 @@ def day_layers():
 @pytest.fixture()
 def night_layers():
     return xr.DataArray(
-        dims=(ConfigurationLabels.fgroup,),
-        coords={ConfigurationLabels.fgroup: np.arange(4)},
+        dims=(CoordinatesLabels.functional_group,),
+        coords={CoordinatesLabels.functional_group: np.arange(4)},
         data=np.array([1, 2, 2, 1], dtype=int),
     )
 
@@ -57,7 +57,7 @@ class TestMaskByFgroup:
         )
 
         assert isinstance(fgroup_mask, xr.DataArray)
-        for dim in (ConfigurationLabels.fgroup, "Y", "X"):
+        for dim in (CoordinatesLabels.functional_group, "Y", "X"):
             assert dim in fgroup_mask.cf.coords
 
         assert fgroup_mask.shape == (day_layers.size, mask.cf["Y"].size, mask.cf["X"].size)
@@ -65,18 +65,18 @@ class TestMaskByFgroup:
         assert fgroup_mask.dtype == bool
 
         assert np.array_equal(
-            fgroup_mask.sel({ConfigurationLabels.fgroup: 0}),
+            fgroup_mask.sel({CoordinatesLabels.functional_group: 0}),
             mask.cf.sel(Z=1),
         )
         assert np.array_equal(
-            fgroup_mask.sel({ConfigurationLabels.fgroup: 1}),
+            fgroup_mask.sel({CoordinatesLabels.functional_group: 1}),
             mask.cf.sel(Z=2),
         )
         assert np.array_equal(
-            fgroup_mask.sel({ConfigurationLabels.fgroup: 2}),
+            fgroup_mask.sel({CoordinatesLabels.functional_group: 2}),
             mask.cf.sel(Z=2),
         )
         assert np.array_equal(
-            fgroup_mask.sel({ConfigurationLabels.fgroup: 3}),
+            fgroup_mask.sel({CoordinatesLabels.functional_group: 3}),
             mask.cf.sel(Z=2),
         )

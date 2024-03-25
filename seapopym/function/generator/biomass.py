@@ -11,6 +11,7 @@ from numba import jit
 
 from seapopym.standard.labels import (
     ConfigurationLabels,
+    CoordinatesLabels,
     PostproductionLabels,
     PreproductionLabels,
     ProductionLabels,
@@ -63,8 +64,8 @@ def compute_biomass(data: xr.Dataset) -> xr.DataArray:
         """Format the fields to be used in the biomass computation"""
         return np.nan_to_num(data.data, 0.0).astype(np.float64)
 
-    data = data.cf.transpose(ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort)
-    recruited = data[ProductionLabels.recruited].sum(ConfigurationLabels.cohort)
+    data = data.cf.transpose(CoordinatesLabels.functional_group, "T", "Y", "X", "Z", CoordinatesLabels.cohort)
+    recruited = data[ProductionLabels.recruited].sum(CoordinatesLabels.cohort)
     recruited = _format_fields(recruited)
     mortality = _format_fields(data[PreproductionLabels.mortality_field])
     if ConfigurationLabels.initial_condition_biomass in data:

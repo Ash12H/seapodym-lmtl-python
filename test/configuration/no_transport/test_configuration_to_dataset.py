@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.no_transport.configuration_to_dataset import (
     _as_dataset__build_cohort_dataset,
     _as_dataset__build_fgroup_dataset,
@@ -13,9 +12,10 @@ from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
 )
+from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
 from seapopym.standard import coordinates
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
 from seapopym.standard.units import StandardUnitsLabels
 
 time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=2))
@@ -143,7 +143,9 @@ class TestConfigurationToDataset:
 
     def test_build_cohort_dataset(self, fgroup_param):
         names = xr.DataArray(
-            dims=ConfigurationLabels.fgroup, coords={ConfigurationLabels.fgroup: [0]}, data=["phytoplankton"]
+            dims=CoordinatesLabels.functional_group,
+            coords={CoordinatesLabels.functional_group: [0]},
+            data=["phytoplankton"],
         )
         cohort_dataset = _as_dataset__build_cohort_dataset(
             functional_groups=fgroup_param,

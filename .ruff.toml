@@ -28,5 +28,23 @@ line-length = 120
 indent-width = 4
 
 [lint.extend-per-file-ignores]
-# Using assert in test with pytest is allowed
-"test/*" = ["S101", "SLF001"]
+# PLR2004 : Magic values are used to validate the test
+# D101, D100, D102 : Missing docstring in test is allowed
+# ANN001, ANN101, ANN201 : Type annotation in test
+# PLR0913 : Too many arguments ?
+# ERA001 : Comments out of code ?
+"test/*" = [
+    "S101",
+    "SLF001",
+    "PLR2004",
+    "D102",
+    "D100",
+    "D101",
+    "D103",
+    "ANN001",
+    "ANN101",
+    "ANN201",
+    "PLR0913",
+    "ERA001",
+]
+"*.ipynb" = ["D100"]

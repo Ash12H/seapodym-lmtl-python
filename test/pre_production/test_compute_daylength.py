@@ -5,7 +5,6 @@ import xarray as xr
 
 from seapopym.function.generator.pre_production import compute_daylength
 from seapopym.standard import coordinates
-from seapopym.standard.labels import ConfigurationLabels
 
 
 @pytest.fixture()

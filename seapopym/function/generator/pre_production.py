@@ -4,9 +4,8 @@ from __future__ import annotations
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core import cell_area
-from seapopym.function.core import day_length
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.function.core import cell_area, day_length
+from seapopym.standard.labels import CoordinatesLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
@@ -19,7 +18,7 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
     - mask_by_fgroup  [functional_group, latitude, longitude] -> boolean
     """
     masks = []
-    for i in day_layers[ConfigurationLabels.fgroup]:
+    for i in day_layers[CoordinatesLabels.functional_group]:
         day_pos = day_layers.sel(functional_group=i)
         night_pos = night_layers.sel(functional_group=i)
 
@@ -29,11 +28,11 @@ def mask_by_fgroup(day_layers: xr.DataArray, night_layers: xr.DataArray, mask: x
 
     return xr.DataArray(
         coords={
-            ConfigurationLabels.fgroup: day_layers[ConfigurationLabels.fgroup],
+            CoordinatesLabels.functional_group: day_layers[CoordinatesLabels.functional_group],
             mask.cf["Y"].name: mask.cf["Y"],
             mask.cf["X"].name: mask.cf["X"],
         },
-        dims=(ConfigurationLabels.fgroup, mask.cf["Y"].name, mask.cf["X"].name),
+        dims=(CoordinatesLabels.functional_group, mask.cf["Y"].name, mask.cf["X"].name),
         data=masks,
         # TODO(Jules): Inherite from mask ?
         attrs={
@@ -90,16 +89,16 @@ def average_temperature_by_fgroup(
     daylength = check_units(daylength, StandardUnitsLabels.time.units)
 
     average_temperature = []
-    for fgroup in day_layer[ConfigurationLabels.fgroup]:
-        day_temperature = temperature.cf.sel(Z=day_layer.sel({ConfigurationLabels.fgroup: fgroup}))
-        night_temperature = temperature.cf.sel(Z=night_layer.sel({ConfigurationLabels.fgroup: fgroup}))
+    for fgroup in day_layer[CoordinatesLabels.functional_group]:
+        day_temperature = temperature.cf.sel(Z=day_layer.sel({CoordinatesLabels.functional_group: fgroup}))
+        night_temperature = temperature.cf.sel(Z=night_layer.sel({CoordinatesLabels.functional_group: fgroup}))
         mean_temperature = (daylength * day_temperature) + ((1 - daylength) * night_temperature)
         if "Z" in mean_temperature.cf:
             mean_temperature = mean_temperature.cf.drop_vars("Z")
-        mean_temperature = mean_temperature.where(mask.sel({ConfigurationLabels.fgroup: fgroup}))
+        mean_temperature = mean_temperature.where(mask.sel({CoordinatesLabels.functional_group: fgroup}))
         average_temperature.append(mean_temperature)
 
-    average_temperature = xr.concat(average_temperature, dim=ConfigurationLabels.fgroup, combine_attrs="drop")
+    average_temperature = xr.concat(average_temperature, dim=CoordinatesLabels.functional_group, combine_attrs="drop")
     average_temperature.name = "average_temperature_by_fgroup"
     return average_temperature.assign_attrs(
         {
@@ -130,7 +129,7 @@ def apply_coefficient_to_primary_production(
     """
     primary_production = check_units(primary_production, StandardUnitsLabels.production.units)
     pp_by_fgroup_gen = (i * primary_production for i in functional_group_coefficient)
-    pp_by_fgroup = xr.concat(pp_by_fgroup_gen, dim=ConfigurationLabels.fgroup, combine_attrs="drop")
+    pp_by_fgroup = xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group, combine_attrs="drop")
     pp_by_fgroup.name = "primary_production_by_fgroup"
     return pp_by_fgroup.assign_attrs(
         {

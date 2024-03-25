@@ -13,7 +13,7 @@ from seapopym.configuration.parameters.parameter_functional_group import (
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
 )
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
 
 if TYPE_CHECKING:
     from seapopym.configuration.no_transport.parameter import ForcingParameters
@@ -58,8 +58,8 @@ def _as_dataset__build_fgroup_dataset__generate_param_coords(
     f_group_coord_data = list(range(len(grps_param["name"])))
     f_group_coord = xr.DataArray(
         coords=(f_group_coord_data,),
-        dims=(ConfigurationLabels.fgroup,),
-        name=ConfigurationLabels.fgroup,
+        dims=(CoordinatesLabels.functional_group,),
+        name=CoordinatesLabels.functional_group,
         attrs={  # cf_xarray convention
             "flag_values": f_group_coord_data,
             "flag_meanings": " ".join(grps_param["name"]),
@@ -84,7 +84,7 @@ def _as_dataset__build_fgroup_dataset__generate_variables(
         return next(filter(lambda x: x.name == attribut, attrs.fields(param_class))).metadata
 
     def _generate_tuple(param_class: attrs.Attribute, name: str) -> tuple:
-        return ((ConfigurationLabels.fgroup,), params[name], _sel_attrs_meta(param_class, name))
+        return ((CoordinatesLabels.functional_group,), params[name], _sel_attrs_meta(param_class, name))
 
     return {name: _generate_tuple(cls, name) for cls, name in classes_and_names}
 
@@ -111,7 +111,7 @@ def _as_dataset__build_fgroup_dataset(functional_groups: list[FunctionalGroupUni
         (FunctionalGroupUnitMigratoryParameters, ConfigurationLabels.night_layer),
     ]
     param_variables = _as_dataset__build_fgroup_dataset__generate_variables(param_as_dict, names_classes)
-    return xr.Dataset(param_variables, coords={ConfigurationLabels.fgroup: f_group_coord})
+    return xr.Dataset(param_variables, coords={CoordinatesLabels.functional_group: f_group_coord})
 
 
 def _as_dataset__build_cohort_dataset___cohort_by_fgroup(fgroup: int, timesteps_number: list[int]) -> xr.Dataset:
@@ -126,7 +126,7 @@ def _as_dataset__build_cohort_dataset___cohort_by_fgroup(fgroup: int, timesteps_
 
     data_vars = {
         ConfigurationLabels.timesteps_number: (
-            (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
+            (CoordinatesLabels.functional_group, CoordinatesLabels.cohort),
             [timesteps_number],
             {
                 "description": (
@@ -136,24 +136,24 @@ def _as_dataset__build_cohort_dataset___cohort_by_fgroup(fgroup: int, timesteps_
             },
         ),
         ConfigurationLabels.min_timestep: (
-            (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
+            (CoordinatesLabels.functional_group, CoordinatesLabels.cohort),
             [min_timestep],
             {"description": "The minimum timestep index."},
         ),
         ConfigurationLabels.max_timestep: (
-            (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
+            (CoordinatesLabels.functional_group, CoordinatesLabels.cohort),
             [max_timestep],
             {"description": "The maximum timestep index."},
         ),
         ConfigurationLabels.mean_timestep: (
-            (ConfigurationLabels.fgroup, ConfigurationLabels.cohort),
+            (CoordinatesLabels.functional_group, CoordinatesLabels.cohort),
             [mean_timestep],
             {"description": "The mean timestep index."},
         ),
     }
 
     return xr.Dataset(
-        coords={ConfigurationLabels.fgroup: fgroup, ConfigurationLabels.cohort: cohort_index},
+        coords={CoordinatesLabels.functional_group: fgroup, CoordinatesLabels.cohort: cohort_index},
         data_vars=data_vars,
     )
 
@@ -162,7 +162,7 @@ def _as_dataset__build_cohort_dataset(functional_groups: list[FunctionalGroupUni
     """Return the cohort parameters as a xarray.Dataset."""
     all_fgroups = functional_groups
     all_cohorts_timesteps = [fgroup.functional_type.cohorts_timesteps for fgroup in all_fgroups]
-    all_index = [names[ConfigurationLabels.fgroup][names == fgroup.name] for fgroup in all_fgroups]
+    all_index = [names[CoordinatesLabels.functional_group][names == fgroup.name] for fgroup in all_fgroups]
     return xr.merge(
         [
             _as_dataset__build_cohort_dataset___cohort_by_fgroup(grp_index, timesteps)

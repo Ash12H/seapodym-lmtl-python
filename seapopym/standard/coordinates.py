@@ -2,45 +2,26 @@
 
 from __future__ import annotations
 
-from enum import Enum
-from typing import TYPE_CHECKING, Iterable, Literal
+from typing import TYPE_CHECKING, Iterable
 
 import cf_xarray.units  # noqa: F401
 import pint_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import CoordinatesLabels, SeaLayers
 
 if TYPE_CHECKING:
     import numpy as np
 
 
-class SeaLayers(Enum):
-    """Enumerate the sea layers."""
-
-    # NOTE(Jules): The following order of the layers declaration is important.
-    ## Since python 3.4 this order is preserved.
-    EPI = ("epipelagic", 1)
-    UPMESO = ("upper-mesopelagic", 2)
-    LOWMESO = ("lower-mesopelagic", 3)
-
-    @property
-    def standard_name(
-        self: SeaLayers,
-    ) -> Literal["epipelagic", "upper-mesopelagic", "lower-mesopelagic"]:
-        """Return the standard_name of the sea layer."""
-        return self.value[0]
-
-    @property
-    def depth(self: SeaLayers) -> Literal[1, 2, 3]:
-        """Return the depth of the sea layer."""
-        return self.value[1]
-
-
 def list_available_dims(data: xr.Dataset | xr.DataArray) -> list[str]:
     """Return the standard name of all available coordinates in the data."""
-    all_coordinates = [ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort]
-    return [coord for coord in all_coordinates if coord in data.cf]
+    return [coord for coord in CoordinatesLabels.ordered() if coord in data.cf]
+
+
+def reorder_dims(data: xr.Dataset | xr.DataArray) -> xr.Dataset | xr.DataArray:
+    """Follow the standard order of dimensions for a xarray.Dataset or xarray.DataArray."""
+    return data.cf.transpose(*CoordinatesLabels.ordered(), missing_dims="ignore")
 
 
 def new_latitude(latitude_data: np.ndarray) -> xr.DataArray:

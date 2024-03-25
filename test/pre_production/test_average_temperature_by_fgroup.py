@@ -7,13 +7,15 @@ import xarray as xr
 
 from seapopym.function.generator.pre_production import average_temperature_by_fgroup
 from seapopym.standard import coordinates
-from seapopym.standard.labels import ConfigurationLabels
+from seapopym.standard.labels import CoordinatesLabels
 
 time = coordinates.new_time(xr.cftime_range(start="2020", freq="D", periods=1))
 latitude = coordinates.new_latitude(np.array([0]))
 longitude = coordinates.new_longitude(np.array([0]))
 fgroup = xr.DataArray(
-    dims=(ConfigurationLabels.fgroup,), coords={ConfigurationLabels.fgroup: np.arange(4)}, data=np.arange(4, dtype=int)
+    dims=(CoordinatesLabels.functional_group,),
+    coords={CoordinatesLabels.functional_group: np.arange(4)},
+    data=np.arange(4, dtype=int),
 )
 layer = coordinates.new_layer()
 
@@ -34,8 +36,8 @@ def daylength():
 @pytest.fixture()
 def mask():
     return xr.DataArray(
-        dims=(ConfigurationLabels.fgroup, "latitude", "longitude"),
-        coords={ConfigurationLabels.fgroup: fgroup, "latitude": latitude, "longitude": longitude},
+        dims=(CoordinatesLabels.functional_group, "latitude", "longitude"),
+        coords={CoordinatesLabels.functional_group: fgroup, "latitude": latitude, "longitude": longitude},
         data=np.full((fgroup.size, latitude.size, longitude.size), True, dtype=bool),
     )
 
@@ -43,8 +45,8 @@ def mask():
 @pytest.fixture()
 def day_layer():
     return xr.DataArray(
-        dims=(ConfigurationLabels.fgroup,),
-        coords={ConfigurationLabels.fgroup: np.arange(4)},
+        dims=(CoordinatesLabels.functional_group,),
+        coords={CoordinatesLabels.functional_group: np.arange(4)},
         data=np.array([1, 1, 2, 2], dtype=int),
     )
 
@@ -52,8 +54,8 @@ def day_layer():
 @pytest.fixture()
 def night_layer():
     return xr.DataArray(
-        dims=(ConfigurationLabels.fgroup,),
-        coords={ConfigurationLabels.fgroup: np.arange(4)},
+        dims=(CoordinatesLabels.functional_group,),
+        coords={CoordinatesLabels.functional_group: np.arange(4)},
         data=np.array([1, 2, 2, 1], dtype=int),
     )
 
@@ -84,7 +86,7 @@ class TestMaskByFgroup:
         )
 
         assert isinstance(fgroup_mask, xr.DataArray)
-        for dim in (ConfigurationLabels.fgroup, "T", "Y", "X"):
+        for dim in (CoordinatesLabels.functional_group, "T", "Y", "X"):
             assert dim in fgroup_mask.cf.coords
 
         assert fgroup_mask.shape == (fgroup.size, time.size, latitude.size, longitude.size)

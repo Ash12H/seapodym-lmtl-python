@@ -12,6 +12,7 @@ from numba import jit
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.labels import (
     ConfigurationLabels,
+    CoordinatesLabels,
     PreproductionLabels,
     ProductionLabels,
 )
@@ -184,15 +185,15 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: np.nd
         The output dataset.
 
     """
-    data = data.cf.transpose(ConfigurationLabels.fgroup, "T", "Y", "X", "Z", ConfigurationLabels.cohort)
+    data = data.cf.transpose(CoordinatesLabels.functional_group, "T", "Y", "X", "Z", CoordinatesLabels.cohort)
     results_recruited = []
     if export_preproduction is not None:
         results_preproduction = []
 
-    for fgroup in data[ConfigurationLabels.fgroup]:
+    for fgroup in data[CoordinatesLabels.functional_group]:
         logger.info(f"Computing production for Cohort {int(fgroup)}")
 
-        fgroup_data = data.sel({ConfigurationLabels.fgroup: fgroup}).dropna(ConfigurationLabels.cohort)
+        fgroup_data = data.sel({CoordinatesLabels.functional_group: fgroup}).dropna(CoordinatesLabels.cohort)
         output_recruited, output_preproduction = time_loop(**_init_forcing(fgroup_data, export_preproduction))
 
         results_recruited.append(_format_recruited(fgroup_data, output_recruited))
@@ -200,11 +201,13 @@ def compute_preproduction_numba(data: xr.Dataset, *, export_preproduction: np.nd
             results_preproduction.append(_format_pre_prod(fgroup_data, export_preproduction, output_preproduction))
 
     results = {
-        ProductionLabels.recruited: xr.concat(results_recruited, dim=ConfigurationLabels.fgroup, combine_attrs="drop")
+        ProductionLabels.recruited: xr.concat(
+            results_recruited, dim=CoordinatesLabels.functional_group, combine_attrs="drop"
+        )
     }
     if export_preproduction is not None:
         results[ProductionLabels.preproduction] = xr.concat(
-            results_preproduction, dim=ConfigurationLabels.fgroup, combine_attrs="drop"
+            results_preproduction, dim=CoordinatesLabels.functional_group, combine_attrs="drop"
         )
     return xr.Dataset(results, coords=data.coords)
 
@@ -223,7 +226,7 @@ def compute_production(
     data : xr.Dataset
         The input dataset.
     chunk : dict[str, int | Literal["auto"]] | None
-        The chunk size for the computation. If None, the default chunk size is used {ConfigurationLabels.fgroup: 1}.
+        The chunk size for the computation. If None, the default chunk size is used {CoordinatesLabels.functional_group: 1}.
     export_preproduction : np.ndarray | None
         An array (dtype=int) containing the time-index (i.e. timestamps) to export the pre-production. If None, the
         pre-production is not exported.
@@ -235,12 +238,12 @@ def compute_production(
 
     Warning:
     --------
-    - Valide chunk keys are : `{ConfigurationLabels.fgroup:..., "X":..., "Y":...}`. Priority should be given to the
+    - Valide chunk keys are : `{CoordinatesLabels.functional_group:..., "X":..., "Y":...}`. Priority should be given to the
     functional group dimension.
 
     """
     if chunk is None:
-        chunk = {ConfigurationLabels.fgroup: 1}
+        chunk = {CoordinatesLabels.functional_group: 1}
     data = data.cf.chunk(chunk).unify_chunks()
 
     template = xr.Dataset(

@@ -2,13 +2,13 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
 from seapopym.configuration.no_transport.parameter import (
     ForcingParameters,
     FunctionalGroups,
     NoTransportParameters,
 )
+from seapopym.configuration.parameters import parameter_functional_group
 from seapopym.configuration.parameters.parameter_environment import EnvironmentParameter
 from seapopym.configuration.parameters.parameter_forcing import ForcingUnit
 from seapopym.standard import coordinates

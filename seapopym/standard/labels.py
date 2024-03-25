@@ -1,14 +1,52 @@
 """Store all labels used in the No Transport model."""
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import Enum, StrEnum
+from typing import Literal
+
+
+class CoordinatesLabels(StrEnum):
+    """A single place to store all labels as declared in coordinates module. It follow the cf_xarray convention."""
+
+    functional_group = "functional_group"
+    time = "T"
+    Y = "Y"
+    X = "X"
+    Z = "Z"
+    cohort = "cohort"
+
+    @classmethod
+    def ordered(cls: CoordinatesLabels) -> list[CoordinatesLabels]:
+        """Return all labels in the order they should be used in a dataset. It follow the CF convention."""
+        return [cls.functional_group, cls.time, cls.Y, cls.X, cls.Z, cls.cohort]
+
+
+class SeaLayers(Enum):
+    """Enumerate the sea layers."""
+
+    # NOTE(Jules): The following order of the layers declaration is important.
+    ## Since python 3.4 this order is preserved.
+    EPI = ("epipelagic", 1)
+    UPMESO = ("upper-mesopelagic", 2)
+    LOWMESO = ("lower-mesopelagic", 3)
+
+    @property
+    def standard_name(
+        self: SeaLayers,
+    ) -> Literal["epipelagic", "upper-mesopelagic", "lower-mesopelagic"]:
+        """Return the standard_name of the sea layer."""
+        return self.value[0]
+
+    @property
+    def depth(self: SeaLayers) -> Literal[1, 2, 3]:
+        """Return the depth of the sea layer."""
+        return self.value[1]
 
 
 class ConfigurationLabels(StrEnum):
     """A single place to store all labels as declared in parameters module."""
 
     # Functional group
-    fgroup = "functional_group"  # Equivalent to name
     fgroup_name = "name"
     energy_transfert = "energy_transfert"
     inv_lambda_max = "inv_lambda_max"
