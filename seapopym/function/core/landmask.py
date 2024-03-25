@@ -1,17 +1,16 @@
 """This module contains the function that generate a landmask from any forcing data."""
 
+import cf_xarray  # noqa: F401
 import xarray as xr
+
+from seapopym.standard.attributs import global_mask_desc
 
 
 def landmask_from_nan(forcing: xr.DataArray) -> xr.DataArray:
     """Create a landmask from a forcing data array."""
-    mask = forcing.isel(time=0).notnull().reset_coords("time", drop=True)
+    mask = forcing.cf.isel(T=0).notnull().cf.reset_coords("T", drop=True)
     mask.name = "mask"
-    mask.attrs = {
-        "long_name": "mask",
-        "flag_values": [0, 1],
-        "flag_meanings": "0:land, 1:ocean",
-    }
+    mask.attrs = global_mask_desc
     return mask
 
 

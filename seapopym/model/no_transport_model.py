@@ -72,7 +72,7 @@ class NoTransportModel(BaseModel):
             return self.client.submit(function, *args, **kargs)
 
         mask = apply_if_not_already_computed(
-            PreproductionLabels.mask_global,
+            PreproductionLabels.global_mask,
             landmask.landmask_from_nan,
             forcing=self.state[ConfigurationLabels.temperature],
         )
@@ -148,12 +148,12 @@ class NoTransportModel(BaseModel):
         # NOTE(Jules): Some forcing are not used in the production-process so we do not keep them in memory.
         results = self.client.gather(
             {
-                # PreproductionLabels.mask_global: mask,
+                PreproductionLabels.global_mask: mask,  #
                 PreproductionLabels.mask_by_fgroup: mask_fgroup,
-                # PreproductionLabels.day_length: day_length,
-                # PreproductionLabels.avg_temperature_by_fgroup: avg_tmp,
+                PreproductionLabels.day_length: day_length,  #
+                PreproductionLabels.avg_temperature_by_fgroup: avg_tmp,  #
                 PreproductionLabels.primary_production_by_fgroup: primary_production_by_fgroup,
-                # PreproductionLabels.min_temperature_by_cohort: min_temperature_by_cohort,
+                PreproductionLabels.min_temperature_by_cohort: min_temperature_by_cohort,  #
                 PreproductionLabels.mask_temperature: mask_temperature,
                 PreproductionLabels.cell_area: cell_area,
                 PreproductionLabels.mortality_field: mortality_field,

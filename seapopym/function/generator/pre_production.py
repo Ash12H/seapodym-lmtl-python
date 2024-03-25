@@ -59,7 +59,7 @@ def compute_daylength(time: xr.DataArray, latitude: xr.DataArray, longitude: xr.
     ---
     Information available in `xarray.cftime_range()` function.
     """
-    return day_length.mesh_day_length(time, latitude, longitude, dask=True)
+    return day_length.mesh_day_length(time, latitude, longitude)
 
 
 def average_temperature_by_fgroup(

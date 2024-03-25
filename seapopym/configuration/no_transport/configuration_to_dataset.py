@@ -13,6 +13,7 @@ from seapopym.configuration.parameters.parameter_functional_group import (
     FunctionalGroupUnitMigratoryParameters,
     FunctionalGroupUnitRelationParameters,
 )
+from seapopym.standard.attributs import functional_group_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
 
 if TYPE_CHECKING:
@@ -60,11 +61,7 @@ def _as_dataset__build_fgroup_dataset__generate_param_coords(
         coords=(f_group_coord_data,),
         dims=(CoordinatesLabels.functional_group,),
         name=CoordinatesLabels.functional_group,
-        attrs={  # cf_xarray convention
-            "flag_values": f_group_coord_data,
-            "flag_meanings": " ".join(grps_param["name"]),
-            "standard_name": "functional group",
-        },
+        attrs=functional_group_desc(f_group_coord_data, grps_param["name"]),
         data=f_group_coord_data,
     )
 

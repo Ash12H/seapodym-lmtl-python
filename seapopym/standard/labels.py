@@ -74,7 +74,7 @@ class ConfigurationLabels(StrEnum):
 class PreproductionLabels(StrEnum):
     """A single place to store all labels as declared in pre-production module."""
 
-    mask_global = "mask"
+    global_mask = "mask"
     mask_by_fgroup = "mask_fgroup"
     day_length = "day_length"
     avg_temperature_by_fgroup = "average_temperature_by_fgroup"

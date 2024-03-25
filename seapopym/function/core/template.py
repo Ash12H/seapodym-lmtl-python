@@ -9,6 +9,7 @@ import xarray as xr
 from seapopym.standard import coordinates
 
 
+# TODO(Jules): Add name integration to template
 def generate_template(
     state: xr.Dataset,
     dims: Iterable[str],
@@ -43,6 +44,9 @@ def generate_template(
         A template for a new variable that can be used in a xarray.map_blocks function.
 
     """
-    coords = {state.cf[dim].name: state.cf[dim] for dim in dims if dim in state.cf}
+    # dims <- cf_xarray style naming
+    coords = {state.cf[dim].name: state.cf[dim] for dim in dims if dim in state.cf.coords}
     coords = {**coords, **kargs}
+    # coords <- data names
+    chunk = {dim: chunk[dim] for dim in coords if dim in chunk}
     return coordinates.reorder_dims(xr.DataArray(dims=coords.keys(), coords=coords, attrs=attributs).cf.chunk(chunk))
