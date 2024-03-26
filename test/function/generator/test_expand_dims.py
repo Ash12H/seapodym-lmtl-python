@@ -1,6 +1,6 @@
 import numpy as np
 
-from seapopym.function.generator.production import expand_dims
+from seapopym.function.generator.production.compiled_functions import expand_dims
 
 
 class TestExpandDims:

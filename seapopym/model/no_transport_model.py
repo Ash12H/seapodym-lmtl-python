@@ -11,7 +11,7 @@ from seapopym.configuration.no_transport.configuration import NoTransportConfigu
 from seapopym.configuration.no_transport.parameter import NoTransportParameters
 from seapopym.function import generator
 from seapopym.function.generator.biomass import compute_biomass
-from seapopym.function.generator.production import compute_production
+from seapopym.function.generator.production.production import production
 from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.standard.labels import PreproductionLabels
@@ -77,15 +77,14 @@ class NoTransportModel(BaseModel):
             PreproductionLabels.cell_area: generator.cell_area,
             PreproductionLabels.mortality_field: generator.mortality_field,
         }
-
         self.state = self.state.chunk(chunk)
         if self.client is not None:
             logger.info("Scattering the data to the workers.")
             self.client.scatter(self.state)
-        for name, func in kernel.items():
-            self.state[name] = func(self.state, chunk=chunk)
 
-        # self.state.persist()
+        for name, func in kernel.items():
+            if name not in self.state:
+                self.state[name] = func(self.state, chunk=chunk)
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
@@ -93,7 +92,7 @@ class NoTransportModel(BaseModel):
         def _preproduction_converter() -> np.ndarray | None:
             """
             The production process requires a specific format, we then convert parameters to a np.ndarray that contains
-            the indices of the timestamps to export. None is returned if no timestamps are required.
+            the indices of the timestamps to export. None is returned if no timestamps are provided.
             """
             timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
             data = self.state.cf["T"]
@@ -103,19 +102,20 @@ class NoTransportModel(BaseModel):
             if timestamps == "all":
                 return np.arange(data.size)
             if np.all([isinstance(x, int) for x in timestamps]):
-                selected_dates = data.isel(time=timestamps)
+                selected_dates = data.cf.isel(T=timestamps)
             elif np.all([isinstance(x, str) for x in timestamps]):
-                selected_dates = data.sel(time=timestamps, method="nearest")
+                selected_dates = data.cf.sel(T=timestamps, method="nearest")
             else:
                 msg = "The timestamps must be either 'all', a list of integers or a list of strings."
                 raise TypeError(msg)
             return np.arange(data.size)[data.isin(selected_dates)]
 
-        self.state = compute_production(
-            data=self.state,
+        output = production(
+            state=self.state,
             chunk=self.configuration.environment_parameters.chunk.as_dict(),
             export_preproduction=_preproduction_converter(),
         )
+        self.state = xr.merge([self.state, output])
 
     def post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""

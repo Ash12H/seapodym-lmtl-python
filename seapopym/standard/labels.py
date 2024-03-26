@@ -16,9 +16,9 @@ class CoordinatesLabels(StrEnum):
     cohort = "cohort"
 
     @classmethod
-    def ordered(cls: CoordinatesLabels) -> list[CoordinatesLabels]:
+    def ordered(cls: CoordinatesLabels) -> tuple[CoordinatesLabels]:
         """Return all labels in the order they should be used in a dataset. It follow the CF convention."""
-        return [cls.functional_group, cls.time, cls.Y, cls.X, cls.Z, cls.cohort]
+        return (cls.functional_group, cls.time, cls.Y, cls.X, cls.Z, cls.cohort)
 
 
 class SeaLayers(Enum):

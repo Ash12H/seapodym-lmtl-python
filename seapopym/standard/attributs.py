@@ -88,3 +88,16 @@ mortality_field_desc = {
     "description": "Mortality coefficient according to the temperature.",
 }
 """dict: Mortality field attributs."""
+
+recruited_desc = {
+    "standard_name": "production",
+    "long_name": "production",
+    "units": str(StandardUnitsLabels.production.units),
+}
+
+preproduction_desc = {
+    "standard_name": "preproduction",
+    "long_name": "pre-production",
+    "description": "The entire population before recruitment, divided into cohorts.",
+    "units": str(StandardUnitsLabels.production.units),
+}
