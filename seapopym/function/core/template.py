@@ -48,5 +48,5 @@ def generate_template(
     coords = {state.cf[dim].name: state.cf[dim] for dim in dims if dim in state.cf.coords}
     coords = {**coords, **kargs}
     # coords <- data names
-    chunk = {dim: chunk[dim] for dim in coords if dim in chunk}
+    chunk = {} if chunk is None else {dim: chunk[dim] for dim in coords if dim in chunk}
     return coordinates.reorder_dims(xr.DataArray(dims=coords.keys(), coords=coords, attrs=attributs).cf.chunk(chunk))

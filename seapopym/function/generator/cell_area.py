@@ -1,4 +1,5 @@
 """A temperature mask computation wrapper. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import numpy as np
@@ -32,8 +33,10 @@ def _cell_area_helper(state: xr.Dataset) -> xr.DataArray:
     return cell_surface_area
 
 
-def cell_area(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def cell_area(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
+    if state.chunks is None and chunk is None:
+        return _cell_area_helper(state)
     max_dims = [CoordinatesLabels.Y, CoordinatesLabels.X]
     template_mask_temperature = generate_template(
         state=state, dims=max_dims, attributs=compute_cell_area_desc, chunk=chunk

@@ -7,6 +7,7 @@ import xarray as xr
 
 from seapopym.standard import coordinates
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.units import StandardUnitsLabels
 
 
 @pytest.fixture()
@@ -46,7 +47,7 @@ def daylength(time_4days, latitude_single, longitude_single):
             coords={"time": time_4days, "latitude": latitude_single, "longitude": longitude_single},
             data=np.full((time_4days.size, latitude_single.size, longitude_single.size), 0.5, dtype=float),
         )
-        .pint.quantify("day")
+        .pint.quantify(StandardUnitsLabels.time.units)
         .pint.dequantify()
     )
 
@@ -103,11 +104,41 @@ def temperature(time_4days, latitude_single, longitude_single, layer):
         coords={"time": time_4days, "latitude": latitude_single, "longitude": longitude_single, "layer": layer},
         data=data,
     )
-    return (data * pint.application_registry("degC")).pint.dequantify()
+    return (data * StandardUnitsLabels.temperature.units).pint.dequantify()
 
 
 @pytest.fixture()
-def state_preprod_fg4_t4d_y1_x1(daylength, day_layer, night_layer, temperature, mask_fgroup, global_mask):
+def primary_production(time_4days, latitude_single, longitude_single, layer):
+    data = np.ones((time_4days.size, latitude_single.size, longitude_single.size, layer.size))
+    data = xr.DataArray(
+        dims=("time", "latitude", "longitude", "layer"),
+        coords={
+            "time": time_4days,
+            "latitude": latitude_single,
+            "longitude": longitude_single,
+            "layer": layer,
+        },
+        data=data,
+    )
+    return (data * StandardUnitsLabels.production.units).pint.dequantify()
+
+
+@pytest.fixture()
+def energy_transfert_4(fgroup_4):
+    data = np.array([1, 1, 1, 1])
+    return xr.DataArray(
+        dims=(CoordinatesLabels.functional_group,),
+        coords={
+            CoordinatesLabels.functional_group: fgroup_4,
+        },
+        data=data,
+    )
+
+
+@pytest.fixture()
+def state_preprod_fg4_t4d_y1_x1_z3(
+    daylength, day_layer, night_layer, temperature, mask_fgroup, global_mask, primary_production, energy_transfert_4
+):
     """
     A dataset for preproduction state.
     Dims : 4 functional groups, 4 days, 1 latitude, 1 longitude, 3 layers.
@@ -120,5 +151,7 @@ def state_preprod_fg4_t4d_y1_x1(daylength, day_layer, night_layer, temperature, 
             ConfigurationLabels.day_layer: day_layer,
             ConfigurationLabels.night_layer: night_layer,
             ConfigurationLabels.temperature: temperature,
+            ConfigurationLabels.primary_production: primary_production,
+            ConfigurationLabels.energy_transfert: energy_transfert_4,
         }
     )

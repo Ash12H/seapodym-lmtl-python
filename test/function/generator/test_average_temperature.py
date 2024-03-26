@@ -8,8 +8,8 @@ from seapopym.standard.labels import CoordinatesLabels
 
 
 class TestMaskByFgroup:
-    def test_mask_by_fgroup(self, state_preprod_fg4_t4d_y1_x1):
-        fgroup_mask = average_temperature(state_preprod_fg4_t4d_y1_x1, chunk={CoordinatesLabels.functional_group: 1})
+    def test_mask_by_fgroup(self, state_preprod_fg4_t4d_y1_x1_z3):
+        fgroup_mask = average_temperature(state_preprod_fg4_t4d_y1_x1_z3, chunk={CoordinatesLabels.functional_group: 1})
 
         assert isinstance(fgroup_mask, xr.DataArray)
         for dim in (
@@ -21,10 +21,10 @@ class TestMaskByFgroup:
             assert dim in fgroup_mask.cf.coords
 
         assert fgroup_mask.shape == (
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.functional_group].size,
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.time].size,
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.Y].size,
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.X].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.functional_group].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.time].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.Y].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.X].size,
         )
 
         assert fgroup_mask.dtype == float

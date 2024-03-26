@@ -1,4 +1,5 @@
 """A temperature mask computation wrapper. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import numpy as np
@@ -39,8 +40,10 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
     return mortality_field
 
 
-def mortality_field(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def mortality_field(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
+    if state.chunks is None and chunk is None:
+        return _mortality_field_helper(state)
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
     template_mortality_field = generate_template(
         state=state, dims=max_dims, attributs=mortality_field_desc, chunk=chunk

@@ -1,4 +1,5 @@
 """Wrapper for the application of the transfert cooeficient to primary production. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import xarray as xr
@@ -64,9 +65,18 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
     return pp_by_fgroup
 
 
-def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
-    max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
+    if state.chunks is None and chunk is None:
+        _apply_coefficient_to_primary_production_helper(state)
+
+    max_dims = [
+        CoordinatesLabels.functional_group,
+        CoordinatesLabels.time,
+        CoordinatesLabels.Y,
+        CoordinatesLabels.X,
+        CoordinatesLabels.Z,
+    ]
     template_coef_to_pp = generate_template(
         state=state, dims=max_dims, attributs=apply_coefficient_to_primary_production_desc, chunk=chunk
     )

@@ -1,4 +1,5 @@
 """A landmask computation wrapper. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import xarray as xr
@@ -9,7 +10,7 @@ from seapopym.standard.attributs import day_length_desc
 from seapopym.standard.labels import CoordinatesLabels
 
 
-def day_length(state: xr.Dataset, chunk: dict, angle_horizon_sun: int = 0) -> xr.DataArray:
+def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: int = 0) -> xr.DataArray:
     """Wrap the day length computation with a map_block function."""
 
     def _wrapper_mesh_day_lengths(state: xr.DataArray) -> xr.DataArray:
@@ -19,6 +20,9 @@ def day_length(state: xr.Dataset, chunk: dict, angle_horizon_sun: int = 0) -> xr
             state.cf[CoordinatesLabels.X],
             angle_horizon_sun,
         )
+
+    if state.chunks is None and chunk is None:
+        return _wrapper_mesh_day_lengths(state)
 
     max_dims = [CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
     template_day_length = generate_template(

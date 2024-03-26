@@ -1,4 +1,5 @@
 """A temperature mask computation wrapper. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import xarray as xr
@@ -40,8 +41,10 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
     return mask_temperature_by_fgroup
 
 
-def mask_temperature(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
+    if state.chunks is None and chunk is None:
+        return _mask_temperature_helper(state)
     max_dims = [
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,

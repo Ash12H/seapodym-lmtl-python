@@ -122,6 +122,9 @@ def production(
     functional group dimension.
 
     """
+    if state.chunks is None and chunk is None:
+        return _production_helper(state)
+
     max_dims = (
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,

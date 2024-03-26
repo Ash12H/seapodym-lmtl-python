@@ -1,4 +1,5 @@
 """An average temperature by fgroup computation wrapper. Use xarray.map_block."""
+from __future__ import annotations
 
 import cf_xarray  # noqa: F401
 import numpy as np
@@ -32,8 +33,10 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
     return result
 
 
-def min_temperature(state: xr.Dataset, chunk: dict) -> xr.DataArray:
+def min_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
+    if state.chunks is None and chunk is None:
+        return _min_temperature_by_cohort_helper(state)
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.cohort]
     template_min_temperature = generate_template(
         state=state, dims=max_dims, attributs=min_temperature_by_cohort_desc, chunk=chunk

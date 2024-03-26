@@ -8,8 +8,8 @@ from seapopym.standard.labels import CoordinatesLabels
 
 
 class TestMaskByFgroup:
-    def test_simple_working(self, state_preprod_fg4_t4d_y1_x1):
-        results = day_length(state_preprod_fg4_t4d_y1_x1, chunk={CoordinatesLabels.functional_group: 1})
+    def test_simple_working(self, state_preprod_fg4_t4d_y1_x1_z3):
+        results = day_length(state_preprod_fg4_t4d_y1_x1_z3, chunk={CoordinatesLabels.functional_group: 1})
         assert isinstance(results, xr.DataArray)
         for dim in (
             CoordinatesLabels.time,
@@ -19,9 +19,9 @@ class TestMaskByFgroup:
             assert dim in results.cf.coords
 
         assert results.shape == (
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.time].size,
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.Y].size,
-            state_preprod_fg4_t4d_y1_x1.cf[CoordinatesLabels.X].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.time].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.Y].size,
+            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.X].size,
         )
 
         assert results.dtype == float
