@@ -54,7 +54,7 @@ def average_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.Data
     return apply_map_block(
         function=_average_temperature_by_fgroup_helper,
         state=state,
-        template=max_dims,
+        dims=max_dims,
         attributs=average_temperature_by_fgroup_desc,
         chunk=chunk,
     )

@@ -118,10 +118,23 @@ def production(
 
     Warning:
     --------
-    - Valide chunk keys are : `{CoordinatesLabels.functional_group:..., "X":..., "Y":...}`. Priority should be given to the
-    functional group dimension.
+    - Valide chunk keys are : `{CoordinatesLabels.functional_group:..., "X":..., "Y":...}`. Priority should be given to
+    the functional group dimension.
 
     """
+    # NOTE(Jules):  Here we have a Dataset as output so we have to implement manually the map_blocks function. If
+    #               others functions required Dataset as output in the future, we should implement a generic function
+    #               to handle this case.
+
+    if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
+        results = _production_helper(state, export_preproduction=export_preproduction)
+        results[ProductionLabels.recruited] = results[ProductionLabels.recruited].assign_attrs(recruited_desc)
+        if export_preproduction is not None:
+            results[ProductionLabels.preproduction] = results[ProductionLabels.preproduction].assign_attrs(
+                preproduction_desc
+            )
+        return results
+
     max_dims = (
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,
@@ -132,16 +145,11 @@ def production(
     template = {
         ProductionLabels.recruited: generate_template(state, dims=max_dims, attributs=recruited_desc, chunk=chunk)
     }
-
     if export_preproduction is not None:
         template[ProductionLabels.preproduction] = generate_template(
             state.cf.isel(T=export_preproduction), dims=max_dims, attributs=preproduction_desc, chunk=chunk
         )
 
-    return apply_map_block(
-        function=_production_helper,
-        state=state,
-        template=xr.Dataset(template),
-        attributs=recruited_desc,
-        export_preproduction=export_preproduction,
+    return xr.map_blocks(
+        _production_helper, state, template=xr.Dataset(template), kwargs={"export_preproduction": export_preproduction}
     )

@@ -14,6 +14,7 @@ from seapopym.configuration.parameters.parameter_functional_group import (
     FunctionalGroupUnitRelationParameters,
 )
 from seapopym.standard.attributs import functional_group_desc
+from seapopym.standard.coordinates import new_cohort
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
 
 if TYPE_CHECKING:
@@ -116,7 +117,7 @@ def _as_dataset__build_cohort_dataset___cohort_by_fgroup(fgroup: int, timesteps_
     Build the cohort axis for a specific functional group using the `timesteps_number` parameter given by the
     user.
     """
-    cohort_index = np.arange(0, len(timesteps_number), 1, dtype=int)
+    cohort_index = new_cohort(np.arange(0, len(timesteps_number), 1, dtype=int))
     max_timestep = np.cumsum(timesteps_number)
     min_timestep = max_timestep - (np.asarray(timesteps_number) - 1)
     mean_timestep = (max_timestep + min_timestep) / 2
@@ -157,9 +158,8 @@ def _as_dataset__build_cohort_dataset___cohort_by_fgroup(fgroup: int, timesteps_
 
 def _as_dataset__build_cohort_dataset(functional_groups: list[FunctionalGroupUnit], names: xr.DataArray) -> xr.Dataset:
     """Return the cohort parameters as a xarray.Dataset."""
-    all_fgroups = functional_groups
-    all_cohorts_timesteps = [fgroup.functional_type.cohorts_timesteps for fgroup in all_fgroups]
-    all_index = [names[CoordinatesLabels.functional_group][names == fgroup.name] for fgroup in all_fgroups]
+    all_cohorts_timesteps = [fgroup.functional_type.cohorts_timesteps for fgroup in functional_groups]
+    all_index = [names[CoordinatesLabels.functional_group][names == fgroup.name] for fgroup in functional_groups]
     return xr.merge(
         [
             _as_dataset__build_cohort_dataset___cohort_by_fgroup(grp_index, timesteps)

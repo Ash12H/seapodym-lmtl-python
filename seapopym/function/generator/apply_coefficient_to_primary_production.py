@@ -71,7 +71,7 @@ def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict | Non
     return apply_map_block(
         function=_apply_coefficient_to_primary_production_helper,
         state=state,
-        template=max_dims,
+        dims=max_dims,
         attributs=apply_coefficient_to_primary_production_desc,
         chunk=chunk,
     )

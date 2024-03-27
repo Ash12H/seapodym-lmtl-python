@@ -74,7 +74,7 @@ def generate_template(
 def apply_map_block(
     function: Callable[[xr.Dataset, ParamSpecArgs, ParamSpecKwargs], xr.DataArray],
     state: xr.Dataset,
-    template: Iterable[str] | xr.DataArray | xr.Dataset,
+    dims: Iterable[str],
     attributs: dict | None = None,
     chunk: dict | None = None,
     *args: list,
@@ -90,10 +90,8 @@ def apply_map_block(
         The function to apply to the state.
     state: xr.Dataset
         The state of the model.
-    template: Iterable[str] | xr.DataArray | xr.Dataset
-        The template of the new variable.
-        You can pass a list of dimensions and the function will generate the template for you.
-        You can also pass a DataArray or a Dataset as a template to override the default template generation.
+    dims: Iterable[str]
+        The dims of the new variable.
     attributs: None | dict
         The attributes of the variable.
     chunk: None | dict
@@ -109,6 +107,5 @@ def apply_map_block(
         attributs = {}
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
         return function(state, *args, **kwargs).assign_attrs(attributs)
-    if not isinstance(template, (xr.DataArray, xr.Dataset)):
-        template = generate_template(state=state, dims=template, attributs=attributs, chunk=chunk)
+    template = generate_template(state=state, dims=dims, attributs=attributs, chunk=chunk)
     return xr.map_blocks(function, state, template=template, kwargs=kwargs, args=args)

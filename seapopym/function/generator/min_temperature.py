@@ -39,7 +39,7 @@ def min_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArra
     return apply_map_block(
         function=_min_temperature_by_cohort_helper,
         state=state,
-        template=max_dims,
+        dims=max_dims,
         attributs=min_temperature_by_cohort_desc,
         chunk=chunk,
     )

@@ -17,7 +17,7 @@ def global_mask(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     return apply_map_block(
         function=landmask_from_nan,
         state=data,
-        template=max_dims,
+        dims=max_dims,
         attributs=global_mask_desc,
         chunk=chunk,
     )

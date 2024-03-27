@@ -66,3 +66,13 @@ def new_time(time_data: Iterable) -> xr.DataArray:
         coords=[("time", time_data, {"long_name": "time", "standard_name": "time", "axis": "T"})], dims=["time"]
     )
     return time.cf["T"]
+
+
+def new_cohort(cohort_data: Iterable) -> xr.DataArray:
+    """Create a new cohort coordinate."""
+    attributs = {"long_name": "cohort", "standard_name": "cohort"}
+    cohort = xr.DataArray(
+        coords=[("cohort", cohort_data, attributs)],
+        dims=["cohort"],
+    )
+    return cohort.cf["cohort"]
