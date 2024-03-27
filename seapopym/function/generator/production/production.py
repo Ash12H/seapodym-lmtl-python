@@ -122,9 +122,6 @@ def production(
     functional group dimension.
 
     """
-    if state.chunks is None and chunk is None:
-        return _production_helper(state)
-
     max_dims = (
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,
@@ -141,8 +138,10 @@ def production(
             state.cf.isel(T=export_preproduction), dims=max_dims, attributs=preproduction_desc, chunk=chunk
         )
 
-    apply_map_block()
-
-    return xr.map_blocks(
-        _production_helper, state, kwargs={"export_preproduction": export_preproduction}, template=xr.Dataset(template)
+    return apply_map_block(
+        function=_production_helper,
+        state=state,
+        template=xr.Dataset(template),
+        attributs=recruited_desc,
+        kargs={"export_preproduction": export_preproduction},
     )

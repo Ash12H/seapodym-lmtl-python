@@ -39,7 +39,7 @@ def cell_area(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     return apply_map_block(
         function=_cell_area_helper,
         state=state,
-        dims=max_dims,
+        template=max_dims,
         attributs=compute_cell_area_desc,
         chunk=chunk,
     )

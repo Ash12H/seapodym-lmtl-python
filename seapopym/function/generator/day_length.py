@@ -26,7 +26,7 @@ def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: 
     return apply_map_block(
         function=_wrapper_mesh_day_lengths,
         state=state,
-        dims=max_dims,
+        template=max_dims,
         attributs=day_length_desc(angle_horizon_sun=angle_horizon_sun),
         chunk=chunk,
     )

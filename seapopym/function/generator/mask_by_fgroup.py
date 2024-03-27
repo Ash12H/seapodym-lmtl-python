@@ -48,7 +48,7 @@ def mask_by_fgroup(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray
     return apply_map_block(
         function=_mask_by_fgroup_helper,
         state=state,
-        dims=max_dims,
+        template=max_dims,
         attributs=mask_by_fgroup_desc,
         chunk=chunk,
     )

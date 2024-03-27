@@ -15,7 +15,7 @@ needed.
 """
 from __future__ import annotations
 
-from typing import Callable, Iterable
+from typing import Callable, Iterable, ParamSpecArgs, ParamSpecKwargs
 
 import cf_xarray  # noqa: F401
 import xarray as xr
@@ -72,9 +72,9 @@ def generate_template(
 
 
 def apply_map_block(
-    function: Callable[[xr.Dataset], xr.DataArray | xr.Dataset],
+    function: Callable[[xr.Dataset, ParamSpecArgs, ParamSpecKwargs], xr.DataArray],
     state: xr.Dataset,
-    dims: Iterable[str],
+    template: Iterable[str] | xr.DataArray | xr.Dataset,
     attributs: dict | None = None,
     chunk: dict | None = None,
     *args: list,
@@ -83,10 +83,32 @@ def apply_map_block(
     """
     Wrap the function computation with a map_block function. If the state is not chunked, the function is directly
     applied to the state.
+
+    Parameters
+    ----------
+    function: Callable[[xr.Dataset, ParamSpecArgs, ParamSpecKwargs], xr.DataArray]
+        The function to apply to the state.
+    state: xr.Dataset
+        The state of the model.
+    template: Iterable[str] | xr.DataArray | xr.Dataset
+        The template of the new variable.
+        You can pass a list of dimensions and the function will generate the template for you.
+        You can also pass a DataArray or a Dataset as a template to override the default template generation.
+    attributs: None | dict
+        The attributes of the variable.
+    chunk: None | dict
+        The chunk size of the variable. If None the template is not chunked. If you want to automatically chunk the
+        variable, set the chunk parameter to `{}`.
+    *args: list
+        Additional arguments to pass to the `function`.
+    **kargs: dict
+        Additional keyword arguments to pass to the `function`.
+
     """
     if attributs is None:
         attributs = {}
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
         return function(state).assign_attrs(attributs)
-    template_avg_temperature = generate_template(state=state, dims=dims, attributs=attributs, chunk=chunk)
-    return xr.map_blocks(function, state, template=template_avg_temperature, kwargs=kargs, args=args)
+    if not isinstance(template, (xr.DataArray, xr.Dataset)):
+        template = generate_template(state=state, dims=template, attributs=attributs, chunk=chunk)
+    return xr.map_blocks(function, state, template=template, kwargs=kargs, args=args)

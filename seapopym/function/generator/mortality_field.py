@@ -46,7 +46,7 @@ def mortality_field(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArra
     return apply_map_block(
         function=_mortality_field_helper,
         state=state,
-        dims=max_dims,
+        template=max_dims,
         attributs=mortality_field_desc,
         chunk=chunk,
     )

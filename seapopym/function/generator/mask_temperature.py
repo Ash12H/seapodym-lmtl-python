@@ -53,7 +53,7 @@ def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArr
     return apply_map_block(
         function=_mask_temperature_helper,
         state=state,
-        dims=max_dims,
+        template=max_dims,
         attributs=mask_temperature_desc,
         chunk=chunk,
     )
