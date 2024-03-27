@@ -78,7 +78,7 @@ def apply_map_block(
     attributs: dict | None = None,
     chunk: dict | None = None,
     *args: list,
-    **kargs: dict,
+    **kwargs: dict,
 ) -> xr.DataArray:
     """
     Wrap the function computation with a map_block function. If the state is not chunked, the function is directly
@@ -101,14 +101,14 @@ def apply_map_block(
         variable, set the chunk parameter to `{}`.
     *args: list
         Additional arguments to pass to the `function`.
-    **kargs: dict
+    **kwargs: dict
         Additional keyword arguments to pass to the `function`.
 
     """
     if attributs is None:
         attributs = {}
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
-        return function(state).assign_attrs(attributs)
+        return function(state, *args, **kwargs).assign_attrs(attributs)
     if not isinstance(template, (xr.DataArray, xr.Dataset)):
         template = generate_template(state=state, dims=template, attributs=attributs, chunk=chunk)
-    return xr.map_blocks(function, state, template=template, kwargs=kargs, args=args)
+    return xr.map_blocks(function, state, template=template, kwargs=kwargs, args=args)

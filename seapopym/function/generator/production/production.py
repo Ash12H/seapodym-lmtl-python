@@ -143,5 +143,5 @@ def production(
         state=state,
         template=xr.Dataset(template),
         attributs=recruited_desc,
-        kargs={"export_preproduction": export_preproduction},
+        export_preproduction=export_preproduction,
     )
