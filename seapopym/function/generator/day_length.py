@@ -5,7 +5,7 @@ import cf_xarray  # noqa: F401
 import xarray as xr
 
 from seapopym.function.core.day_length import mesh_day_length
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block
 from seapopym.standard.attributs import day_length_desc
 from seapopym.standard.labels import CoordinatesLabels
 
@@ -21,11 +21,12 @@ def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: 
             angle_horizon_sun,
         )
 
-    if state.chunks is None and chunk is None:
-        return _wrapper_mesh_day_lengths(state)
-
     max_dims = [CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
-    template_day_length = generate_template(
-        state=state, dims=max_dims, attributs=day_length_desc(angle_horizon_sun), chunk=chunk
+
+    return apply_map_block(
+        function=_wrapper_mesh_day_lengths,
+        state=state,
+        dims=max_dims,
+        attributs=day_length_desc(angle_horizon_sun=angle_horizon_sun),
+        chunk=chunk,
     )
-    return xr.map_blocks(_wrapper_mesh_day_lengths, state, template=template_day_length)

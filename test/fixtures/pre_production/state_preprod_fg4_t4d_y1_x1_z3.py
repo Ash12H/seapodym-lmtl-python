@@ -31,6 +31,7 @@ def fgroup_4():
         dims=(CoordinatesLabels.functional_group,),
         coords={CoordinatesLabels.functional_group: np.arange(4)},
         data=np.arange(4, dtype=int),
+        attrs={"long_name": "Functional group", "standard_name": "functional_group"},
     )
 
 
@@ -108,15 +109,14 @@ def temperature(time_4days, latitude_single, longitude_single, layer):
 
 
 @pytest.fixture()
-def primary_production(time_4days, latitude_single, longitude_single, layer):
-    data = np.ones((time_4days.size, latitude_single.size, longitude_single.size, layer.size))
+def primary_production(time_4days, latitude_single, longitude_single):
+    data = np.ones((time_4days.size, latitude_single.size, longitude_single.size))
     data = xr.DataArray(
-        dims=("time", "latitude", "longitude", "layer"),
+        dims=("time", "latitude", "longitude"),
         coords={
             "time": time_4days,
             "latitude": latitude_single,
             "longitude": longitude_single,
-            "layer": layer,
         },
         data=data,
     )
@@ -136,8 +136,27 @@ def energy_transfert_4(fgroup_4):
 
 
 @pytest.fixture()
+def resolution_latitude():
+    return 1.0
+
+
+@pytest.fixture()
+def resolution_longitude():
+    return 1.0
+
+
+@pytest.fixture()
 def state_preprod_fg4_t4d_y1_x1_z3(
-    daylength, day_layer, night_layer, temperature, mask_fgroup, global_mask, primary_production, energy_transfert_4
+    daylength,
+    day_layer,
+    night_layer,
+    temperature,
+    mask_fgroup,
+    global_mask,
+    primary_production,
+    energy_transfert_4,
+    resolution_latitude,
+    resolution_longitude,
 ):
     """
     A dataset for preproduction state.
@@ -153,5 +172,7 @@ def state_preprod_fg4_t4d_y1_x1_z3(
             ConfigurationLabels.temperature: temperature,
             ConfigurationLabels.primary_production: primary_production,
             ConfigurationLabels.energy_transfert: energy_transfert_4,
+            ConfigurationLabels.resolution_latitude: resolution_latitude,
+            ConfigurationLabels.resolution_longitude: resolution_longitude,
         }
     )

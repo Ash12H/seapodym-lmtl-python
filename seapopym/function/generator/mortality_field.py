@@ -5,7 +5,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.standard.attributs import mortality_field_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
@@ -42,10 +42,11 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
 
 def mortality_field(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
-    if state.chunks is None and chunk is None:
-        return _mortality_field_helper(state)
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
-    template_mortality_field = generate_template(
-        state=state, dims=max_dims, attributs=mortality_field_desc, chunk=chunk
+    return apply_map_block(
+        function=_mortality_field_helper,
+        state=state,
+        dims=max_dims,
+        attributs=mortality_field_desc,
+        chunk=chunk,
     )
-    return xr.map_blocks(_mortality_field_helper, state, template=template_mortality_field)

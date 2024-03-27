@@ -1,4 +1,4 @@
-"""This module contains the function that generate a landmask from any forcing data."""
+"""Core functions to generate a landmask from any forcing data."""
 
 import cf_xarray  # noqa: F401
 import xarray as xr

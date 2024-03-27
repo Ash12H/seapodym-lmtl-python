@@ -11,18 +11,11 @@ class TestMaskByFgroup:
     def test_simple_working(self, state_preprod_fg4_t4d_y1_x1_z3):
         results = day_length(state_preprod_fg4_t4d_y1_x1_z3, chunk={CoordinatesLabels.functional_group: 1})
         assert isinstance(results, xr.DataArray)
-        for dim in (
-            CoordinatesLabels.time,
-            CoordinatesLabels.Y,
-            CoordinatesLabels.X,
-        ):
+        dims = (CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
+        for dim in dims:
             assert dim in results.cf.coords
-
-        assert results.shape == (
-            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.time].size,
-            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.Y].size,
-            state_preprod_fg4_t4d_y1_x1_z3.cf[CoordinatesLabels.X].size,
-        )
+        shape = tuple(state_preprod_fg4_t4d_y1_x1_z3.cf[dim].size for dim in dims)
+        assert results.shape == shape
 
         assert results.dtype == float
 

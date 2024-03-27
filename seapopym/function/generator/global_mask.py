@@ -4,7 +4,7 @@ from __future__ import annotations
 import xarray as xr
 
 from seapopym.function.core.landmask import landmask_from_nan
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.standard.attributs import global_mask_desc
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
@@ -12,10 +12,12 @@ from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
 
 def global_mask(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the landmask computation with a map_block function."""
-    if state.chunks is None and chunk is None:
-        return landmask_from_nan(state)
     max_dims = [CoordinatesLabels.Y, CoordinatesLabels.X, CoordinatesLabels.Z]
-    template_mask = generate_template(state=state, dims=max_dims, attributs=global_mask_desc, chunk=chunk)
     data = reorder_dims(state[ConfigurationLabels.temperature])
-
-    return xr.map_blocks(landmask_from_nan, data, template=template_mask)
+    return apply_map_block(
+        function=landmask_from_nan,
+        state=data,
+        dims=max_dims,
+        attributs=global_mask_desc,
+        chunk=chunk,
+    )

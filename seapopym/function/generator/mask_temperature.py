@@ -4,7 +4,7 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.standard.attributs import mask_temperature_desc
 from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
@@ -43,8 +43,6 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
 
 def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
-    if state.chunks is None and chunk is None:
-        return _mask_temperature_helper(state)
     max_dims = [
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,
@@ -52,7 +50,10 @@ def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArr
         CoordinatesLabels.X,
         CoordinatesLabels.cohort,
     ]
-    template_mask_temperature = generate_template(
-        state=state, dims=max_dims, attributs=mask_temperature_desc, chunk=chunk
+    return apply_map_block(
+        function=_mask_temperature_helper,
+        state=state,
+        dims=max_dims,
+        attributs=mask_temperature_desc,
+        chunk=chunk,
     )
-    return xr.map_blocks(_mask_temperature_helper, state, template=template_mask_temperature)

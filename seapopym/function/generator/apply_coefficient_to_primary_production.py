@@ -4,7 +4,7 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block
 from seapopym.standard.attributs import apply_coefficient_to_primary_production_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
@@ -67,17 +67,11 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
 
 def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
-    if state.chunks is None and chunk is None:
-        _apply_coefficient_to_primary_production_helper(state)
-
-    max_dims = [
-        CoordinatesLabels.functional_group,
-        CoordinatesLabels.time,
-        CoordinatesLabels.Y,
-        CoordinatesLabels.X,
-        CoordinatesLabels.Z,
-    ]
-    template_coef_to_pp = generate_template(
-        state=state, dims=max_dims, attributs=apply_coefficient_to_primary_production_desc, chunk=chunk
+    max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
+    return apply_map_block(
+        function=_apply_coefficient_to_primary_production_helper,
+        state=state,
+        dims=max_dims,
+        attributs=apply_coefficient_to_primary_production_desc,
+        chunk=chunk,
     )
-    return xr.map_blocks(_apply_coefficient_to_primary_production_helper, state, template=template_coef_to_pp)

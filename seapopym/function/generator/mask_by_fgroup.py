@@ -4,7 +4,7 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.standard.attributs import mask_by_fgroup_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 
@@ -44,8 +44,11 @@ def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
 
 def mask_by_fgroup(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the mask by fgroup computation with a map_block function."""
-    if state.chunks is None and chunk is None:
-        return _mask_by_fgroup_helper(state)
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.Y, CoordinatesLabels.X]
-    template_mask = generate_template(state=state, dims=max_dims, attributs=mask_by_fgroup_desc, chunk=chunk)
-    return xr.map_blocks(_mask_by_fgroup_helper, state, template=template_mask)
+    return apply_map_block(
+        function=_mask_by_fgroup_helper,
+        state=state,
+        dims=max_dims,
+        attributs=mask_by_fgroup_desc,
+        chunk=chunk,
+    )

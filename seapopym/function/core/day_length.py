@@ -1,4 +1,4 @@
-"""This module contains functions used to calculate the length of the day."""
+"""Core functions used to calculate the length of the day."""
 
 from __future__ import annotations
 
