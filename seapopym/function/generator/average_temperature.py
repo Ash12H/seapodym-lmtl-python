@@ -43,9 +43,7 @@ def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
         mean_temperature = mean_temperature.where(mask_by_fgroup.sel({CoordinatesLabels.functional_group: fgroup}))
         average_temperature.append(mean_temperature)
 
-    average_temperature = xr.concat(
-        average_temperature, dim=CoordinatesLabels.functional_group.value, combine_attrs="drop"
-    )
+    average_temperature = xr.concat(average_temperature, dim=CoordinatesLabels.functional_group.value)
     average_temperature.name = "average_temperature"
     return average_temperature
 

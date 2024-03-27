@@ -14,7 +14,7 @@ class TestMaskByFgroup:
         assert isinstance(results, xr.DataArray)
         dims = (CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
         for dim in dims:
-            assert dim in results.cf.coords
+            assert dim in results.cf
 
         shape = tuple(state_preprod_fg4_t4d_y1_x1_z3.cf[dim].size for dim in dims)
         assert results.shape == shape

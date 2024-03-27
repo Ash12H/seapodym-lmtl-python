@@ -60,7 +60,7 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
         state[ConfigurationLabels.primary_production], StandardUnitsLabels.production.units
     )
     pp_by_fgroup_gen = (i * primary_production for i in state[ConfigurationLabels.energy_transfert])
-    pp_by_fgroup = xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group, combine_attrs="drop")
+    pp_by_fgroup = xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group)
     pp_by_fgroup.name = "primary_production_by_fgroup"
     return pp_by_fgroup
 

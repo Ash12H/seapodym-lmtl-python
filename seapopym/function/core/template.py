@@ -77,6 +77,8 @@ def apply_map_block(
     dims: Iterable[str],
     attributs: dict | None = None,
     chunk: dict | None = None,
+    *args: list,
+    **kargs: dict,
 ) -> xr.DataArray:
     """
     Wrap the function computation with a map_block function. If the state is not chunked, the function is directly
@@ -87,4 +89,4 @@ def apply_map_block(
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
         return function(state).assign_attrs(attributs)
     template_avg_temperature = generate_template(state=state, dims=dims, attributs=attributs, chunk=chunk)
-    return xr.map_blocks(function, state, template=template_avg_temperature)
+    return xr.map_blocks(function, state, template=template_avg_temperature, kwargs=kargs, args=args)

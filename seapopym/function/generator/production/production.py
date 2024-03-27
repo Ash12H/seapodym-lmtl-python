@@ -11,7 +11,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import generate_template
+from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.function.generator.production.compiled_functions import time_loop
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.attributs import preproduction_desc, recruited_desc
@@ -140,6 +140,8 @@ def production(
         template[ProductionLabels.preproduction] = generate_template(
             state.cf.isel(T=export_preproduction), dims=max_dims, attributs=preproduction_desc, chunk=chunk
         )
+
+    apply_map_block()
 
     return xr.map_blocks(
         _production_helper, state, kwargs={"export_preproduction": export_preproduction}, template=xr.Dataset(template)
