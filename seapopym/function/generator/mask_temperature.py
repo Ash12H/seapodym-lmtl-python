@@ -36,9 +36,7 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
         state[PreproductionLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
     )
     min_temperature = check_units(state[PreproductionLabels.min_temperature], StandardUnitsLabels.temperature.units)
-    mask_temperature_by_fgroup = average_temperature >= min_temperature
-    mask_temperature_by_fgroup.name = "mask_temperature_by_cohort_by_functional_group"
-    return mask_temperature_by_fgroup
+    return average_temperature >= min_temperature
 
 
 def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
@@ -54,6 +52,7 @@ def mask_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArr
         function=_mask_temperature_helper,
         state=state,
         dims=max_dims,
+        name=PreproductionLabels.mask_temperature,
         attributs=mask_temperature_desc,
         chunk=chunk,
     )

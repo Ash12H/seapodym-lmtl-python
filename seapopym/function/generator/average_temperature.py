@@ -43,9 +43,7 @@ def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
         mean_temperature = mean_temperature.where(mask_by_fgroup.sel({CoordinatesLabels.functional_group: fgroup}))
         average_temperature.append(mean_temperature)
 
-    average_temperature = xr.concat(average_temperature, dim=CoordinatesLabels.functional_group.value)
-    average_temperature.name = "average_temperature"
-    return average_temperature
+    return xr.concat(average_temperature, dim=CoordinatesLabels.functional_group.value)
 
 
 def average_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
@@ -53,6 +51,7 @@ def average_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.Data
     max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
     return apply_map_block(
         function=_average_temperature_by_fgroup_helper,
+        name=PreproductionLabels.avg_temperature_by_fgroup,
         state=state,
         dims=max_dims,
         attributs=average_temperature_by_fgroup_desc,

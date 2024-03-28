@@ -75,6 +75,7 @@ def apply_map_block(
     function: Callable[[xr.Dataset, ParamSpecArgs, ParamSpecKwargs], xr.DataArray],
     state: xr.Dataset,
     dims: Iterable[str],
+    name: str | None = None,
     attributs: dict | None = None,
     chunk: dict | None = None,
     *args: list,
@@ -92,6 +93,8 @@ def apply_map_block(
         The state of the model.
     dims: Iterable[str]
         The dims of the new variable.
+    name: None | str
+        The name of the variable.
     attributs: None | dict
         The attributes of the variable.
     chunk: None | dict
@@ -105,7 +108,8 @@ def apply_map_block(
     """
     if attributs is None:
         attributs = {}
+    template = generate_template(state=state, dims=dims, name=name, attributs=attributs, chunk=chunk)
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
-        return function(state, *args, **kwargs).assign_attrs(attributs)
-    template = generate_template(state=state, dims=dims, attributs=attributs, chunk=chunk)
+        template.data = function(state, *args, **kwargs)
+        return template
     return xr.map_blocks(function, state, template=template, kwargs=kwargs, args=args)

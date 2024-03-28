@@ -36,8 +36,18 @@ class BaseModel(abc.ABC):
         """Parse the configuration file."""
 
     @abc.abstractmethod
-    def initialize(self: BaseModel) -> None:
-        """Initialize the local or distant system. For example, it can be used to init the dask.Client."""
+    def initialize_client(self: BaseModel) -> None:
+        """
+        Initialize local or remote system.
+
+        The client can be a local client or a remote cluster. If the client is not initialized, the model will run
+        without parallelism and therefore without dask support.
+
+        ### Xarray documentation on dask :
+        Xarray integrates with Dask to support parallel and continuous calculations on datasets that don't fit in
+        memory.
+
+        """
 
     @abc.abstractmethod
     def generate_configuration(self: BaseModel) -> None:

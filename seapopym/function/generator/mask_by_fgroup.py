@@ -31,14 +31,13 @@ def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
         masks.append(day_mask & night_mask)
 
     return xr.DataArray(
+        dims=(CoordinatesLabels.functional_group, global_mask.cf["Y"].name, global_mask.cf["X"].name),
         coords={
             CoordinatesLabels.functional_group: day_layers[CoordinatesLabels.functional_group],
             global_mask.cf["Y"].name: global_mask.cf["Y"],
             global_mask.cf["X"].name: global_mask.cf["X"],
         },
-        dims=(CoordinatesLabels.functional_group, global_mask.cf["Y"].name, global_mask.cf["X"].name),
         data=masks,
-        name=PreproductionLabels.mask_by_fgroup,
     )
 
 
@@ -48,6 +47,7 @@ def mask_by_fgroup(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray
     return apply_map_block(
         function=_mask_by_fgroup_helper,
         state=state,
+        name=PreproductionLabels.mask_by_fgroup,
         dims=max_dims,
         attributs=mask_by_fgroup_desc,
         chunk=chunk,

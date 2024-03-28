@@ -101,3 +101,9 @@ preproduction_desc = {
     "description": "The entire population before recruitment, divided into cohorts.",
     "units": str(StandardUnitsLabels.production.units),
 }
+
+biomass_desc = {
+    "long_name": "biomass",
+    "units": str(StandardUnitsLabels.biomass.units),
+    "description": "The biomass of the recruited individuals.",
+}

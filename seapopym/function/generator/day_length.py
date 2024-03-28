@@ -7,7 +7,7 @@ import xarray as xr
 from seapopym.function.core.day_length import mesh_day_length
 from seapopym.function.core.template import apply_map_block
 from seapopym.standard.attributs import day_length_desc
-from seapopym.standard.labels import CoordinatesLabels
+from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
 
 
 def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: int = 0) -> xr.DataArray:
@@ -27,6 +27,7 @@ def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: 
         function=_wrapper_mesh_day_lengths,
         state=state,
         dims=max_dims,
+        name=PreproductionLabels.day_length,
         attributs=day_length_desc(angle_horizon_sun=angle_horizon_sun),
         chunk=chunk,
     )

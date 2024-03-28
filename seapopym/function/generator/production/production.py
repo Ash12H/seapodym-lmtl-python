@@ -11,7 +11,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block, generate_template
+from seapopym.function.core.template import generate_template
 from seapopym.function.generator.production.compiled_functions import time_loop
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.attributs import preproduction_desc, recruited_desc
@@ -126,15 +126,6 @@ def production(
     #               others functions required Dataset as output in the future, we should implement a generic function
     #               to handle this case.
 
-    if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
-        results = _production_helper(state, export_preproduction=export_preproduction)
-        results[ProductionLabels.recruited] = results[ProductionLabels.recruited].assign_attrs(recruited_desc)
-        if export_preproduction is not None:
-            results[ProductionLabels.preproduction] = results[ProductionLabels.preproduction].assign_attrs(
-                preproduction_desc
-            )
-        return results
-
     max_dims = (
         CoordinatesLabels.functional_group,
         CoordinatesLabels.time,
@@ -149,7 +140,15 @@ def production(
         template[ProductionLabels.preproduction] = generate_template(
             state.cf.isel(T=export_preproduction), dims=max_dims, attributs=preproduction_desc, chunk=chunk
         )
+    template = xr.Dataset(template)
+
+    if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
+        results = _production_helper(state, export_preproduction=export_preproduction)
+        template[ProductionLabels.recruited].data = results[ProductionLabels.recruited].data
+        if export_preproduction is not None:
+            template[ProductionLabels.preproduction].data = results[ProductionLabels.preproduction].data
+        return template
 
     return xr.map_blocks(
-        _production_helper, state, template=xr.Dataset(template), kwargs={"export_preproduction": export_preproduction}
+        _production_helper, state, template=template, kwargs={"export_preproduction": export_preproduction}
     )

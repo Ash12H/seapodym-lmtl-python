@@ -10,10 +10,11 @@ import xarray as xr
 from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
 from seapopym.configuration.no_transport.parameter import NoTransportParameters
 from seapopym.function import generator
-from seapopym.function.generator.biomass import compute_biomass
+from seapopym.function.generator.biomass.biomass import biomass
 from seapopym.function.generator.production.production import production
 from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
+from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
 
 if TYPE_CHECKING:
@@ -53,11 +54,16 @@ class NoTransportModel(BaseModel):
     def parse(cls: NoTransportModel, configuration_file: str | Path | IO) -> NoTransportModel:
         return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
 
-    def initialize(self: NoTransportModel) -> None:
-        self.configuration.environment_parameters.client.initialize_client()
-
     def generate_configuration(self: NoTransportModel) -> None:
-        self.state: xr.Dataset = self.configuration.model_parameters
+        self.state = reorder_dims(self.configuration.model_parameters)
+
+    def initialize_client(self: NoTransportModel) -> None:
+        logger.info("Initializing the client.")
+        self.configuration.environment_parameters.client.initialize_client()
+        chunk = self.configuration.environment_parameters.chunk.as_dict()
+        self.state = self.state.chunk(chunk)
+        logger.info("Scattering the data to the workers.")
+        self.client.scatter(self.state)
 
     # TODO(Jules): Rename this method to save_state ?
     def save_configuration(self: NoTransportModel) -> None:
@@ -65,7 +71,6 @@ class NoTransportModel(BaseModel):
 
     def pre_production(self: NoTransportModel) -> None:
         """Run the pre-production process. Basicaly, it runs all the parallel functions to speed up the model."""
-        chunk = self.configuration.environment_parameters.chunk.as_dict()
         kernel = {
             PreproductionLabels.global_mask: generator.global_mask,
             PreproductionLabels.mask_by_fgroup: generator.mask_by_fgroup,
@@ -77,14 +82,13 @@ class NoTransportModel(BaseModel):
             PreproductionLabels.cell_area: generator.cell_area,
             PreproductionLabels.mortality_field: generator.mortality_field,
         }
-        self.state = self.state.chunk(chunk)
-        if self.client is not None:
-            logger.info("Scattering the data to the workers.")
-            self.client.scatter(self.state)
-
+        chunk = self.configuration.environment_parameters.chunk.as_dict()
         for name, func in kernel.items():
             if name not in self.state:
+                logger.info(f"Computing {name}.")
                 self.state[name] = func(self.state, chunk=chunk)
+            else:
+                logger.info(f"{name} already present in the state, skipping the computation")
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
@@ -119,8 +123,8 @@ class NoTransportModel(BaseModel):
 
     def post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""
-        biomass = xr.map_blocks(compute_biomass, self.state)
-        self.state = xr.merge([self.state, biomass]).persist()
+        output = biomass(self.state, chunk=self.configuration.environment_parameters.chunk.as_dict())
+        self.state = xr.merge([self.state, output])
 
     def save_output(self: NoTransportModel) -> None:
         """Save the outputs of the model."""

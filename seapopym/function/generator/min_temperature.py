@@ -7,7 +7,7 @@ import xarray as xr
 
 from seapopym.function.core.template import apply_map_block, generate_template
 from seapopym.standard.attributs import min_temperature_by_cohort_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 
 
 def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
@@ -25,12 +25,10 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
     - min_temperature [functional_group, cohort_age] : a datarray with cohort_age as coordinate and
     minimum temperature as value.
     """
-    result = (
+    return (
         np.log(state[ConfigurationLabels.mean_timestep] / state[ConfigurationLabels.temperature_recruitment_max])
         / state[ConfigurationLabels.temperature_recruitment_rate]
     )
-    result.name = "min_temperature"
-    return result
 
 
 def min_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
@@ -40,6 +38,7 @@ def min_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArra
         function=_min_temperature_by_cohort_helper,
         state=state,
         dims=max_dims,
+        name=PreproductionLabels.min_temperature,
         attributs=min_temperature_by_cohort_desc,
         chunk=chunk,
     )

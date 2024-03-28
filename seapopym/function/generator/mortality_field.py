@@ -35,9 +35,7 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
     timestep = state[ConfigurationLabels.timestep]
 
     average_temperature = check_units(average_temperature, StandardUnitsLabels.temperature)
-    mortality_field = np.exp(-timestep * (np.exp(inv_lambda_rate * average_temperature) / inv_lambda_max))
-    mortality_field.name = "mortality_field"
-    return mortality_field
+    return np.exp(-timestep * (np.exp(inv_lambda_rate * average_temperature) / inv_lambda_max))
 
 
 def mortality_field(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
@@ -47,6 +45,7 @@ def mortality_field(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArra
         function=_mortality_field_helper,
         state=state,
         dims=max_dims,
+        name=PreproductionLabels.mortality_field,
         attributs=mortality_field_desc,
         chunk=chunk,
     )
