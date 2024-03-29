@@ -5,7 +5,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block, generate_template
+from seapopym.function.core.template import Template, apply_map_block
 from seapopym.standard.attributs import min_temperature_by_cohort_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 
@@ -33,12 +33,11 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
 
 def min_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
-    max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.cohort]
-    return apply_map_block(
-        function=_min_temperature_by_cohort_helper,
-        state=state,
-        dims=max_dims,
+    template = Template(
         name=PreproductionLabels.min_temperature,
+        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.cohort],
         attributs=min_temperature_by_cohort_desc,
         chunk=chunk,
     )
+
+    return apply_map_block(function=_min_temperature_by_cohort_helper, state=state, template=template)

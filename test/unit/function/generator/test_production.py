@@ -32,12 +32,11 @@ class TestProduction:
         assert len(results.attrs) > 0
 
     def test_mask_by_fgroup_with_chunk_and_without_init_export(self, state_production_fg4_t4d_y1_x1_c4):
-        state_production_fg4_t4d_y1_x1_c4 = state_production_fg4_t4d_y1_x1_c4.drop_vars("initial_condition_production")
         chunk = {"Y": 1, "X": 1}
+        state_production_fg4_t4d_y1_x1_c4 = state_production_fg4_t4d_y1_x1_c4.drop_vars("initial_condition_production")
+        state_production_fg4_t4d_y1_x1_c4 = state_production_fg4_t4d_y1_x1_c4.cf.chunk(chunk)
 
-        results = production(
-            state_production_fg4_t4d_y1_x1_c4.cf.chunk(chunk), chunk=chunk, export_preproduction=None
-        ).compute()
+        results = production(state_production_fg4_t4d_y1_x1_c4, chunk=chunk, export_preproduction=None).compute()
         results = results[ProductionLabels.recruited]
         assert isinstance(results, xr.DataArray)
         dims = (

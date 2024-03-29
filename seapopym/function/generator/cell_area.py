@@ -6,7 +6,7 @@ import numpy as np
 import xarray as xr
 
 from seapopym.function.core.cell_area import mesh_cell_area
-from seapopym.function.core.template import apply_map_block
+from seapopym.function.core.template import Template, apply_map_block
 from seapopym.standard.attributs import compute_cell_area_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 
@@ -33,12 +33,10 @@ def _cell_area_helper(state: xr.Dataset) -> xr.DataArray:
 
 def cell_area(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
-    max_dims = [CoordinatesLabels.Y, CoordinatesLabels.X]
-    return apply_map_block(
-        function=_cell_area_helper,
-        state=state,
+    template = Template(
         name=PreproductionLabels.cell_area,
-        dims=max_dims,
+        dims=[CoordinatesLabels.Y, CoordinatesLabels.X],
         attributs=compute_cell_area_desc,
         chunk=chunk,
     )
+    return apply_map_block(function=_cell_area_helper, state=state, template=template)

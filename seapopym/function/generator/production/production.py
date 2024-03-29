@@ -11,7 +11,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block, generate_template
+from seapopym.function.core.template import Template, apply_map_block
 from seapopym.function.generator.production.compiled_functions import time_loop
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.attributs import preproduction_desc, recruited_desc
@@ -122,34 +122,36 @@ def production(
     the functional group dimension.
 
     """
-    # NOTE(Jules):  Here we have a Dataset as output so we have to implement manually the map_blocks function. If
-    #               others functions required Dataset as output in the future, we should implement a generic function
-    #               to handle this case.
-
-    name = [ProductionLabels.recruited]
-    max_dims = (
-        CoordinatesLabels.functional_group,
-        CoordinatesLabels.time,
-        CoordinatesLabels.Y,
-        CoordinatesLabels.X,
-        CoordinatesLabels.cohort,
+    template = []
+    template_recruited = Template(
+        name=ProductionLabels.recruited,
+        dims=(
+            CoordinatesLabels.functional_group,
+            CoordinatesLabels.time,
+            CoordinatesLabels.Y,
+            CoordinatesLabels.X,
+            CoordinatesLabels.cohort,
+        ),
+        attributs=recruited_desc,
+        chunk=chunk,
     )
-    dims = {ProductionLabels.recruited: max_dims}
-    attributs = {ProductionLabels.recruited: recruited_desc}
-    dims_kwargs = None
+    template.append(template_recruited)
 
     if export_preproduction is not None:
-        name.append(ProductionLabels.preproduction)
-        dims[ProductionLabels.preproduction] = max_dims
-        attributs[ProductionLabels.preproduction] = preproduction_desc
-        dims_kwargs = {ProductionLabels.preproduction: state.cf["T"].cf.isel(T=export_preproduction)}
+        template_preprod = Template(
+            name=ProductionLabels.preproduction,
+            dims=(
+                CoordinatesLabels.functional_group,
+                (CoordinatesLabels.time, state.cf["T"].cf.isel(T=export_preproduction)),
+                CoordinatesLabels.Y,
+                CoordinatesLabels.X,
+                CoordinatesLabels.cohort,
+            ),
+            attributs=preproduction_desc,
+            chunk=chunk,
+        )
+        template.append(template_preprod)
 
     return apply_map_block(
-        function=_production_helper,
-        state=state,
-        name=name,
-        dims=dims,
-        dims_kwargs=dims_kwargs,
-        attributs=attributs,
-        chunk=chunk,
+        function=_production_helper, state=state, template=template, export_preproduction=export_preproduction
     )

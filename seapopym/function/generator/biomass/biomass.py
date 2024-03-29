@@ -8,7 +8,7 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block
+from seapopym.function.core.template import Template, apply_map_block
 from seapopym.function.generator.biomass.compiled_functions import biomass_sequence
 from seapopym.standard.attributs import biomass_desc
 from seapopym.standard.labels import (
@@ -39,20 +39,18 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
     biomass = biomass_sequence(recruited=recruited, mortality=mortality, initial_conditions=initial_conditions)
 
     return xr.DataArray(
-        biomass,
-        coords=state[PreproductionLabels.mortality_field].coords,
         dims=state[PreproductionLabels.mortality_field].dims,
+        coords=state[PreproductionLabels.mortality_field].coords,
+        data=biomass,
     )
 
 
 def biomass(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the biomass cumputation with a map_block function."""
-    max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
-    return apply_map_block(
-        function=_biomass_helper,
-        state=state,
-        dims=max_dims,
+    template = Template(
         name=PostproductionLabels.biomass,
+        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attributs=biomass_desc,
         chunk=chunk,
     )
+    return apply_map_block(function=_biomass_helper, state=state, template=template)

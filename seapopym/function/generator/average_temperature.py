@@ -4,7 +4,7 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block
+from seapopym.function.core.template import Template, apply_map_block
 from seapopym.standard.attributs import average_temperature_by_fgroup_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
@@ -48,12 +48,10 @@ def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
 
 def average_temperature(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
     """Wrap the average temperature by functional group computation with a map_block function."""
-    max_dims = [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X]
-    return apply_map_block(
-        function=_average_temperature_by_fgroup_helper,
+    template = Template(
         name=PreproductionLabels.avg_temperature_by_fgroup,
-        state=state,
-        dims=max_dims,
+        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attributs=average_temperature_by_fgroup_desc,
         chunk=chunk,
     )
+    return apply_map_block(function=_average_temperature_by_fgroup_helper, state=state, template=template)
