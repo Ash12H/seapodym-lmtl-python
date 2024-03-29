@@ -71,6 +71,7 @@ class NoTransportModel(BaseModel):
 
     def pre_production(self: NoTransportModel) -> None:
         """Run the pre-production process. Basicaly, it runs all the parallel functions to speed up the model."""
+        logger.debug("Starting the pre-production process.")
         kernel = {
             PreproductionLabels.global_mask: generator.global_mask,
             PreproductionLabels.mask_by_fgroup: generator.mask_by_fgroup,
@@ -89,6 +90,7 @@ class NoTransportModel(BaseModel):
                 self.state[name] = func(self.state, chunk=chunk)
             else:
                 logger.info(f"{name} already present in the state, skipping the computation")
+        logger.debug("End of the pre-production process.")
 
     def production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
@@ -98,6 +100,7 @@ class NoTransportModel(BaseModel):
             The production process requires a specific format, we then convert parameters to a np.ndarray that contains
             the indices of the timestamps to export. None is returned if no timestamps are provided.
             """
+            logger.debug("Starting the production process.")
             timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
             data = self.state.cf["T"]
 

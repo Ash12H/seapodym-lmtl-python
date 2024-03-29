@@ -4,7 +4,7 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import apply_map_block, generate_template
+from seapopym.function.core.template import apply_map_block
 from seapopym.standard.attributs import mask_temperature_desc
 from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
