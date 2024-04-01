@@ -16,6 +16,7 @@ from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
+from seapopym.function.core.mask import apply_mask_to_state
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -55,6 +56,7 @@ class NoTransportModel(BaseModel):
         return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
 
     def generate_configuration(self: NoTransportModel) -> None:
+        self.state = apply_mask_to_state(self.state)
         self.state = reorder_dims(self.configuration.model_parameters)
 
     def initialize_client(self: NoTransportModel) -> None:

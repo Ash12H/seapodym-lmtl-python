@@ -77,7 +77,7 @@ class ForcingParameters:
     )
 
     def _set_timestep(self: ForcingParameters, forcings: list[ForcingUnit]) -> None:
-        timesteps = {field.timestep for field in forcings}
+        timesteps = {field.timestep for field in forcings if field.timestep is not None}
         if len(timesteps) != 1:
             as_dict = dict(zip([field.forcing.name for field in forcings], [field.timestep for field in forcings]))
             if len(as_dict) != len(timesteps):  # If there are duplicates in the forcing names or None values
@@ -86,7 +86,7 @@ class ForcingParameters:
         object.__setattr__(self, "timestep", timesteps.pop())
 
     def _set_resolution(self: ForcingParameters, forcings: list[ForcingUnit]) -> tuple[float, float]:
-        resolutions = {(field.resolution[0], field.resolution[1]) for field in forcings}
+        resolutions = {(field.resolution[0], field.resolution[1]) for field in forcings if field.resolution is not None}
         if len(resolutions) != 1:
             min_lat = min(lat for lat, _ in resolutions)
             min_lon = min(lon for _, lon in resolutions)
@@ -118,7 +118,15 @@ class ForcingParameters:
         This method is called after the initialization of the class. It is used to check the consistency of the
         forcing fields.
         """
-        forcings = [self.temperature, self.primary_production, self.mask, self.day_length, self.cell_area]
+        forcings = [
+            self.temperature,
+            self.primary_production,
+            self.mask,
+            self.day_length,
+            self.cell_area,
+            self.initial_condition_production,
+            self.initial_condition_biomass,
+        ]
         forcings = [field for field in forcings if field is not None]
         self._set_timestep(forcings)
         self._set_resolution(forcings)

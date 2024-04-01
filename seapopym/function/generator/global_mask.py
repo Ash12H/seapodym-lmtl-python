@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import xarray as xr
 
-from seapopym.function.core.landmask import landmask_from_nan
+from seapopym.function.core.mask import landmask_from_nan
 from seapopym.function.core.template import Template, apply_map_block
 from seapopym.standard.attributs import global_mask_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels

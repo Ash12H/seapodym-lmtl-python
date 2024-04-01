@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import xarray as xr
 
-from seapopym.function.core import landmask
+from seapopym.function.core import mask
 from seapopym.standard import coordinates
 
 
@@ -38,8 +38,8 @@ def simple_forcing() -> xr.DataArray:
 
 class TestLandmask:
     def test_landmask(self, simple_forcing):
-        mask = landmask.landmask_from_nan(simple_forcing)
+        res = mask.landmask_from_nan(simple_forcing)
         # Keep spatial dimensions only
-        assert mask.shape == simple_forcing.isel(time=0).shape
+        assert res.shape == simple_forcing.isel(time=0).shape
         # Only boolean values
-        assert mask.dtype == bool
+        assert res.dtype == bool
