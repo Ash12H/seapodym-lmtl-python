@@ -54,8 +54,15 @@ class BaseModel(abc.ABC):
         """Generate the configuration using parameters extracted by parse or given by the user."""
 
     @abc.abstractmethod
-    def save_configuration(self: BaseModel) -> None:
-        """Save the configuration."""
+    def save_state(self: BaseModel) -> None:
+        """
+        Save the state of the model.
+
+        State:
+        - The input forcing.
+        - The parameters of the model.
+        - The outputs of the model if they are computed.
+        """
 
     @abc.abstractmethod
     def pre_production(self: BaseModel) -> None:

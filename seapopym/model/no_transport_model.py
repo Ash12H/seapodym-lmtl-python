@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import IO, TYPE_CHECKING
 
 import numpy as np
@@ -10,17 +11,15 @@ import xarray as xr
 from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
 from seapopym.configuration.no_transport.parameter import NoTransportParameters
 from seapopym.function import generator
+from seapopym.function.core.mask import apply_mask_to_state
 from seapopym.function.generator.biomass.biomass import biomass
 from seapopym.function.generator.production.production import production
 from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
-from seapopym.function.core.mask import apply_mask_to_state
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from dask.distributed import Client
 
 
@@ -67,9 +66,13 @@ class NoTransportModel(BaseModel):
         logger.info("Scattering the data to the workers.")
         self.client.scatter(self.state)
 
-    # TODO(Jules): Rename this method to save_state ?
-    def save_configuration(self: NoTransportModel) -> None:
+    def save_state(self: NoTransportModel, path: Path, *, zarr: bool = True) -> None:
         """Save the configuration."""
+        path = Path(path)
+        if zarr:
+            self.state.to_zarr(path)
+        else:
+            self.state.to_netcdf(path)
 
     def pre_production(self: NoTransportModel) -> None:
         """Run the pre-production process. Basicaly, it runs all the parallel functions to speed up the model."""
