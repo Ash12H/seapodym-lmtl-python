@@ -56,8 +56,8 @@ class NoTransportModel(BaseModel):
         return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
 
     def generate_configuration(self: NoTransportModel) -> None:
-        self.state = apply_mask_to_state(self.state)
         self.state = reorder_dims(self.configuration.model_parameters)
+        self.state = apply_mask_to_state(self.state)
 
     def initialize_client(self: NoTransportModel) -> None:
         logger.info("Initializing the client.")
