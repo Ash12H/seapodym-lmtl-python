@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import IO, TYPE_CHECKING
 
 import numpy as np
@@ -18,8 +17,11 @@ from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
+from seapopym.writer import writer_no_transport_model
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from dask.distributed import Client
 
 
@@ -40,6 +42,11 @@ class NoTransportModel(BaseModel):
             raise TypeError(msg)
         self.state = None
 
+    @classmethod
+    def parse(cls: NoTransportModel, configuration_file: str | Path | IO) -> NoTransportModel:
+        """Parse the configuration file and generate a configuration for this model."""
+        return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
+
     @property
     def configuration(self: NoTransportModel) -> NoTransportConfiguration | None:
         """The parameters structure is an attrs class."""
@@ -50,15 +57,13 @@ class NoTransportModel(BaseModel):
         """The dask Client getter."""
         return self._configuration.environment_parameters.client.client
 
-    @classmethod
-    def parse(cls: NoTransportModel, configuration_file: str | Path | IO) -> NoTransportModel:
-        return NoTransportModel(NoTransportConfiguration.parse(configuration_file))
-
     def generate_configuration(self: NoTransportModel) -> None:
+        """The entry point of the model. It initializes the state of the model."""
         self.state = reorder_dims(self.configuration.model_parameters)
         self.state = apply_mask_to_state(self.state)
 
     def initialize_client(self: NoTransportModel) -> None:
+        """Initialize the client and configure the model to run in distributed mode."""
         logger.info("Initializing the client.")
         self.configuration.environment_parameters.client.initialize_client()
         chunk = self.configuration.environment_parameters.chunk.as_dict()
@@ -66,15 +71,7 @@ class NoTransportModel(BaseModel):
         logger.info("Scattering the data to the workers.")
         self.client.scatter(self.state)
 
-    def save_state(self: NoTransportModel, path: Path, *, zarr: bool = True) -> None:
-        """Save the configuration."""
-        path = Path(path)
-        if zarr:
-            self.state.to_zarr(path)
-        else:
-            self.state.to_netcdf(path)
-
-    def pre_production(self: NoTransportModel) -> None:
+    def _pre_production(self: NoTransportModel) -> None:
         """Run the pre-production process. Basicaly, it runs all the parallel functions to speed up the model."""
         logger.debug("Starting the pre-production process.")
         kernel = {
@@ -97,7 +94,7 @@ class NoTransportModel(BaseModel):
                 logger.info(f"{name} already present in the state, skipping the computation")
         logger.debug("End of the pre-production process.")
 
-    def production(self: NoTransportModel) -> None:
+    def _production(self: NoTransportModel) -> None:
         """Run the production process that is not explicitly parallel."""
 
         def _preproduction_converter() -> np.ndarray | None:
@@ -129,19 +126,20 @@ class NoTransportModel(BaseModel):
         )
         self.state = xr.merge([self.state, output])
 
-    def post_production(self: NoTransportModel) -> None:
+    def _post_production(self: NoTransportModel) -> None:
         """Run the post-production process. Mostly parallel but need the production to be computed."""
         output = biomass(self.state, chunk=self.configuration.environment_parameters.chunk.as_dict())
         self.state = xr.merge([self.state, output])
 
-    def save_output(self: NoTransportModel) -> None:
-        """Save the outputs of the model."""
-        # 1. biomass
-        # param_biomass = self.configuration.environment_parameters.output.biomass
-        # biomass_field = self.state[PostproductionLabels.biomass]
-
-        # 2. production
+    def run(self: NoTransportModel) -> None:
+        """Run the model. Wrapper of the pre-production, production and post-production processes."""
+        self._pre_production()
+        self._production()
+        self._post_production()
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""
         self.configuration.environment_parameters.client.close_client()
+
+    export_state = writer_no_transport_model.export_state
+    export_initial_conditions = writer_no_transport_model.export_initial_conditions
