@@ -1,6 +1,4 @@
 import cf_xarray  # noqa: F401
-import numpy as np
-import pytest
 import xarray as xr
 
 from seapopym.function.generator.mask_by_fgroup import mask_by_fgroup

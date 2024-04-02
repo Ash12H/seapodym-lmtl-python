@@ -1,10 +1,8 @@
 import cf_xarray  # noqa: F401
 import numpy as np
-import pytest
 import xarray as xr
 
 from seapopym.function.generator.production.production import production
-from seapopym.logging.custom_logger import logger
 from seapopym.standard.labels import CoordinatesLabels, ProductionLabels
 
 

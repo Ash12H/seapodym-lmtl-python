@@ -1,6 +1,5 @@
 import cf_xarray  # noqa: F401
 import numpy as np
-import pint
 import pint_xarray  # noqa: F401
 import pytest
 import xarray as xr
