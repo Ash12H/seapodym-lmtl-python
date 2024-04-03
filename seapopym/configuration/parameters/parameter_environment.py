@@ -168,8 +168,25 @@ class PreProductionParameter(BaseOuputForcingParameter):
 
     timestamps: Iterable[str] | Iterable[int] | Literal["all"] = field(
         default=[-1],
+        converter=lambda x: [x] if x != "all" and isinstance(x, (int, str)) else x,
         metadata={"description": "The timestamps for the pre-production forcing."},
     )
+
+    @timestamps.validator
+    def _validate_timestamps(
+        self: PreProductionParameter, attribute: str, value: Iterable[str] | Iterable[int]
+    ) -> None:
+        if value == "all":
+            return
+
+        msg = "The timestamps must be either 'all' or a list of integers (time index) or a list of strings (datetime)."
+        if not isinstance(value, Iterable):
+            raise TypeError(msg)
+        if all(isinstance(x, int) for x in value):
+            return
+        if all(isinstance(x, str) for x in value):
+            return
+        raise TypeError(msg)
 
 
 @frozen(kw_only=True)
@@ -181,21 +198,11 @@ class OutputParameter:
         validator=validators.instance_of(BiomassParameter),
         metadata={"description": "The output parameter for the biomass forcing."},
     )
-    production: ProductionParameter = field(
-        factory=ProductionParameter,
-        validator=validators.instance_of(ProductionParameter),
-        metadata={"description": "The output parameter for the production forcing."},
-    )
     pre_production: PreProductionParameter = field(
-        factory=PreProductionParameter,
-        validator=validators.instance_of(PreProductionParameter),
+        default=None,
+        validator=validators.optional(validators.instance_of(PreProductionParameter)),
         metadata={"description": "The output parameter for the pre-production forcing."},
     )
-
-    # TODO(Jules): Is it useful ?
-    def shared_path(self: OutputParameter) -> bool:
-        """Check if the path are shared between the different output forcing."""
-        return self.biomass.path == self.production.path and self.production.path == self.pre_production.path
 
 
 @frozen(kw_only=True)

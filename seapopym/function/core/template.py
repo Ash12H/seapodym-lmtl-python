@@ -169,4 +169,13 @@ def apply_map_block(
     if len(state.chunks) == 0:  # Dataset chunks == FrozenDict({}) when not chunked
         return _map_block_without_dask(function, state, template, *args, **kwargs)
 
-    return _map_block_with_dask(function, state, template, *args, **kwargs)
+    try:
+        res = _map_block_with_dask(function, state, template, *args, **kwargs)
+    except ValueError as e:
+        msg = (
+            f"An error occurred when applying map_blocks to {function.__name__}. Please ensure that the entire dataset "
+            "is split into chunks and that the chunks are unified."
+        )
+        raise ValueError(msg) from e
+
+    return res

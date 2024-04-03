@@ -17,7 +17,7 @@ from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
-from seapopym.writer import writer_no_transport_model
+from seapopym.writer import base_functions
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -119,10 +119,15 @@ class NoTransportModel(BaseModel):
                 raise TypeError(msg)
             return np.arange(data.size)[data.isin(selected_dates)]
 
+        if self.configuration.environment_parameters.output.pre_production is None:
+            export_preproduction = None
+        else:
+            export_preproduction = _preproduction_converter()
+
         output = production(
             state=self.state,
             chunk=self.configuration.environment_parameters.chunk.as_dict(),
-            export_preproduction=_preproduction_converter(),
+            export_preproduction=export_preproduction,
         )
         self.state = xr.merge([self.state, output])
 
@@ -141,5 +146,6 @@ class NoTransportModel(BaseModel):
         """Clean up the system. For example, it can be used to close dask.Client."""
         self.configuration.environment_parameters.client.close_client()
 
-    export_state = writer_no_transport_model.export_state
-    export_initial_conditions = writer_no_transport_model.export_initial_conditions
+    export_state = base_functions.export_state
+    export_biomass = base_functions.export_biomass
+    export_initial_conditions = base_functions.export_initial_conditions
