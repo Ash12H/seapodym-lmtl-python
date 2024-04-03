@@ -15,9 +15,10 @@ from seapopym.function.generator.biomass.biomass import biomass
 from seapopym.function.generator.production.production import production
 from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
+from seapopym.plotter import base_functions as pfunctions
 from seapopym.standard.coordinates import reorder_dims
 from seapopym.standard.labels import PreproductionLabels
-from seapopym.writer import base_functions
+from seapopym.writer import base_functions as wfunctions
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -146,6 +147,8 @@ class NoTransportModel(BaseModel):
         """Clean up the system. For example, it can be used to close dask.Client."""
         self.configuration.environment_parameters.client.close_client()
 
-    export_state = base_functions.export_state
-    export_biomass = base_functions.export_biomass
-    export_initial_conditions = base_functions.export_initial_conditions
+    export_state = wfunctions.export_state
+    export_biomass = wfunctions.export_biomass
+    export_initial_conditions = wfunctions.export_initial_conditions
+
+    plot_biomass = pfunctions.plot_biomass
