@@ -28,9 +28,36 @@ from seapopym.standard.types import ForcingName, SeapopymDims
 if TYPE_CHECKING:
     from seapopym.standard.types import ForcingAttrs, SeapopymForcing, SeapopymState
 
+from abc import ABC, abstractmethod
+
+
+class BaseTemplate(ABC):
+    name: ForcingName
+    """The name of the variable."""
+    attributs: ForcingAttrs = field(factory=dict)
+    """The attributes of the variable."""
+    chunk: dict[str, int | Literal["auto"]] | None = field(default=None)
+    """The chunk size of the variable. If None the template is not chunked. If you want to automatically chunk the
+    variable, set the chunk parameter to `{}`."""
+
+    @abstractmethod
+    def generate(
+        self: BaseTemplate,
+        state: SeapopymState | None = None,
+    ) -> SeapopymForcing:
+        """
+        Generate a template for a new variable based on the state of the model.
+
+        Returns
+        -------
+        xr.Dataset
+            A template for a new variable that can be used in a xarray.map_blocks function.
+
+        """
+
 
 @define
-class Template:
+class Template(BaseTemplate):
     """Template for a new variable that can be used in a xarray.map_blocks function."""
 
     name: ForcingName
@@ -85,10 +112,33 @@ class Template:
         return coordinates.reorder_dims(template)
 
 
+@define
+class TemplateLazy(BaseTemplate):
+    """Template for a new variable that can be used in a xarray.map_blocks function."""
+
+    name: ForcingName
+    """The name of the variable."""
+    attributs: ForcingAttrs = field(factory=dict)
+    """The attributes of the variable."""
+    chunk: dict[str, int | Literal["auto"]] | None = field(default=None)
+    """The chunk size of the variable. If None the template is not chunked. If you want to automatically chunk the
+    variable, set the chunk parameter to `{}`."""
+
+    def generate(self: TemplateLazy, forcing: SeapopymForcing) -> SeapopymForcing:
+        """Lazy template generation. Avoid the creation of a new xarray object."""
+        results = forcing.copy(deep=False)
+        results.name = self.name
+        results.attrs = self.attributs
+        if self.chunk is not None:
+            chunk = {dim: self.chunk[dim] for dim in results if dim in self.chunk}
+            results = results.cf.chunk(chunk)
+        return results
+
+
 def _map_block_without_dask(
     function: Callable[[SeapopymState, ParamSpecArgs, ParamSpecKwargs], SeapopymForcing | xr.Dataset[SeapopymForcing]],
     state: SeapopymState,
-    template: Template | Iterable[Template],
+    template: BaseTemplate | Iterable[BaseTemplate],
     *args: list,
     **kwargs: dict,
 ) -> SeapopymForcing:
@@ -96,14 +146,14 @@ def _map_block_without_dask(
     results = function(state, *args, **kwargs)
 
     if isinstance(results, xr.Dataset) and not isinstance(template, Iterable):
-        msg = "When the function returns a xarray.Dataset, the template attribut should be an Iterable of Template."
+        msg = "When the function returns a xarray.Dataset, the template attribut should be an Iterable of BaseTemplate."
         raise TypeError(msg)
 
     if isinstance(results, xr.DataArray) and isinstance(template, Iterable):
-        msg = "When the function returns a xarray.DataArray, the template attribut should be a Template."
+        msg = "When the function returns a xarray.DataArray, the template attribut should be a BaseTemplate."
         raise TypeError(msg)
 
-    if isinstance(template, Template):
+    if isinstance(template, BaseTemplate):
         results.name = template.name
         return results.assign_attrs(template.attributs)
 
@@ -118,18 +168,18 @@ def _map_block_without_dask(
 def _map_block_with_dask(
     function: Callable[[SeapopymState, ParamSpecArgs, ParamSpecKwargs], SeapopymForcing | xr.Dataset[SeapopymForcing]],
     state: SeapopymState,
-    template: Template | Iterable[Template],
+    template: BaseTemplate | Iterable[BaseTemplate],
     *args: list,
     **kwargs: dict,
 ) -> SeapopymForcing:
     logger.debug(f"Creating template for {function.__name__}.")
 
-    if isinstance(template, Template):
+    if isinstance(template, BaseTemplate):
         result_template = template.generate(state)
     elif isinstance(template, Iterable):
         result_template = xr.Dataset({tmp.name: tmp.generate(state) for tmp in template})
     else:
-        msg = "The template attribut should be a Template or an Iterable of Template."
+        msg = "The template attribut should be a BaseTemplate or an Iterable of BaseTemplate."
         raise TypeError(msg)
 
     logger.debug(f"Applying map_blocks to {function.__name__}.")
@@ -139,7 +189,7 @@ def _map_block_with_dask(
 def apply_map_block(
     function: Callable[[SeapopymState, ParamSpecArgs, ParamSpecKwargs], SeapopymForcing | xr.Dataset[SeapopymForcing]],
     state: SeapopymState,
-    template: Template | Iterable[Template],
+    template: BaseTemplate | Iterable[BaseTemplate],
     *args: list,
     **kwargs: dict,
 ) -> SeapopymForcing | xr.Dataset[SeapopymForcing]:
@@ -153,7 +203,7 @@ def apply_map_block(
         The function to apply to the state.
     state: xr.Dataset
         The state of the model.
-    template: Template | Iterable[Template]
+    template: BaseTemplate | Iterable[BaseTemplate]
         The template for the new variable(s).
     *args: list
         Additional arguments to pass to the `function`.
