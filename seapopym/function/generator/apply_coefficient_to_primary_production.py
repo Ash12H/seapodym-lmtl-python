@@ -4,9 +4,10 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import Template, apply_map_block
+from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
 from seapopym.standard.attributs import apply_coefficient_to_primary_production_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.types import ForcingName, SeapopymForcing
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
@@ -63,7 +64,9 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
     return xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group)
 
 
-def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
+def apply_coefficient_to_primary_production(
+    state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
+) -> SeapopymForcing:
     """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
     template = Template(
         name=PreproductionLabels.primary_production_by_fgroup,
@@ -71,4 +74,14 @@ def apply_coefficient_to_primary_production(state: xr.Dataset, chunk: dict | Non
         attributs=apply_coefficient_to_primary_production_desc,
         chunk=chunk,
     )
+    class_type = Template if lazy is None else TemplateLazy
+    template_attributs = {
+        "name": PreproductionLabels.primary_production_by_fgroup,
+        "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+        "attributs": apply_coefficient_to_primary_production_desc,
+        "chunk": chunk,
+    }
+    if lazy is not None:
+        template_attributs["model_name"] = lazy
+    template = class_type(**template_attributs)
     return apply_map_block(function=_apply_coefficient_to_primary_production_helper, state=state, template=template)

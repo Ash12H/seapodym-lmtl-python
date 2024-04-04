@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Literal
 
 import cf_xarray  # noqa: F401
 import numpy as np
@@ -141,11 +141,13 @@ class ForcingUnit:
         name: str,
         resolution: tuple[float, float] | float | None = None,
         timestep: int | None = None,
+        engine: Literal["zarr", "netcdf"] = "zarr",
     ) -> ForcingUnit:
         """Create a ForcingUnit from a path and a name."""
         forcing = Path(forcing)
         path_validation(forcing)
-        return cls.from_dataset(xr.open_dataset(forcing), name, resolution, timestep)
+        data = xr.open_zarr(forcing) if engine == "zarr" else xr.open_dataset(forcing)
+        return cls.from_dataset(data, name, resolution, timestep)
 
     def __attrs_post_init__(self: ForcingUnit) -> None:
         """Setup the space and time resolutions."""

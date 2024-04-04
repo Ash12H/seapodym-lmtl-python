@@ -57,6 +57,8 @@ def ageing(production: np.ndarray, nb_timestep_by_cohort: np.ndarray) -> np.ndar
     return growing + staying
 
 
+# TODO(Jules): For efficiency, the recruited cohorts can be summed to reduce the size of the output. This will require
+# to change the output shape of the function.
 @jit
 def time_loop(
     primary_production: np.ndarray,
