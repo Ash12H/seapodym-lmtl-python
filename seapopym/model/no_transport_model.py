@@ -17,7 +17,8 @@ from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.plotter import base_functions as pfunctions
 from seapopym.standard.coordinates import reorder_dims
-from seapopym.standard.labels import PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, PreproductionLabels
+from seapopym.standard.types import SeapopymState
 from seapopym.writer import base_functions as wfunctions
 
 if TYPE_CHECKING:
@@ -74,25 +75,55 @@ class NoTransportModel(BaseModel):
 
     def _pre_production(self: NoTransportModel) -> None:
         """Run the pre-production process. Basicaly, it runs all the parallel functions to speed up the model."""
+
+        def _apply_functions(state: SeapopymState, kernel: dict, chunk: dict) -> xr.Dataset:
+            for name, func in kernel.items():
+                if name in state:
+                    logger.info(f"{name} already present in the state, skipping the computation")
+                else:
+                    logger.info(f"Computing {name}.")
+                    if callable(func):
+                        self.state[name] = func(self.state, chunk=chunk)
+                    else:
+                        self.state[name] = func[0](self.state, chunk=chunk, **func[1])
+
         logger.debug("Starting the pre-production process.")
         kernel = {
-            PreproductionLabels.global_mask: generator.global_mask,
-            PreproductionLabels.mask_by_fgroup: generator.mask_by_fgroup,
-            PreproductionLabels.day_length: generator.day_length,
-            PreproductionLabels.avg_temperature_by_fgroup: generator.average_temperature,
-            PreproductionLabels.primary_production_by_fgroup: generator.apply_coefficient_to_primary_production,
+            PreproductionLabels.global_mask: (generator.global_mask, {"lazy": ConfigurationLabels.temperature}),
+            PreproductionLabels.mask_by_fgroup: (generator.mask_by_fgroup, {"lazy": ConfigurationLabels.temperature}),
+            PreproductionLabels.day_length: (generator.day_length, {"lazy": ConfigurationLabels.primary_production}),
+            PreproductionLabels.avg_temperature_by_fgroup: (
+                generator.average_temperature,
+                {"lazy": ConfigurationLabels.primary_production},
+            ),
+            PreproductionLabels.primary_production_by_fgroup: (
+                generator.apply_coefficient_to_primary_production,
+                {"lazy": ConfigurationLabels.primary_production},
+            ),
             PreproductionLabels.min_temperature: generator.min_temperature,
-            PreproductionLabels.mask_temperature: generator.mask_temperature,
-            PreproductionLabels.cell_area: generator.cell_area,
-            PreproductionLabels.mortality_field: generator.mortality_field,
+            PreproductionLabels.mask_temperature: (
+                generator.mask_temperature,
+                {"lazy": ConfigurationLabels.primary_production},
+            ),
+            PreproductionLabels.cell_area: (generator.cell_area, {"lazy": ConfigurationLabels.primary_production}),
+            PreproductionLabels.mortality_field: (
+                generator.mortality_field,
+                {"lazy": ConfigurationLabels.primary_production},
+            ),
         }
+        # kernel = {
+        #     PreproductionLabels.global_mask: generator.global_mask,
+        #     PreproductionLabels.mask_by_fgroup: generator.mask_by_fgroup,
+        #     PreproductionLabels.day_length: generator.day_length,
+        #     PreproductionLabels.avg_temperature_by_fgroup: generator.average_temperature,
+        #     PreproductionLabels.primary_production_by_fgroup: generator.apply_coefficient_to_primary_production,
+        #     PreproductionLabels.min_temperature: generator.min_temperature,
+        #     PreproductionLabels.mask_temperature: generator.mask_temperature,
+        #     PreproductionLabels.cell_area: generator.cell_area,
+        #     PreproductionLabels.mortality_field: generator.mortality_field,
+        # }
         chunk = self.configuration.environment_parameters.chunk.as_dict()
-        for name, func in kernel.items():
-            if name not in self.state:
-                logger.info(f"Computing {name}.")
-                self.state[name] = func(self.state, chunk=chunk)
-            else:
-                logger.info(f"{name} already present in the state, skipping the computation")
+        _apply_functions(self.state, kernel, chunk)
         logger.debug("End of the pre-production process.")
 
     def _production(self: NoTransportModel) -> None:
@@ -142,6 +173,7 @@ class NoTransportModel(BaseModel):
         self._pre_production()
         self._production()
         self._post_production()
+        self.state.persist()
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""

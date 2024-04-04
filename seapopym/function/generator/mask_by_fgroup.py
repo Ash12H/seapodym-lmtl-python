@@ -1,12 +1,17 @@
 """An average temperature by fgroup computation wrapper. Use xarray.map_block."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import Template, apply_map_block
+from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
 from seapopym.standard.attributs import mask_by_fgroup_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+
+if TYPE_CHECKING:
+    from seapopym.standard.types import ForcingName, SeapopymForcing
 
 
 def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
@@ -41,13 +46,17 @@ def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
     )
 
 
-def mask_by_fgroup(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
+def mask_by_fgroup(state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None) -> SeapopymForcing:
     """Wrap the mask by fgroup computation with a map_block function."""
-    template = Template(
-        name=PreproductionLabels.mask_by_fgroup,
-        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.Y, CoordinatesLabels.X],
-        attributs=mask_by_fgroup_desc,
-        chunk=chunk,
-    )
+    class_type = Template if lazy is None else TemplateLazy
+    template_attributs = {
+        "name": PreproductionLabels.mask_by_fgroup,
+        "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.Y, CoordinatesLabels.X],
+        "attributs": mask_by_fgroup_desc,
+        "chunk": chunk,
+    }
+    if lazy is not None:
+        template_attributs["model_name"] = lazy
+    template = class_type(**template_attributs)
 
     return apply_map_block(function=_mask_by_fgroup_helper, state=state, template=template)

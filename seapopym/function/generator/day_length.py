@@ -5,12 +5,15 @@ import cf_xarray  # noqa: F401
 import xarray as xr
 
 from seapopym.function.core.day_length import mesh_day_length
-from seapopym.function.core.template import Template, apply_map_block
+from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
 from seapopym.standard.attributs import day_length_desc
 from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
+from seapopym.standard.types import ForcingName, SeapopymForcing
 
 
-def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: int = 0) -> xr.DataArray:
+def day_length(
+    state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: int = 0, lazy: ForcingName | None = None
+) -> SeapopymForcing:
     """Wrap the day length computation with a map_block function."""
 
     def _wrapper_mesh_day_lengths(state: xr.DataArray) -> xr.DataArray:
@@ -21,11 +24,15 @@ def day_length(state: xr.Dataset, chunk: dict | None = None, angle_horizon_sun: 
             angle_horizon_sun,
         )
 
-    template = Template(
-        name=PreproductionLabels.day_length,
-        dims=[CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-        attributs=day_length_desc(angle_horizon_sun=angle_horizon_sun),
-        chunk=chunk,
-    )
+    class_type = Template if lazy is None else TemplateLazy
+    template_attributs = {
+        "name": PreproductionLabels.day_length,
+        "dims": [CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+        "attributs": day_length_desc(angle_horizon_sun=angle_horizon_sun),
+        "chunk": chunk,
+    }
+    if lazy is not None:
+        template_attributs["model_name"] = lazy
+    template = class_type(**template_attributs)
 
     return apply_map_block(function=_wrapper_mesh_day_lengths, state=state, template=template)
