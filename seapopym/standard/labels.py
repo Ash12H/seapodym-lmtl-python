@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 from enum import Enum, StrEnum
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
+
+if TYPE_CHECKING:
+    import xarray as xr
 
 
 class CoordinatesLabels(StrEnum):
@@ -19,6 +22,11 @@ class CoordinatesLabels(StrEnum):
     def ordered(cls: CoordinatesLabels) -> tuple[CoordinatesLabels]:
         """Return all labels in the order they should be used in a dataset. It follow the CF convention."""
         return (cls.functional_group, cls.time, cls.Y, cls.X, cls.Z, cls.cohort)
+
+    @classmethod
+    def order_data(cls: CoordinatesLabels, data: xr.Dataset | xr.DataArray) -> xr.Dataset:
+        """Return the dataset with the coordinates ordered as in the CF convention."""
+        return data.cf.transpose(*cls.ordered(), missing_dims="ignore")
 
 
 class SeaLayers(Enum):
