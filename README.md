@@ -1,8 +1,8 @@
 # Seapopym
 
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
-[![Documentation Status](https://readthedocs.org/projects/seapodym-lmtl-python/badge/?version=latest)](https://seapodym-lmtl-python.readthedocs.io/en/latest/?badge=latest)
-![Tests](./docs/badges/tests.svg)
+[![Documentation Status](https://readthedocs.org/projects/seapopym/badge/?version=latest)](https://seapopym.readthedocs.io/en/latest/?badge=latest)
+![Tests](https://github.com/Ash12H/Seapopym/blob/master/docs/badges/tests.svg)
 
 ## Description
 
