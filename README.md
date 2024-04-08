@@ -2,7 +2,6 @@
 
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Documentation Status](https://readthedocs.org/projects/seapopym/badge/?version=latest)](https://seapopym.readthedocs.io/en/latest/?badge=latest)
-![Tests](https://github.com/Ash12H/Seapopym/blob/master/docs/badges/tests.svg)
 
 ## Description
 
@@ -17,6 +16,8 @@ This package use the [Poetry](https://python-poetry.org/) package manager. To in
 ```bash
 pip install seapopym
 ```
+
+PyPi package is available [here](https://pypi.org/project/seapopym/).
 
 Or you can download the source code and run the following command:
 
