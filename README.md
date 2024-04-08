@@ -27,4 +27,4 @@ poetry install
 
 ## Documentation
 
-The documentation is available [here](https://seapodym-lmtl-python.readthedocs.io/en/latest/).
+The documentation is available [here](https://seapopym.readthedocs.io/en/latest/).

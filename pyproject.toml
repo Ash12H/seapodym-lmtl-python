@@ -1,9 +1,17 @@
 [tool.poetry]
 name = "seapopym"
 version = "0.0.1.1"
-description = ""
+description = "Seapodym is a Python package that provides models to simulate the dynamics of low and mid trophic level marine ecosystems."
 authors = ["Jules Lehodey <lehodey.jules+seapopym@gmail.com>"]
 readme = "README.md"
+license = "MIT"
+repository = "https://github.com/Ash12H/Seapopym"
+documentation = "https://seapopym.readthedocs.io/en/latest/"
+classifiers = ["Topic :: Scientific/Engineering :: Oceanography"]
+
+[tool.poetry.urls]
+"Documentation" = "https://seapopym.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/Ash12H/Seapopym/issues"
 
 [tool.poetry.dependencies]
 python = "^3.12"
