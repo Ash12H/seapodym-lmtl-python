@@ -10,7 +10,7 @@ import xarray as xr
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import day_length_desc
-from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels
 
 DAY_IN_HOUR = pint.application_registry("day").to("hour").magnitude
@@ -123,7 +123,7 @@ def _wrapper_mesh_day_lengths(state: xr.DataArray, angle_horizon_sun: float = 0)
 
 def day_length_template(chunk: dict | None = None, angle_horizon_sun: float = 0) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.day_length,
+        name=ForcingLabels.day_length,
         dims=[CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=day_length_desc(angle_horizon_sun=angle_horizon_sun),
         chunks=chunk,
@@ -136,7 +136,7 @@ def day_length_kernel(
     if template is None:
         template = day_length_template(chunk=chunk, angle_horizon_sun=angle_horizon_sun)
     return KernelUnits(
-        name=PreproductionLabels.day_length,
+        name=ForcingLabels.day_length,
         template=template,
         function=_wrapper_mesh_day_lengths,
         kwargs={"angle_horizon_sun": angle_horizon_sun},

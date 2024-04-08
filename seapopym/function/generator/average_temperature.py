@@ -7,7 +7,7 @@ import xarray as xr
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import average_temperature_by_fgroup_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
@@ -28,9 +28,9 @@ def _average_temperature(state: xr.Dataset) -> xr.DataArray:
     ------
     - avg_temperature [functional_group, time, latitude, longitude] in degC
     """
-    temperature = check_units(state[ConfigurationLabels.temperature], StandardUnitsLabels.temperature.units)
-    day_length = check_units(state[PreproductionLabels.day_length], StandardUnitsLabels.time.units)
-    mask_by_fgroup = state[PreproductionLabels.mask_by_fgroup]
+    temperature = check_units(state[ForcingLabels.temperature], StandardUnitsLabels.temperature.units)
+    day_length = check_units(state[ForcingLabels.day_length], StandardUnitsLabels.time.units)
+    mask_by_fgroup = state[ForcingLabels.mask_by_fgroup]
     day_layer = state[ConfigurationLabels.day_layer]
     night_layer = state[ConfigurationLabels.night_layer]
 
@@ -53,7 +53,7 @@ def _average_temperature(state: xr.Dataset) -> xr.DataArray:
 #     """Wrap the average temperature by functional group computation with a map_block function."""
 #     class_type = Template if lazy is None else TemplateLazy
 #     template_attributs = {
-#         "name": PreproductionLabels.avg_temperature_by_fgroup,
+#         "name": ForcingLabels.avg_temperature_by_fgroup,
 #         "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
 #         "attributs": average_temperature_by_fgroup_desc,
 #         "chunk": chunk,
@@ -67,7 +67,7 @@ def _average_temperature(state: xr.Dataset) -> xr.DataArray:
 
 def average_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.avg_temperature_by_fgroup,
+        name=ForcingLabels.avg_temperature_by_fgroup,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=average_temperature_by_fgroup_desc,
         chunks=chunk,
@@ -78,7 +78,7 @@ def average_temperature_kernel(*, chunk: dict | None = None, template: ForcingTe
     if template is None:
         template = average_temperature_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.avg_temperature_by_fgroup,
+        name=ForcingLabels.avg_temperature_by_fgroup,
         template=template,
         function=_average_temperature,
     )

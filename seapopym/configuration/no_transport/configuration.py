@@ -40,7 +40,7 @@ class NoTransportConfiguration(BaseConfiguration):
         return self._parameters.environment_parameters
 
     @classmethod
-    def parse(cls: NoTransportConfiguration, configuration_file: str | Path | IO) -> NoTransportConfiguration:
+    def parse(cls: NoTransportConfiguration, configuration_file: str | Path | IO) -> NoTransportConfiguration:  # noqa: ARG003
         """Parse the configuration file and create a NoTransportConfiguration object."""
         msg = "This method is not implemented yet."
         raise NotImplementedError(msg)

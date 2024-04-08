@@ -11,7 +11,7 @@ import xarray as xr
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import compute_cell_area_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels
 
 EARTH_RADIUS = 6_371_000 * StandardUnitsLabels.height.units
@@ -164,7 +164,7 @@ def _cell_area_helper(state: xr.Dataset) -> xr.DataArray:
 
 def cell_area_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.cell_area,
+        name=ForcingLabels.cell_area,
         dims=[CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=compute_cell_area_desc,
         chunks=chunk,
@@ -175,7 +175,7 @@ def cell_area_kernel(*, chunk: dict | None = None, template: ForcingTemplate | N
     if template is None:
         template = cell_area_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.cell_area,
+        name=ForcingLabels.cell_area,
         template=template,
         function=_cell_area_helper,
     )

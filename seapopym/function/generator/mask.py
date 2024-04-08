@@ -8,7 +8,7 @@ from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.attributs import global_mask_desc, mask_by_fgroup_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 
 def landmask_from_nan(forcing: xr.DataArray) -> xr.DataArray:
@@ -29,7 +29,7 @@ def mask_by_fgroup(state: xr.Dataset) -> xr.DataArray:
     """
     day_layers = state[ConfigurationLabels.day_layer]
     night_layers = state[ConfigurationLabels.night_layer]
-    global_mask = state[PreproductionLabels.global_mask]
+    global_mask = state[ForcingLabels.global_mask]
 
     masks = []
     for i in day_layers[CoordinatesLabels.functional_group]:
@@ -57,15 +57,15 @@ def mask_by_fgroup(state: xr.Dataset) -> xr.DataArray:
 
 def apply_mask_to_state(state: xr.Dataset) -> xr.Dataset:
     """Apply a mask to a state dataset."""
-    if PreproductionLabels.global_mask in state:
+    if ForcingLabels.global_mask in state:
         logger.debug("Applying the global mask to the state.")
-        return state.where(state[PreproductionLabels.global_mask])
+        return state.where(state[ForcingLabels.global_mask])
     return state
 
 
 def global_mask_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.global_mask,
+        name=ForcingLabels.global_mask,
         dims=[CoordinatesLabels.Y, CoordinatesLabels.X, CoordinatesLabels.Z],
         attrs=global_mask_desc,
         chunks=chunk,
@@ -74,7 +74,7 @@ def global_mask_template(chunk: dict | None = None) -> ForcingTemplate:
 
 def mask_by_fgroup_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.mask_by_fgroup,
+        name=ForcingLabels.mask_by_fgroup,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=mask_by_fgroup_desc,
         chunks=chunk,
@@ -83,12 +83,12 @@ def mask_by_fgroup_template(chunk: dict | None = None) -> ForcingTemplate:
 
 def global_mask_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> KernelUnits:
     def global_mask_from_nan(state: xr.Dataset) -> xr.DataArray:
-        return landmask_from_nan(state[ConfigurationLabels.temperature])
+        return landmask_from_nan(state[ForcingLabels.temperature])
 
     if template is None:
         template = global_mask_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.global_mask,
+        name=ForcingLabels.global_mask,
         template=template,
         function=global_mask_from_nan,
     )
@@ -98,7 +98,7 @@ def mask_by_fgroup_kernel(*, chunk: dict | None = None, template: ForcingTemplat
     if template is None:
         template = mask_by_fgroup_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.mask_by_fgroup,
+        name=ForcingLabels.mask_by_fgroup,
         template=template,
         function=mask_by_fgroup,
     )

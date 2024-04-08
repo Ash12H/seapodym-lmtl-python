@@ -8,7 +8,7 @@ import xarray as xr
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import min_temperature_by_cohort_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 
 def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
@@ -27,14 +27,14 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
     minimum temperature as value.
     """
     return (
-        np.log(state[ConfigurationLabels.mean_timestep] / state[ConfigurationLabels.temperature_recruitment_max])
-        / state[ConfigurationLabels.temperature_recruitment_rate]
+        np.log(state[ConfigurationLabels.mean_timestep] / state[ForcingLabels.temperature_recruitment_max])
+        / state[ForcingLabels.temperature_recruitment_rate]
     )
 
 
 def min_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.min_temperature,
+        name=ForcingLabels.min_temperature,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.cohort],
         attrs=min_temperature_by_cohort_desc,
         chunks=chunk,
@@ -45,7 +45,7 @@ def min_temperature_kernel(*, chunk: dict | None = None, template: ForcingTempla
     if template is None:
         template = min_temperature_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.min_temperature,
+        name=ForcingLabels.min_temperature,
         template=template,
         function=_min_temperature_by_cohort_helper,
     )

@@ -3,7 +3,7 @@ import numpy as np
 import xarray as xr
 
 from seapopym.function.generator.production.production import production_kernel
-from seapopym.standard.labels import CoordinatesLabels, ProductionLabels
+from seapopym.standard.labels import CoordinatesLabels, ForcingLabels
 
 
 class TestProduction:
@@ -11,7 +11,7 @@ class TestProduction:
         state_production_fg4_t4d_y1_x1_c4 = state_production_fg4_t4d_y1_x1_c4.drop_vars("initial_condition_production")
         kernel = production_kernel()
         results = kernel.run(state_production_fg4_t4d_y1_x1_c4)
-        results = results[ProductionLabels.recruited]
+        results = results[ForcingLabels.recruited]
         assert isinstance(results, xr.DataArray)
         dims = (
             CoordinatesLabels.functional_group,
@@ -36,7 +36,7 @@ class TestProduction:
         state_production_fg4_t4d_y1_x1_c4 = state_production_fg4_t4d_y1_x1_c4.cf.chunk(chunk)
         kernel = production_kernel(chunk=chunk)
         results = kernel.run(state_production_fg4_t4d_y1_x1_c4).compute()
-        results = results[ProductionLabels.recruited]
+        results = results[ForcingLabels.recruited]
         assert isinstance(results, xr.DataArray)
         dims = (
             CoordinatesLabels.functional_group,

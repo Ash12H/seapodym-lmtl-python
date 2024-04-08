@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Literal
 
 import xarray as xr
 
-from seapopym.standard.labels import ConfigurationLabels, PostproductionLabels, ProductionLabels
+from seapopym.standard.labels import ConfigurationLabels, ForcingLabels
 
 if TYPE_CHECKING:
     from seapopym.model.no_transport_model import NoTransportModel
@@ -69,17 +69,17 @@ def export_initial_conditions(
 ) -> None:
     """Export the initial conditions to a file."""
     _helper_check_state(model)
-    if ProductionLabels.preproduction not in model.state:
+    if ForcingLabels.preproduction not in model.state:
         msg = "The model does not have production to export."
         raise ValueError(msg)
-    if PostproductionLabels.biomass not in model.state:
+    if ForcingLabels.biomass not in model.state:
         msg = "The model does not have biomass to export."
         raise ValueError(msg)
 
     data_to_export = xr.Dataset(
         {
-            ConfigurationLabels.initial_condition_production: model.state[ProductionLabels.preproduction].cf.isel(T=-1),
-            ConfigurationLabels.initial_condition_biomass: model.state[PostproductionLabels.biomass].cf.isel(T=-1),
+            ConfigurationLabels.initial_condition_production: model.state[ForcingLabels.preproduction].cf.isel(T=-1),
+            ConfigurationLabels.initial_condition_biomass: model.state[ForcingLabels.biomass].cf.isel(T=-1),
         }
     )
 
@@ -94,8 +94,8 @@ def export_biomass(
 ) -> None:
     """Export the biomass to a file."""
     _helper_check_state(model)
-    if PostproductionLabels.biomass not in model.state:
+    if ForcingLabels.biomass not in model.state:
         msg = "The model does not have biomass to export."
         raise ValueError(msg)
 
-    _helper_export_data(model.state[PostproductionLabels.biomass], path, engine, mode)
+    _helper_export_data(model.state[ForcingLabels.biomass], path, engine, mode)

@@ -34,7 +34,10 @@ def _check_single_forcing_resolution(latitude: xr.DataArray, longitude: xr.DataA
     lon_resolution = lon_resolution.item()
 
     if lat_resolution != lon_resolution:
-        msg = f"The latitude resolution ({lat_resolution}) of the forcing is not the same as longitude ({lon_resolution})."
+        msg = (
+            f"The latitude resolution ({lat_resolution}) of the forcing is not the same as longitude "
+            f"({lon_resolution})."
+        )
         logger.info(msg)
     return (lat_resolution, lon_resolution)
 

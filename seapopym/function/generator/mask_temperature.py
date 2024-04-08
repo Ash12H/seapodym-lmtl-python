@@ -8,7 +8,7 @@ import cf_xarray  # noqa: F401
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import mask_temperature_desc
-from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 if TYPE_CHECKING:
@@ -38,15 +38,15 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
 
     """
     average_temperature = check_units(
-        state[PreproductionLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
+        state[ForcingLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
     )
-    min_temperature = check_units(state[PreproductionLabels.min_temperature], StandardUnitsLabels.temperature.units)
+    min_temperature = check_units(state[ForcingLabels.min_temperature], StandardUnitsLabels.temperature.units)
     return average_temperature >= min_temperature
 
 
 def mask_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.mask_temperature,
+        name=ForcingLabels.mask_temperature,
         dims=[
             CoordinatesLabels.functional_group,
             CoordinatesLabels.time,
@@ -63,7 +63,7 @@ def mask_temperature_kernel(*, chunk: dict | None = None, template: ForcingTempl
     if template is None:
         template = mask_temperature_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.mask_temperature,
+        name=ForcingLabels.mask_temperature,
         template=template,
         function=_mask_temperature_helper,
     )

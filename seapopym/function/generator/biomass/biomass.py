@@ -12,13 +12,7 @@ from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.function.generator.biomass.compiled_functions import biomass_sequence
 from seapopym.standard.attributs import biomass_desc
-from seapopym.standard.labels import (
-    ConfigurationLabels,
-    CoordinatesLabels,
-    PostproductionLabels,
-    PreproductionLabels,
-    ProductionLabels,
-)
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 
 def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
@@ -29,9 +23,9 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
         return np.nan_to_num(state.data, 0.0).astype(np.float64)
 
     state = state.cf.transpose(*CoordinatesLabels.ordered(), missing_dims="ignore")
-    recruited = state[ProductionLabels.recruited].sum(CoordinatesLabels.cohort)
+    recruited = state[ForcingLabels.recruited].sum(CoordinatesLabels.cohort)
     recruited = _format_fields(recruited)
-    mortality = _format_fields(state[PreproductionLabels.mortality_field])
+    mortality = _format_fields(state[ForcingLabels.mortality_field])
     if ConfigurationLabels.initial_condition_biomass in state:
         initial_conditions = _format_fields(state[ConfigurationLabels.initial_condition_biomass])
     else:
@@ -40,8 +34,8 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
     biomass = biomass_sequence(recruited=recruited, mortality=mortality, initial_conditions=initial_conditions)
 
     return xr.DataArray(
-        dims=state[PreproductionLabels.mortality_field].dims,
-        coords=state[PreproductionLabels.mortality_field].coords,
+        dims=state[ForcingLabels.mortality_field].dims,
+        coords=state[ForcingLabels.mortality_field].coords,
         data=biomass,
     )
 
@@ -49,7 +43,7 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
 # def biomass(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
 #     """Wrap the biomass cumputation with a map_block function."""
 #     template = Template(
-#         name=PostproductionLabels.biomass,
+#         name=ForcingLabels.biomass,
 #         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
 #         attributs=biomass_desc,
 #         chunks=chunk,
@@ -59,7 +53,7 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
 
 def biomass_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PostproductionLabels.biomass,
+        name=ForcingLabels.biomass,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=biomass_desc,
         chunks=chunk,
@@ -70,7 +64,7 @@ def biomass_kernel(*, chunk: dict | None = None, template: ForcingTemplate | Non
     if template is None:
         template = biomass_template(chunk=chunk)
     return KernelUnits(
-        name=PostproductionLabels.biomass,
+        name=ForcingLabels.biomass,
         template=template,
         function=_biomass_helper,
     )

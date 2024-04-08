@@ -9,7 +9,7 @@ import numpy as np
 from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import mortality_field_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
     ------
     - mortality_field [functional_group, time, latitude, longitude]
     """
-    average_temperature = state[PreproductionLabels.avg_temperature_by_fgroup]
+    average_temperature = state[ForcingLabels.avg_temperature_by_fgroup]
     inv_lambda_max = state[ConfigurationLabels.inv_lambda_max]
     inv_lambda_rate = state[ConfigurationLabels.inv_lambda_rate]
     timestep = state[ConfigurationLabels.timestep]
@@ -45,7 +45,7 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
 
 def mortality_field_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
-        name=PreproductionLabels.mortality_field,
+        name=ForcingLabels.mortality_field,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
         attrs=mortality_field_desc,
         chunks=chunk,
@@ -56,7 +56,7 @@ def mortality_field_kernel(*, chunk: dict | None = None, template: ForcingTempla
     if template is None:
         template = mortality_field_template(chunk=chunk)
     return KernelUnits(
-        name=PreproductionLabels.mortality_field,
+        name=ForcingLabels.mortality_field,
         template=template,
         function=_mortality_field_helper,
     )

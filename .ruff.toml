@@ -22,6 +22,8 @@ exclude = [
     "build",
     "tests",
     "__init__.py",
+    "test",
+    "docs",
 ]
 
 line-length = 120
