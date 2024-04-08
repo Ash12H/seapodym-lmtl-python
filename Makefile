@@ -29,6 +29,16 @@ doc:
 	poetry run sphinx-apidoc seapopym -o docs/source
 	poetry run sphinx-build -b html docs/source/ docs/build/html
 
+## Generate the test package on TestPyPI : https://stackoverflow.com/a/72524326
+publish_test:
+	poetry build
+	poetry publish -r test-pypi
+
+## Generate the official package on PyPI
+publish:
+	poetry build
+	poetry publish
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
