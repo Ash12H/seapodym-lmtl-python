@@ -1,14 +1,19 @@
 """Wrapper for the application of the transfert cooeficient to primary production. Use xarray.map_block."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
+from seapopym.function.core.kernel import KernelUnits
+from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import apply_coefficient_to_primary_production_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
-from seapopym.standard.types import ForcingName, SeapopymForcing
 from seapopym.standard.units import StandardUnitsLabels, check_units
+
+if TYPE_CHECKING:
+    from seapopym.standard.types import SeapopymForcing
 
 
 def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
@@ -64,24 +69,45 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
     return xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group)
 
 
-def apply_coefficient_to_primary_production(
-    state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
-) -> SeapopymForcing:
-    """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
-    template = Template(
+# def apply_coefficient_to_primary_production(
+#     state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
+# ) -> SeapopymForcing:
+#     """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
+#     template = Template(
+#         name=PreproductionLabels.primary_production_by_fgroup,
+#         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+#         attributs=apply_coefficient_to_primary_production_desc,
+#         chunk=chunk,
+#     )
+#     class_type = Template if lazy is None else TemplateLazy
+#     template_attributs = {
+#         "name": PreproductionLabels.primary_production_by_fgroup,
+#         "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+#         "attributs": apply_coefficient_to_primary_production_desc,
+#         "chunk": chunk,
+#     }
+#     if lazy is not None:
+#         template_attributs["model_name"] = lazy
+#     template = class_type(**template_attributs)
+#     return apply_map_block(function=_apply_coefficient_to_primary_production_helper, state=state, template=template)
+
+
+def apply_coefficient_to_primary_production_template(chunk: dict | None = None) -> ForcingTemplate:
+    return ForcingTemplate(
         name=PreproductionLabels.primary_production_by_fgroup,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-        attributs=apply_coefficient_to_primary_production_desc,
-        chunk=chunk,
+        attrs=apply_coefficient_to_primary_production_desc,
+        chunks=chunk,
     )
-    class_type = Template if lazy is None else TemplateLazy
-    template_attributs = {
-        "name": PreproductionLabels.primary_production_by_fgroup,
-        "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-        "attributs": apply_coefficient_to_primary_production_desc,
-        "chunk": chunk,
-    }
-    if lazy is not None:
-        template_attributs["model_name"] = lazy
-    template = class_type(**template_attributs)
-    return apply_map_block(function=_apply_coefficient_to_primary_production_helper, state=state, template=template)
+
+
+def apply_coefficient_to_primary_production_kernel(
+    *, chunk: dict | None = None, template: ForcingTemplate | None = None
+) -> SeapopymForcing:
+    if template is None:
+        template = apply_coefficient_to_primary_production_template(chunk=chunk)
+    return KernelUnits(
+        name=PreproductionLabels.primary_production_by_fgroup,
+        template=template,
+        function=_apply_coefficient_to_primary_production_helper,
+    )

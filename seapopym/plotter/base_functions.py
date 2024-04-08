@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-import matplotlib.pyplot as plt
 import xarray as xr
 
-from seapopym.standard.labels import CoordinatesLabels, PostproductionLabels, ProductionLabels
+from seapopym.standard.labels import CoordinatesLabels, PostproductionLabels
 from seapopym.writer.base_functions import _helper_check_state
 
 if TYPE_CHECKING:

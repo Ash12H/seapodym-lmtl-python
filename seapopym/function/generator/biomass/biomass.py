@@ -8,7 +8,8 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import Template, apply_map_block
+from seapopym.function.core.kernel import KernelUnits
+from seapopym.function.core.template import ForcingTemplate
 from seapopym.function.generator.biomass.compiled_functions import biomass_sequence
 from seapopym.standard.attributs import biomass_desc
 from seapopym.standard.labels import (
@@ -18,6 +19,7 @@ from seapopym.standard.labels import (
     PreproductionLabels,
     ProductionLabels,
 )
+from seapopym.standard.types import SeapopymForcing
 
 
 def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
@@ -45,12 +47,31 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
     )
 
 
-def biomass(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
-    """Wrap the biomass cumputation with a map_block function."""
-    template = Template(
+# def biomass(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
+#     """Wrap the biomass cumputation with a map_block function."""
+#     template = Template(
+#         name=PostproductionLabels.biomass,
+#         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+#         attributs=biomass_desc,
+#         chunks=chunk,
+#     )
+#     return apply_map_block(function=_biomass_helper, state=state, template=template)
+
+
+def biomass_template(chunk: dict | None = None) -> ForcingTemplate:
+    return ForcingTemplate(
         name=PostproductionLabels.biomass,
         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-        attributs=biomass_desc,
-        chunk=chunk,
+        attrs=biomass_desc,
+        chunks=chunk,
     )
-    return apply_map_block(function=_biomass_helper, state=state, template=template)
+
+
+def biomass_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> SeapopymForcing:
+    if template is None:
+        template = biomass_template(chunk=chunk)
+    return KernelUnits(
+        name=PostproductionLabels.biomass,
+        template=template,
+        function=_biomass_helper,
+    )

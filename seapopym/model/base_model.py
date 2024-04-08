@@ -3,35 +3,42 @@
 from __future__ import annotations
 
 import abc
-from typing import IO, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from pathlib import Path
+    from dask.distributed import Client
 
-    import xarray as xr
+    from seapopym.configuration.base_configuration import BaseConfiguration
+    from seapopym.function.core.kernel import Kernel
 
 
 class BaseModel(abc.ABC):
     """The base class for all models."""
 
-    state: xr.Dataset | None
+    @abc.abstractmethod
+    def __init__(self: BaseModel, configuration: BaseConfiguration) -> None:
+        """Initialize the model."""
+        self._configuration = configuration
+        self.state = configuration.model_parameters
 
     @property
     @abc.abstractmethod
-    def configuration(self: BaseModel) -> object:
+    def configuration(self: BaseModel) -> BaseConfiguration:
         """The structure that store the model parameters."""
+        return self._configuration
 
     @property
     @abc.abstractmethod
-    def client(self: BaseModel) -> object:
+    def client(self: BaseModel) -> Client:
         """The client getter."""
 
-    @abc.abstractclassmethod
-    def parse(cls: BaseModel, configuration_file: str | Path | IO) -> BaseModel:
-        """Parse the configuration file."""
+    @property
+    @abc.abstractmethod
+    def kernel(self: BaseModel) -> Kernel:
+        """The kernel getter."""
 
     @abc.abstractmethod
-    def initialize_client(self: BaseModel) -> None:
+    def initialize_dask(self: BaseModel) -> None:
         """
         Initialize local or remote system.
 
@@ -43,10 +50,6 @@ class BaseModel(abc.ABC):
         memory.
 
         """
-
-    @abc.abstractmethod
-    def generate_configuration(self: BaseModel) -> None:
-        """Generate the configuration using parameters extracted by parse or given by the user."""
 
     @abc.abstractmethod
     def run(self: BaseModel) -> None:

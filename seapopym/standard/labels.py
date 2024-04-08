@@ -79,6 +79,28 @@ class ConfigurationLabels(StrEnum):
     primary_production = "primary_production"
 
 
+# TODO(Jules): Regroup all functions labels
+# https://github.com/Ash12H/Seapopym/issues/52
+class ForcingLabels(StrEnum):
+    """A single place to store all labels as declared in forcing module."""
+
+    temperature = "temperature"
+    primary_production = "primary_production"
+    mortality = "mortality"
+    recruitment = "recruitment"
+    biomass = "biomass"
+    energy_transfert = "energy_transfert"
+    day_length = "day_length"
+    mask = "mask"
+    mask_by_fgroup = "mask_by_fgroup"
+    avg_temperature_by_fgroup = "average_temperature"
+    primary_production_by_fgroup = "primary_production_by_fgroup"
+    min_temperature = "min_temperature"
+    mask_temperature = "mask_temperature"
+    cell_area = "cell_area"
+    mortality_field = "mortality_field"
+
+
 class PreproductionLabels(StrEnum):
     """A single place to store all labels as declared in pre-production module."""
 

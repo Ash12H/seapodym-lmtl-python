@@ -1,6 +1,6 @@
-select = ["ALL"]
-fixable = ["ALL"]
-ignore = [
+lint.select = ["ALL"]
+lint.fixable = ["ALL"]
+lint.ignore = [
     "COM812",
     "D203",
     "D205",

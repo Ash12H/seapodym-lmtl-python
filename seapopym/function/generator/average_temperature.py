@@ -4,14 +4,15 @@ from __future__ import annotations
 import cf_xarray  # noqa: F401
 import xarray as xr
 
-from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
+from seapopym.function.core.kernel import KernelUnits
+from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import average_temperature_by_fgroup_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
-from seapopym.standard.types import ForcingName, SeapopymForcing
+from seapopym.standard.types import SeapopymForcing
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
-def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
+def _average_temperature(state: xr.Dataset) -> xr.DataArray:
     """
     Depend on:
     - compute_daylength
@@ -47,19 +48,40 @@ def _average_temperature_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
     return xr.concat(average_temperature, dim=CoordinatesLabels.functional_group.value)
 
 
-def average_temperature(
-    state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
-) -> SeapopymForcing:
-    """Wrap the average temperature by functional group computation with a map_block function."""
-    class_type = Template if lazy is None else TemplateLazy
-    template_attributs = {
-        "name": PreproductionLabels.avg_temperature_by_fgroup,
-        "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-        "attributs": average_temperature_by_fgroup_desc,
-        "chunk": chunk,
-    }
-    if lazy is not None:
-        template_attributs["model_name"] = lazy
-    template = class_type(**template_attributs)
+# def average_temperature(
+#     state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
+# ) -> SeapopymForcing:
+#     """Wrap the average temperature by functional group computation with a map_block function."""
+#     class_type = Template if lazy is None else TemplateLazy
+#     template_attributs = {
+#         "name": PreproductionLabels.avg_temperature_by_fgroup,
+#         "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+#         "attributs": average_temperature_by_fgroup_desc,
+#         "chunk": chunk,
+#     }
+#     if lazy is not None:
+#         template_attributs["model_name"] = lazy
+#     template = class_type(**template_attributs)
 
-    return apply_map_block(function=_average_temperature_by_fgroup_helper, state=state, template=template)
+#     return apply_map_block(function=_average_temperature, state=state, template=template)
+
+
+def average_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
+    return ForcingTemplate(
+        name=PreproductionLabels.avg_temperature_by_fgroup,
+        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
+        attrs=average_temperature_by_fgroup_desc,
+        chunks=chunk,
+    )
+
+
+def average_temperature_kernel(
+    *, chunk: dict | None = None, template: ForcingTemplate | None = None
+) -> SeapopymForcing:
+    if template is None:
+        template = average_temperature_template(chunk=chunk)
+    return KernelUnits(
+        name=PreproductionLabels.avg_temperature_by_fgroup,
+        template=template,
+        function=_average_temperature,
+    )
