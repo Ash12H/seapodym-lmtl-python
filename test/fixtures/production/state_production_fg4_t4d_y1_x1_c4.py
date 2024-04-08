@@ -5,7 +5,7 @@ import pytest
 import xarray as xr
 
 from seapopym.standard import coordinates
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 
 @pytest.fixture()
@@ -104,8 +104,8 @@ def state_production_fg4_t4d_y1_x1_c4(
     # TODO(Jules): Prepare dataset for production process
     return xr.Dataset(
         {
-            PreproductionLabels.mask_temperature: mask_temperature,
-            PreproductionLabels.primary_production_by_fgroup: primary_production_by_fgroup,
+            ForcingLabels.mask_temperature: mask_temperature,
+            ForcingLabels.primary_production_by_fgroup: primary_production_by_fgroup,
             ConfigurationLabels.initial_condition_production: initial_condition_production,
             ConfigurationLabels.timesteps_number: timestep_number,
         }

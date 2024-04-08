@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-import matplotlib.pyplot as plt
 import xarray as xr
 
-from seapopym.standard.labels import CoordinatesLabels, PostproductionLabels, ProductionLabels
+from seapopym.standard.labels import CoordinatesLabels, ForcingLabels
 from seapopym.writer.base_functions import _helper_check_state
 
 if TYPE_CHECKING:
@@ -17,15 +16,15 @@ def plot_biomass(model: NoTransportModel, method: Literal["sum", "mean"] = "mean
     """Plot the biomass of the model."""
     _helper_check_state(model)
 
-    if PostproductionLabels.biomass not in model.state:
+    if ForcingLabels.biomass not in model.state:
         msg = "The model does not have biomass to plot."
         raise ValueError(msg)
 
     with xr.set_options(keep_attrs=True):
         if method == "sum":
-            data = model.state[PostproductionLabels.biomass].cf.sum(["Y", "X"])
+            data = model.state[ForcingLabels.biomass].cf.sum(["Y", "X"])
         elif method == "mean":
-            data = model.state[PostproductionLabels.biomass].cf.mean(["Y", "X"])
+            data = model.state[ForcingLabels.biomass].cf.mean(["Y", "X"])
         else:
             msg = "The method must be either 'sum' or 'mean'."
             raise ValueError(msg)

@@ -15,6 +15,11 @@ if TYPE_CHECKING:
 class BaseConfiguration(abc.ABC):
     """Base class for all configurations."""
 
+    @classmethod
+    @abc.abstractmethod
+    def parse(cls: BaseConfiguration, configuration_file: str | Path | IO) -> BaseConfiguration:
+        """Parse the configuration file and create a BaseConfiguration object."""
+
     @property
     @abc.abstractmethod
     def model_parameters(self: BaseConfiguration) -> xr.Dataset:
@@ -24,7 +29,3 @@ class BaseConfiguration(abc.ABC):
     @abc.abstractmethod
     def environment_parameters(self: BaseConfiguration) -> attrs.Attribute:
         """The attrs dataclass that stores all the environment parameters."""
-
-    @abc.abstractclassmethod
-    def parse(cls: BaseConfiguration, configuration_file: str | Path | IO) -> BaseConfiguration:
-        """Parse the configuration file and create a BaseConfiguration object."""

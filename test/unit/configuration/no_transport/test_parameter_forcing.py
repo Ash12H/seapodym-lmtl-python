@@ -38,7 +38,7 @@ def right_time_and_space_forcing_dataset() -> xr.Dataset:
 def right_time_and_space_forcing_file(tmp_path):
     forcing = _right_time_and_space_forcing()
     tmp_file = tmp_path / "forcing_file.nc"
-    forcing.to_netcdf(tmp_file)
+    forcing.to_zarr(tmp_file)
     return (tmp_file, forcing.name)
 
 

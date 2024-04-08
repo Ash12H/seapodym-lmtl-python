@@ -5,10 +5,10 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
+from seapopym.function.core.kernel import KernelUnits
+from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import min_temperature_by_cohort_desc
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
-from seapopym.standard.types import ForcingName, SeapopymForcing
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 
 def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
@@ -27,22 +27,25 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
     minimum temperature as value.
     """
     return (
-        np.log(state[ConfigurationLabels.mean_timestep] / state[ConfigurationLabels.temperature_recruitment_max])
-        / state[ConfigurationLabels.temperature_recruitment_rate]
+        np.log(state[ConfigurationLabels.mean_timestep] / state[ForcingLabels.temperature_recruitment_max])
+        / state[ForcingLabels.temperature_recruitment_rate]
     )
 
 
-def min_temperature(state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None) -> SeapopymForcing:
-    """Wrap the average temperature by functional group computation with a map_block function."""
-    class_type = Template if lazy is None else TemplateLazy
-    template_attributs = {
-        "name": PreproductionLabels.min_temperature,
-        "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.cohort],
-        "attributs": min_temperature_by_cohort_desc,
-        "chunk": chunk,
-    }
-    if lazy is not None:
-        template_attributs["model_name"] = lazy
-    template = class_type(**template_attributs)
+def min_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
+    return ForcingTemplate(
+        name=ForcingLabels.min_temperature,
+        dims=[CoordinatesLabels.functional_group, CoordinatesLabels.cohort],
+        attrs=min_temperature_by_cohort_desc,
+        chunks=chunk,
+    )
 
-    return apply_map_block(function=_min_temperature_by_cohort_helper, state=state, template=template)
+
+def min_temperature_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> KernelUnits:
+    if template is None:
+        template = min_temperature_template(chunk=chunk)
+    return KernelUnits(
+        name=ForcingLabels.min_temperature,
+        template=template,
+        function=_min_temperature_by_cohort_helper,
+    )

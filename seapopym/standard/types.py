@@ -4,13 +4,7 @@ from typing import TypeAlias
 
 import xarray as xr
 
-from seapopym.standard.labels import (
-    ConfigurationLabels,
-    CoordinatesLabels,
-    PostproductionLabels,
-    PreproductionLabels,
-    ProductionLabels,
-)
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 
 SeapopymState: TypeAlias = xr.Dataset
 """SeapopymState is the model state that stores all forcings (IN/OUT) and parameters."""
@@ -18,7 +12,7 @@ SeapopymState: TypeAlias = xr.Dataset
 SeapopymForcing: TypeAlias = xr.DataArray
 """SeapopymForcing is the forcing used as a xarray.DataArray in the SeapopymState."""
 
-ForcingName: TypeAlias = ConfigurationLabels | PreproductionLabels | ProductionLabels | PostproductionLabels | str
+ForcingName: TypeAlias = ConfigurationLabels | ForcingLabels | str
 """ForcingName is the name of the forcing used as key in the SeapopymState."""
 
 SeapopymDims: TypeAlias = CoordinatesLabels | str

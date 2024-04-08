@@ -1,14 +1,18 @@
 """A temperature mask computation wrapper. Use xarray.map_block."""
 from __future__ import annotations
 
-import cf_xarray  # noqa: F401
-import xarray as xr
+from typing import TYPE_CHECKING
 
-from seapopym.function.core.template import Template, TemplateLazy, apply_map_block
+import cf_xarray  # noqa: F401
+
+from seapopym.function.core.kernel import KernelUnits
+from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import mask_temperature_desc
-from seapopym.standard.labels import CoordinatesLabels, PreproductionLabels
-from seapopym.standard.types import ForcingName, SeapopymForcing
+from seapopym.standard.labels import CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
+
+if TYPE_CHECKING:
+    import xarray as xr
 
 
 def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
@@ -34,28 +38,32 @@ def _mask_temperature_helper(state: xr.Dataset) -> xr.DataArray:
 
     """
     average_temperature = check_units(
-        state[PreproductionLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
+        state[ForcingLabels.avg_temperature_by_fgroup], StandardUnitsLabels.temperature.units
     )
-    min_temperature = check_units(state[PreproductionLabels.min_temperature], StandardUnitsLabels.temperature.units)
+    min_temperature = check_units(state[ForcingLabels.min_temperature], StandardUnitsLabels.temperature.units)
     return average_temperature >= min_temperature
 
 
-def mask_temperature(state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None) -> SeapopymForcing:
-    """Wrap the average temperature by functional group computation with a map_block function."""
-    class_type = Template if lazy is None else TemplateLazy
-    template_attributs = {
-        "name": PreproductionLabels.mask_temperature,
-        "dims": [
+def mask_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
+    return ForcingTemplate(
+        name=ForcingLabels.mask_temperature,
+        dims=[
             CoordinatesLabels.functional_group,
             CoordinatesLabels.time,
             CoordinatesLabels.Y,
             CoordinatesLabels.X,
             CoordinatesLabels.cohort,
         ],
-        "attributs": mask_temperature_desc,
-        "chunk": chunk,
-    }
-    if lazy is not None:
-        template_attributs["model_name"] = lazy
-    template = class_type(**template_attributs)
-    return apply_map_block(function=_mask_temperature_helper, state=state, template=template)
+        attrs=mask_temperature_desc,
+        chunks=chunk,
+    )
+
+
+def mask_temperature_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> KernelUnits:
+    if template is None:
+        template = mask_temperature_template(chunk=chunk)
+    return KernelUnits(
+        name=ForcingLabels.mask_temperature,
+        template=template,
+        function=_mask_temperature_helper,
+    )

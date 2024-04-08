@@ -5,7 +5,7 @@ import pytest
 import xarray as xr
 
 from seapopym.standard import coordinates
-from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
+from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
 from seapopym.standard.units import StandardUnitsLabels
 
 
@@ -61,7 +61,7 @@ def mask_fgroup(fgroup_4, latitude_single, longitude_single):
             "latitude": latitude_single,
             "longitude": longitude_single,
         },
-        data=np.full((fgroup_4.size, latitude_single.size, longitude_single.size), True, dtype=bool),
+        data=np.full((fgroup_4.size, latitude_single.size, longitude_single.size), fill_value=True, dtype=bool),
     )
 
 
@@ -70,7 +70,7 @@ def global_mask(latitude_single, longitude_single, layer):
     return xr.DataArray(
         dims=("latitude", "longitude", "layer"),
         coords={"latitude": latitude_single, "longitude": longitude_single, "layer": layer},
-        data=np.full((latitude_single.size, longitude_single.size, layer.size), True, dtype=bool),
+        data=np.full((latitude_single.size, longitude_single.size, layer.size), fill_value=True, dtype=bool),
     )
 
 
@@ -163,13 +163,13 @@ def state_preprod_fg4_t4d_y1_x1_z3(
     """
     return xr.Dataset(
         {
-            PreproductionLabels.day_length: daylength,
-            PreproductionLabels.mask_by_fgroup: mask_fgroup,
-            PreproductionLabels.global_mask: global_mask,
+            ForcingLabels.day_length: daylength,
+            ForcingLabels.mask_by_fgroup: mask_fgroup,
+            ForcingLabels.global_mask: global_mask,
             ConfigurationLabels.day_layer: day_layer,
             ConfigurationLabels.night_layer: night_layer,
-            ConfigurationLabels.temperature: temperature,
-            ConfigurationLabels.primary_production: primary_production,
+            ForcingLabels.temperature: temperature,
+            ForcingLabels.primary_production: primary_production,
             ConfigurationLabels.energy_transfert: energy_transfert_4,
             ConfigurationLabels.resolution_latitude: resolution_latitude,
             ConfigurationLabels.resolution_longitude: resolution_longitude,
