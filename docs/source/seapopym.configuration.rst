@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    seapopym.configuration.no_transport
+   seapopym.configuration.parameters
 
 Submodules
 ----------

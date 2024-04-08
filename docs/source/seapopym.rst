@@ -12,6 +12,8 @@ Subpackages
    seapopym.logging
    seapopym.model
    seapopym.standard
+   seapopym.writer
+   seapopym.plotter
 
 Module contents
 ---------------
