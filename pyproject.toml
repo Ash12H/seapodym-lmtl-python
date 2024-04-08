@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "seapodym-lmtl-python"
-version = "0.1.0"
+name = "seapopym"
+version = "0.0.1"
 description = ""
-authors = ["Jules Lehodey <lehodey.jules+lmtl@gmail.com>"]
+authors = ["Jules Lehodey <lehodey.jules+seapopym@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -27,6 +27,7 @@ notebook = "^7.1.0"
 graphviz = "^0.20.1"
 pooch = "^1.8.1"
 pytest = "^8.0.1"
+pytest-local-badge = "^1.0.3"
 
 
 [tool.poetry.group.docs.dependencies]

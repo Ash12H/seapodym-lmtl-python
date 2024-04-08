@@ -11,3 +11,4 @@ notebooks/*
 
 # Build
 docs/build
+dist
