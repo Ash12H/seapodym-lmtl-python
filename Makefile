@@ -13,21 +13,21 @@ PROJECT_NAME = Seapopym
 
 ## Lint using Ruff
 lint:
-	ruff check .
+	poetry run ruff check .
 
 ## Format using Ruff (ie. equivalent to Black)
 format:
-	ruff format .
+	poetry run ruff format .
 
 ## Run all tests
 test:
-	pytest
+	poetry run pytest --local-badge-output-dir docs/badges/
 
 ## Generate the documentation using Sphinx
-generate_doc:
+doc:
 	poetry export -f requirements.txt --with docs --output docs/requirements.txt
-	sphinx-apidoc seapopym -o docs/source
-	sphinx-build -b html docs/source/ docs/build/html
+	poetry run sphinx-apidoc seapopym -o docs/source
+	poetry run sphinx-build -b html docs/source/ docs/build/html
 
 #################################################################################
 # Self Documenting Commands                                                     #
