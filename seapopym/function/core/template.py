@@ -192,7 +192,7 @@ class ForcingTemplate(BaseTemplate):
     name: ForcingName
     attrs: ForcingAttrs
     dims: Iterable[SeapopymDims | SeapopymForcing] = field(validator=validators.instance_of(Iterable))
-    chunks: dict[str, int] | None
+    chunks: dict[str, int] | None = None
 
     @dims.validator
     def _validate_dims(self, attribute, value) -> None:
@@ -214,8 +214,11 @@ class ForcingTemplate(BaseTemplate):
         coords = [dim if isinstance(dim, SeapopymForcing) else state.cf[dim] for dim in self.dims]
         coords_size = [dim.size for dim in coords]
         coords_name = [dim.name for dim in coords]
-        unordered_chunks = {state.cf[k].name: v for k, v in self.chunks.items()}
-        ordered_chunks = [unordered_chunks.get(dim.name, None) for dim in coords]
+        if self.chunks is not None:
+            unordered_chunks = {state.cf[k].name: v for k, v in self.chunks.items()}
+            ordered_chunks = [unordered_chunks.get(dim.name, None) for dim in coords]
+        else:
+            ordered_chunks = {}
 
         template = xr.DataArray(
             da.empty(coords_size, chunks=ordered_chunks),

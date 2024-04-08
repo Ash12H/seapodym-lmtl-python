@@ -1,10 +1,12 @@
+import cf_xarray  # noqa: F401  # noqa: F401
 import numpy as np
 import pint
 import pytest
 import xarray as xr
 
-from seapopym.function.core.day_length import day_length_forsythe
+from seapopym.function.generator.day_length import day_length_forsythe, day_length_kernel
 from seapopym.standard import coordinates
+from seapopym.standard.labels import CoordinatesLabels
 
 
 @pytest.fixture()
@@ -39,6 +41,40 @@ def simple_forcing() -> xr.DataArray:
 def tolerance() -> pint.Quantity:
     """The tolerance for the tests."""
     return 1 * pint.application_registry.minute
+
+
+class TestMaskByFgroup:
+    def test_simple_working(self, state_preprod_fg4_t4d_y1_x1_z3):
+        kernel = day_length_kernel()
+        results = kernel.run(state_preprod_fg4_t4d_y1_x1_z3)
+        assert isinstance(results, xr.DataArray)
+        dims = (CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
+        for dim in dims:
+            assert dim in results.cf.coords
+        shape = tuple(state_preprod_fg4_t4d_y1_x1_z3.cf[dim].size for dim in dims)
+        assert results.shape == shape
+
+        assert results.dtype == float
+
+        assert np.all(results > 0)
+        assert np.all(results <= 24)
+
+    def test_simple_working_with_chunk(self, state_preprod_fg4_t4d_y1_x1_z3):
+        chunk = {CoordinatesLabels.functional_group: 1}
+        data = state_preprod_fg4_t4d_y1_x1_z3.chunk(chunk)
+        kernel = day_length_kernel(chunk=chunk)
+        results = kernel.run(data).compute()
+        assert isinstance(results, xr.DataArray)
+        dims = (CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
+        for dim in dims:
+            assert dim in results.cf.coords
+        shape = tuple(state_preprod_fg4_t4d_y1_x1_z3.cf[dim].size for dim in dims)
+        assert results.shape == shape
+
+        assert results.dtype == float
+
+        assert np.all(results > 0)
+        assert np.all(results <= 24)
 
 
 class TestDayLength:

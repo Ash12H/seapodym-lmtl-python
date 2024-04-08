@@ -4,7 +4,9 @@ import cf_xarray  # noqa: F401
 import numpy as np
 import xarray as xr
 
-from seapopym.function.generator.apply_coefficient_to_primary_production import apply_coefficient_to_primary_production
+from seapopym.function.generator.apply_coefficient_to_primary_production import (
+    apply_coefficient_to_primary_production_kernel,
+)
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.labels import CoordinatesLabels
 
@@ -12,7 +14,8 @@ from seapopym.standard.labels import CoordinatesLabels
 class TestApplyCoefficientToPrimaryProduction:
     def test_apply_coefficient_to_primary_production_no_chunk(self, state_preprod_fg4_t4d_y1_x1_z3):
         start = time()
-        results = apply_coefficient_to_primary_production(state_preprod_fg4_t4d_y1_x1_z3)
+        kernel = apply_coefficient_to_primary_production_kernel()
+        results = kernel.run(state_preprod_fg4_t4d_y1_x1_z3)
         stop = time()
         logger.debug(f"Execution time no chunk: {stop - start}")
         logger.debug(f"Results: {results.functional_group.attrs}")
@@ -32,7 +35,8 @@ class TestApplyCoefficientToPrimaryProduction:
         chunk = {"Y": 1, "X": 1}
         data = state_preprod_fg4_t4d_y1_x1_z3.cf.chunk(chunk)
         start = time()
-        results = apply_coefficient_to_primary_production(data, chunk=chunk).compute()
+        kernel = apply_coefficient_to_primary_production_kernel(chunk=chunk)
+        results = kernel.run(data).compute()
         stop = time()
         logger.debug(f"Execution time no chunk: {stop - start}")
 

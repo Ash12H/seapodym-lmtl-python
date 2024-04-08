@@ -19,7 +19,6 @@ from seapopym.standard.labels import (
     PreproductionLabels,
     ProductionLabels,
 )
-from seapopym.standard.types import SeapopymForcing
 
 
 def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
@@ -67,7 +66,7 @@ def biomass_template(chunk: dict | None = None) -> ForcingTemplate:
     )
 
 
-def biomass_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> SeapopymForcing:
+def biomass_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> KernelUnits:
     if template is None:
         template = biomass_template(chunk=chunk)
     return KernelUnits(

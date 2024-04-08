@@ -1,8 +1,6 @@
 """Wrapper for the application of the transfert cooeficient to primary production. Use xarray.map_block."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import cf_xarray  # noqa: F401
 import xarray as xr
 
@@ -11,9 +9,6 @@ from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import apply_coefficient_to_primary_production_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
 from seapopym.standard.units import StandardUnitsLabels, check_units
-
-if TYPE_CHECKING:
-    from seapopym.standard.types import SeapopymForcing
 
 
 def _mask_by_fgroup_helper(state: xr.Dataset) -> xr.DataArray:
@@ -103,7 +98,7 @@ def apply_coefficient_to_primary_production_template(chunk: dict | None = None) 
 
 def apply_coefficient_to_primary_production_kernel(
     *, chunk: dict | None = None, template: ForcingTemplate | None = None
-) -> SeapopymForcing:
+) -> KernelUnits:
     if template is None:
         template = apply_coefficient_to_primary_production_template(chunk=chunk)
     return KernelUnits(

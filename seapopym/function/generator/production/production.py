@@ -15,7 +15,7 @@ from seapopym.function.generator.production.compiled_functions import time_loop
 from seapopym.logging.custom_logger import logger
 from seapopym.standard.attributs import preproduction_desc, recruited_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels, ProductionLabels
-from seapopym.standard.types import SeapopymForcing, SeapopymState
+from seapopym.standard.types import SeapopymForcing
 
 
 def _init_forcing(fgroup_data: xr.Dataset, export_preproduction: np.ndarray | None) -> dict[str, np.ndarray]:
@@ -196,7 +196,7 @@ def production_kernel(
     template: StateTemplate | None = None,
     preproduction_time_coords: SeapopymForcing | None = None,
     preproduction_time_index: np.ndarray | None = None,
-) -> SeapopymState:
+) -> KernelUnits:
     if template is None:
         template = production_template(chunk=chunk, preproduction_time_coords=preproduction_time_coords)
     return KernelUnits(

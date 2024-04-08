@@ -8,7 +8,6 @@ from seapopym.function.core.kernel import KernelUnits
 from seapopym.function.core.template import ForcingTemplate
 from seapopym.standard.attributs import average_temperature_by_fgroup_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, PreproductionLabels
-from seapopym.standard.types import SeapopymForcing
 from seapopym.standard.units import StandardUnitsLabels, check_units
 
 
@@ -75,9 +74,7 @@ def average_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
     )
 
 
-def average_temperature_kernel(
-    *, chunk: dict | None = None, template: ForcingTemplate | None = None
-) -> SeapopymForcing:
+def average_temperature_kernel(*, chunk: dict | None = None, template: ForcingTemplate | None = None) -> KernelUnits:
     if template is None:
         template = average_temperature_template(chunk=chunk)
     return KernelUnits(

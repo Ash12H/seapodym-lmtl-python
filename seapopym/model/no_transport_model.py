@@ -8,7 +8,7 @@ import numpy as np
 
 from seapopym.function import generator
 from seapopym.function.core.kernel import Kernel
-from seapopym.function.core.mask import apply_mask_to_state
+from seapopym.function.generator.mask import apply_mask_to_state
 from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.plotter import base_functions as pfunctions

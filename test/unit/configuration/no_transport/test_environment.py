@@ -10,7 +10,6 @@ from seapopym.configuration.parameters.parameter_environment import (
     EnvironmentParameter,
     OutputParameter,
     PreProductionParameter,
-    ProductionParameter,
 )
 
 
@@ -120,27 +119,16 @@ class TestOutputParameter:
         output_param = OutputParameter()
         assert output_param.biomass is not None
         assert isinstance(output_param.biomass, BiomassParameter)
-        assert output_param.production is not None
-        assert isinstance(output_param.production, ProductionParameter)
-        assert output_param.pre_production is not None
-        assert isinstance(output_param.pre_production, PreProductionParameter)
+        assert output_param.pre_production is None
 
     def test_shared_path_as_default(self):
-        output_param = OutputParameter(
-            biomass=BiomassParameter(),
-            production=ProductionParameter(),
-            pre_production=PreProductionParameter(),
-        )
-        assert output_param.shared_path()
+        output_param = OutputParameter(biomass=BiomassParameter(), pre_production=PreProductionParameter())
 
     def test_not_shared_path(self):
-        output_param = OutputParameter(
+        OutputParameter(
             biomass=BiomassParameter(path="/path/to/outputs1"),
-            production=ProductionParameter(path="/path/to/outputs2"),
-            pre_production=PreProductionParameter(path="/path/to/outputs3"),
+            pre_production=PreProductionParameter(path="/path/to/outputs2"),
         )
-
-        assert not output_param.shared_path()
 
 
 class TestEnvironmentParameter:
