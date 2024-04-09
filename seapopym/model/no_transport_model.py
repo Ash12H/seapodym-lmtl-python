@@ -122,7 +122,7 @@ class NoTransportModel(BaseModel):
         """Run the model. Wrapper of the pre-production, production and post-production processes."""
         self.state = self.kernel.run(self.state)
         if self.client is not None:
-            self.state = self.client.persist(self.state)
+            self.client.persist(self.state)
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""
