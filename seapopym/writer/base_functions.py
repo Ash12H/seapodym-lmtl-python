@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Literal
 import xarray as xr
 
 from seapopym.standard.labels import ConfigurationLabels, ForcingLabels
+from seapopym.standard.types import SeapopymForcing, SeapopymState
 
 if TYPE_CHECKING:
     from seapopym.model.no_transport_model import NoTransportModel
@@ -63,10 +64,10 @@ def export_state(
 
 def export_initial_conditions(
     model: NoTransportModel,
-    path: str | Path,
+    path: str | Path | None = None,
     engine: Literal["zarr", "netcdf"] = "zarr",
     mode: Literal["w", "a"] = "w",
-) -> None:
+) -> SeapopymState | None:
     """Export the initial conditions to a file."""
     _helper_check_state(model)
     if ForcingLabels.preproduction not in model.state:
@@ -83,19 +84,27 @@ def export_initial_conditions(
         }
     )
 
+    if path is None:
+        return data_to_export
+
     _helper_export_data(data_to_export, path, engine, mode)
+    return None
 
 
 def export_biomass(
     model: NoTransportModel,
-    path: str | Path,
+    path: str | Path | None = None,
     engine: Literal["zarr", "netcdf"] = "zarr",
     mode: Literal["w", "a"] = "w",
-) -> None:
+) -> SeapopymForcing | None:
     """Export the biomass to a file."""
     _helper_check_state(model)
     if ForcingLabels.biomass not in model.state:
         msg = "The model does not have biomass to export."
         raise ValueError(msg)
 
+    if path is None:
+        return model.state[ForcingLabels.biomass]
+
     _helper_export_data(model.state[ForcingLabels.biomass], path, engine, mode)
+    return None

@@ -15,7 +15,7 @@ class ChunkParameter:
     """The chunk size of the different dimensions."""
 
     functional_group: str | int | None = field(
-        default="auto",
+        default=1,
         validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the functional group dimension."},
     )

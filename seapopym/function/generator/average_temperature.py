@@ -47,24 +47,6 @@ def _average_temperature(state: xr.Dataset) -> xr.DataArray:
     return xr.concat(average_temperature, dim=CoordinatesLabels.functional_group.value)
 
 
-# def average_temperature(
-#     state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
-# ) -> SeapopymForcing:
-#     """Wrap the average temperature by functional group computation with a map_block function."""
-#     class_type = Template if lazy is None else TemplateLazy
-#     template_attributs = {
-#         "name": ForcingLabels.avg_temperature_by_fgroup,
-#         "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-#         "attributs": average_temperature_by_fgroup_desc,
-#         "chunk": chunk,
-#     }
-#     if lazy is not None:
-#         template_attributs["model_name"] = lazy
-#     template = class_type(**template_attributs)
-
-#     return apply_map_block(function=_average_temperature, state=state, template=template)
-
-
 def average_temperature_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
         name=ForcingLabels.avg_temperature_by_fgroup,

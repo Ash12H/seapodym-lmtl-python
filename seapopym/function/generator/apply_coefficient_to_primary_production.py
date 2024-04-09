@@ -62,29 +62,6 @@ def _apply_coefficient_to_primary_production_helper(state: xr.Dataset) -> xr.Dat
     return xr.concat(pp_by_fgroup_gen, dim=CoordinatesLabels.functional_group)
 
 
-# def apply_coefficient_to_primary_production(
-#     state: xr.Dataset, chunk: dict | None = None, lazy: ForcingName | None = None
-# ) -> SeapopymForcing:
-#     """Wrap the application of the transfert cooeficient to primary production with a map_block function."""
-#     template = Template(
-#         name=ForcingLabels.primary_production_by_fgroup,
-#         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-#         attributs=apply_coefficient_to_primary_production_desc,
-#         chunk=chunk,
-#     )
-#     class_type = Template if lazy is None else TemplateLazy
-#     template_attributs = {
-#         "name": ForcingLabels.primary_production_by_fgroup,
-#         "dims": [CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-#         "attributs": apply_coefficient_to_primary_production_desc,
-#         "chunk": chunk,
-#     }
-#     if lazy is not None:
-#         template_attributs["model_name"] = lazy
-#     template = class_type(**template_attributs)
-#     return apply_map_block(function=_apply_coefficient_to_primary_production_helper, state=state, template=template)
-
-
 def apply_coefficient_to_primary_production_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
         name=ForcingLabels.primary_production_by_fgroup,

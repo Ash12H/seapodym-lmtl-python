@@ -23,7 +23,6 @@ exclude = [
     "tests",
     "__init__.py",
     "test",
-    "docs",
 ]
 
 line-length = 120
