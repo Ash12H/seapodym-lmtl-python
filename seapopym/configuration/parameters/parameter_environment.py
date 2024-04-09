@@ -14,17 +14,17 @@ from seapopym.logging.custom_logger import logger
 class ChunkParameter:
     """The chunk size of the different dimensions."""
 
-    functional_group: str | int | None = field(
+    functional_group: Literal["auto"] | int | None = field(
         default=1,
         validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the functional group dimension."},
     )
-    latitude: str | int | None = field(
+    latitude: Literal["auto"] | int | None = field(
         default=None,
         validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the latitude dimension."},
     )
-    longitude: str | int | None = field(
+    longitude: Literal["auto"] | int | None = field(
         default=None,
         validator=validators.optional(validators.instance_of((str, int))),
         metadata={"description": "The chunk size of the longitude dimension."},

@@ -13,6 +13,7 @@ from seapopym.logging.custom_logger import logger
 from seapopym.model.base_model import BaseModel
 from seapopym.plotter import base_functions as pfunctions
 from seapopym.standard.coordinates import reorder_dims
+from seapopym.standard.types import SeapopymState
 from seapopym.writer import base_functions as wfunctions
 
 if TYPE_CHECKING:
@@ -27,32 +28,16 @@ class NoTransportModel(BaseModel):
 
     def __init__(self: NoTransportModel, configuration: NoTransportConfiguration) -> None:
         """The constructor of the model allows the user to overcome the default parameters and client behaviors."""
-        self._configuration = configuration
-        self.state = apply_mask_to_state(reorder_dims(configuration.model_parameters))
-
-    @property
-    def configuration(self: NoTransportModel) -> NoTransportConfiguration:
-        """The configuration getter."""
-        return self._configuration
-
-    @property
-    def client(self: NoTransportModel) -> Client | None:
-        """The dask Client getter."""
-        return self._configuration.environment_parameters.client.client
-
-    # TODO(Jules): Include angle_horizon_sun in the configuration. Then kernel will be a property.
-    def kernel(self: NoTransportModel, angle_horizon_sun: float = 0) -> Kernel:
-        """The kernel getter."""
 
         def _preproduction_converter() -> tuple[np.ndarray, xr.DataArray] | tuple[None, None]:
             """
             The production process requires a specific format, we then convert parameters to a np.ndarray that contains
             the indices of the timestamps to export. None is returned if no timestamps are provided.
             """
-            if self.configuration.environment_parameters.output.pre_production is None:
+            if configuration.environment_parameters.output.pre_production is None:
                 return (None, None)
 
-            timestamps = self.configuration.environment_parameters.output.pre_production.timestamps
+            timestamps = configuration.environment_parameters.output.pre_production.timestamps
             data = self.state.cf["T"]
 
             if timestamps is None:
@@ -70,15 +55,20 @@ class NoTransportModel(BaseModel):
             coords = data.cf.isel(T=index)
             return (index, coords)
 
+        self._configuration = configuration
+        self.state = apply_mask_to_state(reorder_dims(configuration.model_parameters))
+
         preproduction_time_index, preproduction_time_coords = _preproduction_converter()
 
         chunk = self.configuration.environment_parameters.chunk.as_dict()
 
-        return Kernel(
+        self._kernel = Kernel(
             [
                 generator.global_mask_kernel(chunk=chunk),
                 generator.mask_by_fgroup_kernel(chunk=chunk),
-                generator.day_length_kernel(chunk=chunk, angle_horizon_sun=angle_horizon_sun),
+                generator.day_length_kernel(
+                    chunk=chunk, angle_horizon_sun=configuration.kernel_parameters.angle_horizon_sun
+                ),
                 generator.average_temperature_kernel(chunk=chunk),
                 generator.apply_coefficient_to_primary_production_kernel(chunk=chunk),
                 generator.min_temperature_kernel(chunk=chunk),
@@ -94,6 +84,31 @@ class NoTransportModel(BaseModel):
             ]
         )
 
+    @property
+    def configuration(self: NoTransportModel) -> NoTransportConfiguration:
+        """The configuration getter."""
+        return self._configuration
+
+    @property
+    def client(self: NoTransportModel) -> Client | None:
+        """The dask Client getter."""
+        return self._configuration.environment_parameters.client.client
+
+    @property
+    def kernel(self: NoTransportModel) -> Kernel:
+        """The kernel getter."""
+        return self._kernel
+
+    @property
+    def template(self: NoTransportModel) -> SeapopymState:
+        """The template getter."""
+        return self.kernel.template(self.state)
+
+    @property
+    def expected_memory_usage(self: NoTransportModel) -> int:
+        """The expected memory usage getter."""
+        return f"The expected memory usage is {self.template.nbytes / 1e6:.2f} MB."
+
     def initialize_dask(self: NoTransportModel) -> None:
         """Initialize the client and configure the model to run in distributed mode."""
         logger.info("Initializing the client.")
@@ -105,7 +120,7 @@ class NoTransportModel(BaseModel):
 
     def run(self: NoTransportModel) -> None:
         """Run the model. Wrapper of the pre-production, production and post-production processes."""
-        self.state = self.kernel().run(self.state)
+        self.state = self.kernel.run(self.state)
         if self.client is not None:
             self.state = self.client.persist(self.state)
 

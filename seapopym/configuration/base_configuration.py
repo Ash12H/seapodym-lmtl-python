@@ -29,3 +29,8 @@ class BaseConfiguration(abc.ABC):
     @abc.abstractmethod
     def environment_parameters(self: BaseConfiguration) -> attrs.Attribute:
         """The attrs dataclass that stores all the environment parameters."""
+
+    @property
+    @abc.abstractmethod
+    def kernel_parameters(self: BaseConfiguration) -> attrs.Attribute:
+        """The attrs dataclass that stores all the kernel parameters."""

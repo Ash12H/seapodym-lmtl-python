@@ -9,6 +9,7 @@ from typing import IO, TYPE_CHECKING
 
 from seapopym.configuration.base_configuration import BaseConfiguration
 from seapopym.configuration.no_transport.configuration_to_dataset import as_dataset
+from seapopym.configuration.no_transport.parameter import KernelParameters
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -38,6 +39,11 @@ class NoTransportConfiguration(BaseConfiguration):
     def environment_parameters(self: NoTransportConfiguration) -> EnvironmentParameter:
         """The attrs dataclass that stores all the environment parameters."""
         return self._parameters.environment_parameters
+
+    @property
+    def kernel_parameters(self: NoTransportConfiguration) -> KernelParameters:
+        """The attrs dataclass that stores all the kernel parameters."""
+        return self._parameters.kernel_parameters
 
     @classmethod
     def parse(cls: NoTransportConfiguration, configuration_file: str | Path | IO) -> NoTransportConfiguration:  # noqa: ARG003

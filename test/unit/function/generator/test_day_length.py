@@ -45,7 +45,7 @@ def tolerance() -> pint.Quantity:
 
 class TestMaskByFgroup:
     def test_simple_working(self, state_preprod_fg4_t4d_y1_x1_z3):
-        kernel = day_length_kernel()
+        kernel = day_length_kernel(angle_horizon_sun=0.0)
         results = kernel.run(state_preprod_fg4_t4d_y1_x1_z3)
         assert isinstance(results, xr.DataArray)
         dims = (CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
