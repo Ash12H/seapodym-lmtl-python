@@ -27,8 +27,8 @@ def _min_temperature_by_cohort_helper(state: xr.Dataset) -> xr.DataArray:
     minimum temperature as value.
     """
     return (
-        np.log(state[ConfigurationLabels.mean_timestep] / state[ForcingLabels.temperature_recruitment_max])
-        / state[ForcingLabels.temperature_recruitment_rate]
+        np.log(state[ConfigurationLabels.mean_timestep] / state[ConfigurationLabels.temperature_recruitment_max])
+        / state[ConfigurationLabels.temperature_recruitment_rate]
     )
 
 
