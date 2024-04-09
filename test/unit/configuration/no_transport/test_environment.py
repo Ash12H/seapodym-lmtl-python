@@ -39,7 +39,7 @@ class TestClientParameter:
 
 class TestChunkParameter:
     def test_as_dict_with_fgroup(self):
-        expected_chunks = {"functional_group": "auto"}
+        expected_chunks = {"functional_group": 1}
         chunk_param = ChunkParameter()
         assert chunk_param.as_dict() == expected_chunks
 

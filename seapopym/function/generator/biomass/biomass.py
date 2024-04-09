@@ -40,17 +40,6 @@ def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
     )
 
 
-# def biomass(state: xr.Dataset, chunk: dict | None = None) -> xr.DataArray:
-#     """Wrap the biomass cumputation with a map_block function."""
-#     template = Template(
-#         name=ForcingLabels.biomass,
-#         dims=[CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X],
-#         attributs=biomass_desc,
-#         chunks=chunk,
-#     )
-#     return apply_map_block(function=_biomass_helper, state=state, template=template)
-
-
 def biomass_template(chunk: dict | None = None) -> ForcingTemplate:
     return ForcingTemplate(
         name=ForcingLabels.biomass,

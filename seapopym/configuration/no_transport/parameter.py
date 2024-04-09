@@ -150,6 +150,15 @@ class FunctionalGroups:
 
 
 @frozen(kw_only=True)
+class KernelParameters:
+    """This data class is used to store the parameters of the kernel."""
+
+    angle_horizon_sun: float = field(
+        default=0.0, metadata={"description": "The angle between the horizon and the sun in degrees."}
+    )
+
+
+@frozen(kw_only=True)
 class NoTransportParameters:
     """This is the main data class. It is used to store the model configuration parameters."""
 
@@ -161,6 +170,10 @@ class NoTransportParameters:
 
     environment_parameters: EnvironmentParameter = field(
         factory=EnvironmentParameter, metadata={"description": "Parameters of the environment."}
+    )
+
+    kernel_parameters: KernelParameters = field(
+        factory=KernelParameters, metadata={"description": "Parameters of the kernel."}
     )
 
     def __attrs_post_init__(self: NoTransportParameters) -> None:
