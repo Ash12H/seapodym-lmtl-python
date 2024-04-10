@@ -71,7 +71,6 @@ def name_isin_forcing(forcing: xr.Dataset, name: str) -> None:
 @frozen(kw_only=True)
 class ForcingUnit:
     """
-    TODO(Jules): Refactor.
     This data class is used to store a forcing field and its resolution and timestep.
 
     Parameters

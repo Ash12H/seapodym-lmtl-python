@@ -77,9 +77,16 @@ def export_initial_conditions(
         msg = "The model does not have biomass to export."
         raise ValueError(msg)
 
+    if "T" in model.state[ForcingLabels.preproduction].cf.coords:
+        # NOTE(Jules): if production_export_preproduction have been used
+        init_prod = model.state[ForcingLabels.preproduction].cf.isel(T=-1)
+    else:
+        # NOTE(Jules): if production_export_initial have been used
+        init_prod = model.state[ForcingLabels.preproduction]
+
     data_to_export = xr.Dataset(
         {
-            ConfigurationLabels.initial_condition_production: model.state[ForcingLabels.preproduction].cf.isel(T=-1),
+            ConfigurationLabels.initial_condition_production: init_prod,
             ConfigurationLabels.initial_condition_biomass: model.state[ForcingLabels.biomass].cf.isel(T=-1),
         }
     )
