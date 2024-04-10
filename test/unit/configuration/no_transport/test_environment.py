@@ -3,13 +3,9 @@ from pathlib import Path
 from dask.distributed import Client
 
 from seapopym.configuration.parameters.parameter_environment import (
-    BaseOuputForcingParameter,
-    BiomassParameter,
     ChunkParameter,
     ClientParameter,
-    EnvironmentParameter,
-    OutputParameter,
-    PreProductionParameter,
+    EnvironmentParameter
 )
 
 
@@ -73,63 +69,6 @@ class TestChunkParameter:
         assert chunk_param.as_dict(with_fgroup=False) == expected_chunks
 
 
-class TestBaseOuputForcingParameter:
-    def test_default_values(self):
-        param = BaseOuputForcingParameter()
-        assert param.path == Path("./output.nc")
-        assert param.with_parameter is True
-        assert param.with_forcing is False
-
-    def test_custom_values(self):
-        path = "/path/to/outputs"
-        with_parameter = False
-        with_forcing = True
-
-        param = BaseOuputForcingParameter(path=path, with_parameter=with_parameter, with_forcing=with_forcing)
-        assert param.path == Path(path)
-        assert param.with_parameter is with_parameter
-        assert param.with_forcing is with_forcing
-
-
-class TestPreProductionParameter:
-    def test_default_values(self):
-        param = PreProductionParameter()
-        assert param.path == Path("./output.nc")
-        assert param.with_parameter is True
-        assert param.with_forcing is False
-        assert param.timestamps == [-1]
-
-    def test_custom_values(self):
-        path = "/path/to/outputs"
-        with_parameter = False
-        with_forcing = True
-        timestamps = [0, 1, 2]
-
-        param = PreProductionParameter(
-            path=path, with_parameter=with_parameter, with_forcing=with_forcing, timestamps=timestamps
-        )
-        assert param.path == Path(path)
-        assert param.with_parameter is with_parameter
-        assert param.with_forcing is with_forcing
-        assert param.timestamps == timestamps
-
-
-class TestOutputParameter:
-    def test_default_values(self):
-        output_param = OutputParameter()
-        assert output_param.biomass is not None
-        assert isinstance(output_param.biomass, BiomassParameter)
-        assert output_param.pre_production is None
-
-    def test_shared_path_as_default(self):
-        output_param = OutputParameter(biomass=BiomassParameter(), pre_production=PreProductionParameter())
-
-    def test_not_shared_path(self):
-        OutputParameter(
-            biomass=BiomassParameter(path="/path/to/outputs1"),
-            pre_production=PreProductionParameter(path="/path/to/outputs2"),
-        )
-
 
 class TestEnvironmentParameter:
     def test_default_values(self):
@@ -138,15 +77,11 @@ class TestEnvironmentParameter:
         assert isinstance(param.chunk, ChunkParameter)
         assert param.client is not None
         assert isinstance(param.client, ClientParameter)
-        assert param.output is not None
-        assert isinstance(param.output, OutputParameter)
 
     def test_custom_values(self):
         chunk_param = ChunkParameter()
         client_param = ClientParameter()
-        output_param = OutputParameter()
 
-        param = EnvironmentParameter(chunk=chunk_param, client=client_param, output=output_param)
+        param = EnvironmentParameter(chunk=chunk_param, client=client_param)
         assert param.chunk is chunk_param
         assert param.client is client_param
-        assert param.output is output_param

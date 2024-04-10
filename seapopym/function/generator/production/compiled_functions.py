@@ -57,8 +57,6 @@ def ageing(production: np.ndarray, nb_timestep_by_cohort: np.ndarray) -> np.ndar
     return growing + staying
 
 
-# TODO(Jules): For efficiency, the recruited cohorts can be summed to reduce the size of the output. This will require
-# to change the output shape of the function.
 @jit
 def time_loop(
     primary_production: np.ndarray,
@@ -119,3 +117,69 @@ def time_loop(
             output_preproduction[timestep] = pre_production
 
     return (output_recruited, output_preproduction if export_preproduction is not None else None)
+
+
+@jit
+def production(
+    primary_production: np.ndarray,
+    mask_temperature: np.ndarray,
+    timestep_number: np.ndarray,
+    initial_production: np.ndarray | None = None,
+) -> np.ndarray:
+    output_recruited = np.empty(mask_temperature.shape)
+    next_prepoduction = np.zeros(mask_temperature.shape[1:]) if initial_production is None else initial_production
+    for timestep in range(primary_production.shape[0]):
+        pre_production = expand_dims(primary_production[timestep], timestep_number.size)
+        pre_production = pre_production + next_prepoduction
+        if timestep < primary_production.shape[0] - 1:
+            not_recruited = np.where(np.logical_not(mask_temperature[timestep]), pre_production, 0)
+            next_prepoduction = ageing(not_recruited, timestep_number)
+        recruited = np.where(mask_temperature[timestep], pre_production, 0)
+        output_recruited[timestep] = recruited
+    return np.sum(output_recruited, axis=-1)
+
+
+@jit
+def production_export_preproduction(
+    primary_production: np.ndarray,
+    mask_temperature: np.ndarray,
+    timestep_number: np.ndarray,
+    initial_production: np.ndarray | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    output_recruited = np.empty(mask_temperature.shape)
+    output_preproduction = np.empty(mask_temperature.shape, dtype=np.float64)
+    next_prepoduction = np.zeros(mask_temperature.shape[1:]) if initial_production is None else initial_production
+
+    for timestep in range(primary_production.shape[0]):
+        pre_production = expand_dims(primary_production[timestep], timestep_number.size)
+        pre_production = pre_production + next_prepoduction
+        # if timestep < primary_production.shape[0] - 1:
+        not_recruited = np.where(np.logical_not(mask_temperature[timestep]), pre_production, 0)
+        next_prepoduction = ageing(not_recruited, timestep_number)
+        recruited = np.where(mask_temperature[timestep], pre_production, 0)
+
+        output_recruited[timestep] = recruited
+        output_preproduction[timestep] = pre_production
+    output_preproduction[-1, ...] = next_prepoduction
+    return (np.sum(output_recruited, axis=-1), output_preproduction)
+
+
+@jit
+def production_export_initial(
+    primary_production: np.ndarray,
+    mask_temperature: np.ndarray,
+    timestep_number: np.ndarray,
+    initial_production: np.ndarray | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    output_recruited = np.empty(mask_temperature.shape)
+    next_prepoduction = np.zeros(mask_temperature.shape[1:]) if initial_production is None else initial_production
+
+    for timestep in range(primary_production.shape[0]):
+        pre_production = expand_dims(primary_production[timestep], timestep_number.size)
+        pre_production = pre_production + next_prepoduction
+        if timestep < primary_production.shape[0] - 1:
+            not_recruited = np.where(np.logical_not(mask_temperature[timestep]), pre_production, 0)
+            next_prepoduction = ageing(not_recruited, timestep_number)
+        recruited = np.where(mask_temperature[timestep], pre_production, 0)
+        output_recruited[timestep] = recruited
+    return (np.sum(output_recruited, axis=-1), next_prepoduction)

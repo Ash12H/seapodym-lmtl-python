@@ -157,6 +157,14 @@ class KernelParameters:
         default=0.0, metadata={"description": "The angle between the horizon and the sun in degrees."}
     )
 
+    compute_initial_conditions: bool = field(
+        default=False, metadata={"description": "If True, the initial conditions are computed."}
+    )
+
+    compute_preproduction: bool = field(
+        default=False, metadata={"description": "If True, the pre-production is computed."}
+    )
+
 
 @frozen(kw_only=True)
 class NoTransportParameters:

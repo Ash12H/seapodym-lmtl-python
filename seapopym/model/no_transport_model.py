@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import numpy as np
-
 from seapopym.function import generator
 from seapopym.function.core.kernel import Kernel
 from seapopym.function.generator.mask import apply_mask_to_state
@@ -17,7 +15,6 @@ from seapopym.standard.types import SeapopymState
 from seapopym.writer import base_functions as wfunctions
 
 if TYPE_CHECKING:
-    import xarray as xr
     from dask.distributed import Client
 
     from seapopym.configuration.no_transport.configuration import NoTransportConfiguration
@@ -28,37 +25,8 @@ class NoTransportModel(BaseModel):
 
     def __init__(self: NoTransportModel, configuration: NoTransportConfiguration) -> None:
         """The constructor of the model allows the user to overcome the default parameters and client behaviors."""
-
-        def _preproduction_converter() -> tuple[np.ndarray, xr.DataArray] | tuple[None, None]:
-            """
-            The production process requires a specific format, we then convert parameters to a np.ndarray that contains
-            the indices of the timestamps to export. None is returned if no timestamps are provided.
-            """
-            if configuration.environment_parameters.output.pre_production is None:
-                return (None, None)
-
-            timestamps = configuration.environment_parameters.output.pre_production.timestamps
-            data = self.state.cf["T"]
-
-            if timestamps is None:
-                return (None, None)
-            if timestamps == "all":
-                return (np.arange(data.size), data.cf["T"])
-            if np.all([isinstance(x, int) for x in timestamps]):
-                selected_dates = data.cf.isel(T=timestamps)
-            elif np.all([isinstance(x, str) for x in timestamps]):
-                selected_dates = data.cf.sel(T=timestamps, method="nearest")
-            else:
-                msg = "The timestamps must be either 'all', a list of integers or a list of strings."
-                raise TypeError(msg)
-            index = np.arange(data.size)[data.isin(selected_dates)]
-            coords = data.cf.isel(T=index)
-            return (index, coords)
-
         self._configuration = configuration
         self.state = apply_mask_to_state(reorder_dims(configuration.model_parameters))
-
-        preproduction_time_index, preproduction_time_coords = _preproduction_converter()
 
         chunk = self.configuration.environment_parameters.chunk.as_dict()
 
@@ -77,8 +45,8 @@ class NoTransportModel(BaseModel):
                 generator.mortality_field_kernel(chunk=chunk),
                 generator.production_kernel(
                     chunk=chunk,
-                    preproduction_time_coords=preproduction_time_coords,
-                    preproduction_time_index=preproduction_time_index,
+                    export_preproduction=configuration.kernel_parameters.compute_preproduction,
+                    export_initial_production=configuration.kernel_parameters.compute_initial_conditions,
                 ),
                 generator.biomass_kernel(chunk=chunk),
             ]
@@ -122,7 +90,7 @@ class NoTransportModel(BaseModel):
         """Run the model. Wrapper of the pre-production, production and post-production processes."""
         self.state = self.kernel.run(self.state)
         if self.client is not None:
-            self.state = self.client.persist(self.state)
+            self.client.persist(self.state)
 
     def close(self: NoTransportModel) -> None:
         """Clean up the system. For example, it can be used to close dask.Client."""

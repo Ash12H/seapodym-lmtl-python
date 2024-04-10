@@ -13,26 +13,24 @@ from seapopym.function.core.template import ForcingTemplate
 from seapopym.function.generator.biomass.compiled_functions import biomass_sequence
 from seapopym.standard.attributs import biomass_desc
 from seapopym.standard.labels import ConfigurationLabels, CoordinatesLabels, ForcingLabels
+from seapopym.standard.types import SeapopymForcing
 
 
 def _biomass_helper(state: xr.Dataset) -> xr.DataArray:
     """Wrap the biomass computation arround the Numba function `biomass_sequence`."""
 
-    def _format_fields(state: xr.Dataset) -> xr.Dataset:
+    def _format_fields(forcing: SeapopymForcing) -> SeapopymForcing:
         """Format the fields to be used in the biomass computation."""
-        return np.nan_to_num(state.data, 0.0).astype(np.float64)
+        return np.nan_to_num(forcing.data, 0.0).astype(np.float64)
 
-    state = state.cf.transpose(*CoordinatesLabels.ordered(), missing_dims="ignore")
-    recruited = state[ForcingLabels.recruited].sum(CoordinatesLabels.cohort)
-    recruited = _format_fields(recruited)
+    state = CoordinatesLabels.order_data(state)
+    recruited = _format_fields(state[ForcingLabels.recruited])
     mortality = _format_fields(state[ForcingLabels.mortality_field])
     if ConfigurationLabels.initial_condition_biomass in state:
         initial_conditions = _format_fields(state[ConfigurationLabels.initial_condition_biomass])
     else:
         initial_conditions = None
-
     biomass = biomass_sequence(recruited=recruited, mortality=mortality, initial_conditions=initial_conditions)
-
     return xr.DataArray(
         dims=state[ForcingLabels.mortality_field].dims,
         coords=state[ForcingLabels.mortality_field].coords,
