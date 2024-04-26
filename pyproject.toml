@@ -27,7 +27,6 @@ xgcm = "^0.8.1"
 pint-xarray = "^0.3"
 zarr = "^2.17.0"
 numba = "^0.59.0"
-copernicusmarine = "^1.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -44,10 +43,12 @@ sphinx = "^7.2.6"
 nbsphinx = "^0.9.3"
 sphinx-rtd-theme = "^2.0.0"
 
-
-[tool.poetry.group.cloud.dependencies]
+[tool.poetry.group.data.dependencies]
 google-cloud-storage = "^2.16.0"
 gcsfs = "^2024.3.1"
+openpyxl = "^3.1.2"
+scipy = "^1.13.0"
+copernicusmarine = "^1.1.1"
 
 [build-system]
 requires = ["poetry-core"]
