@@ -7,6 +7,7 @@ __pycache__
 .venv
 notebooks/*
 !notebooks/benchmark
+!notebooks/data_processing
 .DS_Store
 
 # Build
