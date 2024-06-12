@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "latitude",
+        "longitude"
+    ],
+    "long_name": "Mass content of migrant upper mesopelagic micronekton expressed as wet weight in sea water",
+    "standard_name": "mass_content_of_migrant_upper_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+    "units": "g m-2"
+}

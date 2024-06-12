@@ -1,0 +1,2366 @@
+{
+    "metadata": {
+        ".zattrs": {
+            "Conventions": "CF-1.11",
+            "history": "Created on 2022-09-28",
+            "institution": "CLS",
+            "references": "http://www.cls.fr; http://www.seapodym.eu",
+            "source": "SEAPODYM-LMTL 3.0.0",
+            "subset:datasetId": "cmems_mod_glo_bgc_my_0.083deg-lmtl_PT1D-i_202211",
+            "subset:date": "2024-06-11T23:54:54.527Z",
+            "subset:productId": "GLOBAL_MULTIYEAR_BGC_001_033",
+            "subset:source": "ARCO data downloaded from the Marine Data Store using the MyOcean Data Portal",
+            "title": "Global ocean low and mid trophic levels biomass content hindcast"
+        },
+        ".zgroup": {
+            "zarr_format": 2
+        },
+        "bsal/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "bsal/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18795,
+            "keywords": "ALOHA, Angel White Lab, biology, bsal, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, Salinity, Salinometer, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Salinity",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Salinometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "PSS-78",
+            "variable_25th": 35.0364,
+            "variable_50th": 35.1695,
+            "variable_75th": 35.2816,
+            "variable_count": 2121.0,
+            "variable_max": 35.5255,
+            "variable_mean": 35.1434074493,
+            "variable_min": 34.3871,
+            "variable_std": 0.1855814898,
+            "visualize": 1.0
+        },
+        "carb_migrant/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "carb_migrant/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18833,
+            "keywords": "ALOHA, Angel White Lab, carb, Carbon, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Elemental Analyzer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, zooplankton, Zooplankton Community Structure HOT v2022",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Carbon",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Elemental Analyzer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "mg/m2",
+            "variable_25th": 37.52,
+            "variable_50th": 69.79,
+            "variable_75th": 121.31,
+            "variable_count": 7833.0,
+            "variable_max": 1330.39,
+            "variable_mean": 109.2451321333,
+            "variable_min": -0.02,
+            "variable_std": 125.3129471554,
+            "visualize": 1.0
+        },
+        "carb_resident/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "carb_resident/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18833,
+            "keywords": "ALOHA, Angel White Lab, carb, Carbon, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Elemental Analyzer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, zooplankton, Zooplankton Community Structure HOT v2022",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Carbon",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Elemental Analyzer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "mg/m2",
+            "variable_25th": 37.52,
+            "variable_50th": 69.79,
+            "variable_75th": 121.31,
+            "variable_count": 7833.0,
+            "variable_max": 1330.39,
+            "variable_mean": 109.2451321333,
+            "variable_min": -0.02,
+            "variable_std": 125.3129471554,
+            "visualize": 1.0
+        },
+        "chl/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "chl/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18791,
+            "keywords": "ALOHA, Angel White Lab, biology, chl, Chlorophyll a, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Chlorophyll a",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "fluorometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "mg/m3",
+            "variable_25th": 0.069,
+            "variable_50th": 0.101,
+            "variable_75th": 0.158,
+            "variable_count": 2579.0,
+            "variable_max": 0.5,
+            "variable_mean": 0.1185114385,
+            "variable_min": 0.004,
+            "variable_std": 0.0699850267,
+            "visualize": 1.0
+        },
+        "cmems_T/.zarray": {
+            "chunks": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_T/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "layer",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Sea water potential temperature vertical mean over pelagic layer",
+            "standard_name": "sea_water_potential_temperature_vertical_mean_over_pelagic_layer",
+            "units": "Celsius degree"
+        },
+        "cmems_U/.zarray": {
+            "chunks": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_U/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "layer",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Eastward sea water velocity vertical mean over pelagic layer",
+            "standard_name": "eastward_sea_water_velocity_vertical_mean_over_pelagic_layer",
+            "units": "m/s"
+        },
+        "cmems_V/.zarray": {
+            "chunks": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_V/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "layer",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Northward sea water velocity vertical mean over pelagic layer",
+            "standard_name": "northward_sea_water_velocity_vertical_mean_over_pelagic_layer",
+            "units": "m/s"
+        },
+        "cmems_mnkc_epi/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_epi/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of epipelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_epipelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_mnkc_hmlmeso/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_hmlmeso/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of highly migrant lower mesopelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_highly_migrant_lower_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_mnkc_lmeso/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_lmeso/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of lower mesopelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_lower_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_mnkc_mlmeso/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_mlmeso/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of migrant lower mesopelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_migrant_lower_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_mnkc_mumeso/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_mumeso/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of migrant upper mesopelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_migrant_upper_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_mnkc_umeso/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_mnkc_umeso/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of upper mesopelagic micronekton expressed as wet weight in sea water",
+            "standard_name": "mass_content_of_upper_mesopelagic_micronekton_expressed_as_wet_weight_in_sea_water",
+            "units": "g m-2"
+        },
+        "cmems_npp/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_npp/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Net primary productivity of biomass expressed as carbon in sea water",
+            "standard_name": "net_primary_productivity_of_biomass_expressed_as_carbon_in_sea_water",
+            "units": "mg m-2 day-1"
+        },
+        "cmems_pelagic_layer_depth/.zarray": {
+            "chunks": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                3,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_pelagic_layer_depth/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "layer",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Sea water pelagic layer bottom depth",
+            "standard_name": "sea_water_pelagic_layer_bottom_depth",
+            "units": "m"
+        },
+        "cmems_zeu/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_zeu/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Euphotic zone depth",
+            "standard_name": "euphotic_zone_depth",
+            "units": "m"
+        },
+        "cmems_zooc/.zarray": {
+            "chunks": [
+                659,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "cmems_zooc/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude"
+            ],
+            "long_name": "Mass content of zooplankton expressed as carbon in sea water",
+            "standard_name": "mass_content_of_zooplankton_expressed_as_carbon_in_sea_water",
+            "units": "g m-2"
+        },
+        "d12/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "d12/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18794,
+            "keywords": "ALOHA, Angel White Lab, biology, d12, Dark 12, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Liquid Scintillation Counter, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Dark 12",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Liquid Scintillation Counter",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "mg C/m3",
+            "variable_25th": 0.07,
+            "variable_50th": 0.116,
+            "variable_75th": 0.173,
+            "variable_count": 900.0,
+            "variable_max": 0.71,
+            "variable_mean": 0.1316233333,
+            "variable_min": 0.0,
+            "variable_std": 0.0845980966,
+            "visualize": 1.0
+        },
+        "depth/.zarray": {
+            "chunks": [
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<i8",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                8
+            ],
+            "zarr_format": 2
+        },
+        "depth/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "depth"
+            ],
+            "axis": "Z",
+            "long_name": "depth",
+            "standard_name": "depth",
+            "units": "m"
+        },
+        "dwt_migrant/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "dwt_migrant/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18832,
+            "keywords": "ALOHA, Angel White Lab, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Dry Weight, dwt, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, zooplankton, Zooplankton Community Structure HOT v2022, Zooplankton Net",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Dry Weight",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Zooplankton Net",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "g/m2",
+            "variable_25th": 0.117775,
+            "variable_50th": 0.2068,
+            "variable_75th": 0.34865,
+            "variable_count": 9264.0,
+            "variable_max": 3.5814,
+            "variable_mean": 0.3244671092,
+            "variable_min": -0.087,
+            "variable_std": 0.3636227501,
+            "visualize": 1.0
+        },
+        "dwt_resident/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "dwt_resident/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18832,
+            "keywords": "ALOHA, Angel White Lab, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Dry Weight, dwt, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, zooplankton, Zooplankton Community Structure HOT v2022, Zooplankton Net",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Dry Weight",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Zooplankton Net",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "g/m2",
+            "variable_25th": 0.117775,
+            "variable_50th": 0.2068,
+            "variable_75th": 0.34865,
+            "variable_count": 9264.0,
+            "variable_max": 3.5814,
+            "variable_mean": 0.3244671092,
+            "variable_min": -0.087,
+            "variable_std": 0.3636227501,
+            "visualize": 1.0
+        },
+        "ebact/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "ebact/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18799,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, ebact, Flow Cytometer, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, picoEukaryotes, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "picoEukaryotes",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Flow Cytometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "#/ml",
+            "variable_25th": 496.0,
+            "variable_50th": 843.5,
+            "variable_75th": 1240.5,
+            "variable_count": 1988.0,
+            "variable_max": 6670.0,
+            "variable_mean": 952.5115694165,
+            "variable_min": 0.0,
+            "variable_std": 695.5187926346,
+            "visualize": 1.0
+        },
+        "fluor/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "fluor/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18785,
+            "keywords": "ALOHA, Angel White Lab, Chloropigment, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluor, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Chloropigment",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "\u00c2\u00b5g/l",
+            "variable_25th": 0.0357,
+            "variable_50th": 0.0566,
+            "variable_75th": 0.0815,
+            "variable_count": 547541.0,
+            "variable_max": 40407.715,
+            "variable_mean": 0.3670678888,
+            "variable_min": -0.0626,
+            "variable_std": 83.1049125142,
+            "visualize": 1.0
+        },
+        "frac/.zarray": {
+            "chunks": [
+                5
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5
+            ],
+            "zarr_format": 2
+        },
+        "frac/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac"
+            ],
+            "long_name": "fraction",
+            "standard_name": "fraction",
+            "units": "mm"
+        },
+        "hbact/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "hbact/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18797,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Flow Cytometer, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, hbact, Heterotrophic Bacteria, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Heterotrophic Bacteria",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Flow Cytometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "#/ml",
+            "variable_25th": 266712.0,
+            "variable_50th": 392558.0,
+            "variable_75th": 479802.0,
+            "variable_count": 1977.0,
+            "variable_max": 840648.0,
+            "variable_mean": 382577.0374304502,
+            "variable_min": 60189.0,
+            "variable_std": 136839.2594339277,
+            "visualize": 1.0
+        },
+        "l12/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "l12/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18793,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, l12, Light 12, Liquid Scintillation Counter, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Light 12",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Liquid Scintillation Counter",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "mg C/m3",
+            "variable_25th": 0.94,
+            "variable_50th": 3.53,
+            "variable_75th": 5.953,
+            "variable_count": 2153.0,
+            "variable_max": 27.22,
+            "variable_mean": 3.7070334417,
+            "variable_min": 0.015,
+            "variable_std": 2.9437358664,
+            "visualize": 1.0
+        },
+        "latitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "latitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "latitude"
+            ]
+        },
+        "layer/.zarray": {
+            "chunks": [
+                3
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                3
+            ],
+            "zarr_format": 2
+        },
+        "layer/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "layer"
+            ],
+            "axis": "Z",
+            "long_name": "Depth",
+            "positive": "down",
+            "standard_name": "depth",
+            "unit_long": "Meters",
+            "units": "m",
+            "valid_max": 3.0,
+            "valid_min": 1.0
+        },
+        "longitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<i8",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "longitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "longitude"
+            ]
+        },
+        "nit/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "nit/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18786,
+            "keywords": "ALOHA, Angel White Lab, Bottle, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, nit, Nitrate (NO3), North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Nitrate (NO3)",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Bottle",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "\u00c2\u00b5mol/kg",
+            "variable_25th": 18.5535,
+            "variable_50th": 41.315,
+            "variable_75th": 117.622,
+            "variable_count": 97876.0,
+            "variable_max": 126.992,
+            "variable_mean": 58.5273810944,
+            "variable_min": -4.861,
+            "variable_std": 45.9353097477,
+            "visualize": 1.0
+        },
+        "oxy/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "oxy/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18783,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, oxy, Oxygen, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Oxygen",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "\u00c2\u00b5mol/kg",
+            "variable_25th": 76.0,
+            "variable_50th": 118.7,
+            "variable_75th": 148.1,
+            "variable_count": 764753.0,
+            "variable_max": 234.1,
+            "variable_mean": 113.5036685047,
+            "variable_min": 4.9,
+            "variable_std": 46.6146292699,
+            "visualize": 1.0
+        },
+        "pbact/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "pbact/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18796,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Flow Cytometer, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, pbact, primary production, Prochlorococcus, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Prochlorococcus",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Flow Cytometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "#/ml",
+            "variable_25th": 30709.0,
+            "variable_50th": 137536.0,
+            "variable_75th": 204649.0,
+            "variable_count": 1981.0,
+            "variable_max": 369400.0,
+            "variable_mean": 126099.200908632,
+            "variable_min": 15.0,
+            "variable_std": 92719.8502366352,
+            "visualize": 1.0
+        },
+        "phaeo/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "phaeo/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18792,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, phaeo, Pheopigments, primary production, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Pheopigments",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "fluorometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "mg/m3",
+            "variable_25th": 0.065,
+            "variable_50th": 0.116,
+            "variable_75th": 0.238,
+            "variable_count": 2579.0,
+            "variable_max": 0.887,
+            "variable_mean": 0.1697029857,
+            "variable_min": 0.0,
+            "variable_std": 0.140998804,
+            "visualize": 1.0
+        },
+        "press/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "press/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18778,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, press, Pressure, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Pressure",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "decibars",
+            "variable_25th": 1184.0,
+            "variable_50th": 2382.0,
+            "variable_75th": 3586.0,
+            "variable_count": 787345.0,
+            "variable_max": 4816.0,
+            "variable_mean": 2386.6229543593,
+            "variable_min": 0.0,
+            "variable_std": 1385.5224317547,
+            "visualize": 1.0
+        },
+        "sal/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "sal/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18782,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, sal, Salinity, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Salinity",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "PSS-78",
+            "variable_25th": 34.5617,
+            "variable_50th": 34.6542,
+            "variable_75th": 34.6838,
+            "variable_count": 782881.0,
+            "variable_max": 38.0968,
+            "variable_mean": 34.6026392578,
+            "variable_min": 34.0165,
+            "variable_std": 0.1985516996,
+            "visualize": 1.0
+        },
+        "sbact/.zarray": {
+            "chunks": [
+                310,
+                1,
+                1,
+                4
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "sbact/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "This dataset consists of measurements of photosynthetic primary production, chlorophyll a and phaeopigment concentrations, and flow cytometry-based determinations of the abundances of heterotrophic bacteria and the picophytoplankton - Prochlorococcus, Synechococcus and small eukaryotic phytoplankton. All samples were collected through the Hawaii Ocean Time-series (HOT) program, which began in 1988 with ~monthly cruises to Station ALOHA (A Long-term Oligotrophic Habitat Assessment; 22\u00c2\u00b0 10 N, 158\u00c2\u00b0 00 W). Photosynthetic production of organic matter was measured by the 14C tracer method. Details on the methods employed over the years are detailed in Karl et al., Progress in Oceanography ([https://doi.org/10.1016/j.pocean.2021.102563](https://doi.org/10.1016/j.pocean.2021.102563)). Flow cytometry-based determinations of microbial abundances were made using an EPICS 753 flow cytometer on HOT 22-173 (December 1980 \u00e2\u0080\u0093 September 2005) and a B/D Influx flow cytometer beginning with HOT 174 . Details on the flow cytometry methods are provided at [https://hahana.soest.hawaii.edu/hot/methods/bact.html](https://hahana.soest.hawaii.edu/hot/methods/bact.html). Samples for chlorophyll a and phaeopigments were collected onto Whatman GF/F filters and extracted with 100% acetone and measured on a Turner Designs Model 10-AU fluorometer based on standard techniques described in Strickland and Parsons, 1972. Method details available at [https://hahana.soest.hawaii.edu/hot/methods/chl.html](https://hahana.soest.hawaii.edu/hot/methods/chl.html). Time is in a separate column from date. Dates and times are in local time (HST).",
+            "dataset_id": 750,
+            "dataset_name": "HOT Primary Production and Flow Cytometry v2022",
+            "dataset_short_name": "HOT_PP_v2022",
+            "depth_max": 178,
+            "depth_min": 0,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18798,
+            "keywords": "ALOHA, Angel White Lab, biology, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Flow Cytometer, fluorometer, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT Primary Production and Flow Cytometry v2022, HOT_PP_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT022, HOT023, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT134, HOT135, HOT136, HOT137, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT239, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT279, HOT280, HOT281, HOT283, HOT284, HOT285, HOT286, HOT287, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT300, HOT301, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, primary production, rep, reprocessed, sbact, Synechococcus, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Synechococcus",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Flow Cytometer",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology+Biogeochemistry",
+            "table_name": "tblHOT_PP_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "#/ml",
+            "variable_25th": 47.75,
+            "variable_50th": 909.5,
+            "variable_75th": 1699.25,
+            "variable_count": 1988.0,
+            "variable_max": 9823.0,
+            "variable_mean": 1119.0457746479,
+            "variable_min": 0.0,
+            "variable_std": 1212.6668131085,
+            "visualize": 1.0
+        },
+        "sigma/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "sigma/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18780,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, Potential Density, rep, reprocessed, sigma, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Potential Density",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "kg/m3",
+            "variable_25th": 27.457,
+            "variable_50th": 27.712,
+            "variable_75th": 27.776,
+            "variable_count": 782540.0,
+            "variable_max": 30.145,
+            "variable_mean": 27.3803937895,
+            "variable_min": 22.134,
+            "variable_std": 0.8343038408,
+            "visualize": 1.0
+        },
+        "temp/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "temp/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18781,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, temp, Temperature, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Temperature",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "ITS-90",
+            "variable_25th": 1.4915,
+            "variable_50th": 1.8153,
+            "variable_75th": 3.5652,
+            "variable_count": 784862.0,
+            "variable_max": 28.1028,
+            "variable_mean": 3.7859856163,
+            "variable_min": 1.4394,
+            "variable_std": 4.8205537726,
+            "visualize": 1.0
+        },
+        "theta/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "theta/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18779,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, Potential Temperature, rep, reprocessed, theta, UH, University of Hawaii, University of Hawai'i at Manoa",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Potential Temperature",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "ITS-90",
+            "variable_25th": 1.1931,
+            "variable_50th": 1.6499,
+            "variable_75th": 3.4852,
+            "variable_count": 782540.0,
+            "variable_max": 28.1023,
+            "variable_mean": 3.6066431667,
+            "variable_min": 1.0737,
+            "variable_std": 4.8908941605,
+            "visualize": 1.0
+        },
+        "time/.zarray": {
+            "chunks": [
+                659
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659
+            ],
+            "zarr_format": 2
+        },
+        "time/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time"
+            ],
+            "axis": "T",
+            "calendar": "gregorian",
+            "long_name": "Time",
+            "standard_name": "time",
+            "units": "seconds since 1970-01-01"
+        },
+        "wwt_migrant/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "wwt_migrant/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18831,
+            "keywords": "ALOHA, Angel White Lab, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, Wet Weight, wwt, zooplankton, Zooplankton Community Structure HOT v2022, Zooplankton Net",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Wet Weight",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Zooplankton Net",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "g/m2",
+            "variable_25th": 0.92145,
+            "variable_50th": 1.5543,
+            "variable_75th": 2.567225,
+            "variable_count": 8682.0,
+            "variable_max": 28.2872,
+            "variable_mean": 2.4719013707,
+            "variable_min": -0.0554,
+            "variable_std": 2.8067152069,
+            "visualize": 1.0
+        },
+        "wwt_resident/.zarray": {
+            "chunks": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                5,
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "wwt_resident/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "frac",
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cLarge zooplankton and micronekton play important roles in the export of organic material from surface waters in the open ocean. Global Ocean Flux planning models suggest that the relationship between primary production and passive particulate export flux is strongly influenced by size structure of the zooplankton community (e.g., Paffenh\u00c3\u00b6ffer & Knowles, 1979; Small et al., 1987; Frost, 1984). Active vertical migrations also have important implications for the transport and transformation of surface-derived organic particulates to dissolved inorganic constituents at depth (Longhurst & Harrison, 1988; Longhurst et al., 1990; Al-Mutairi & Landry, 2001; Hannides et al., 2008). The zooplankton component of the time-series sampling effort allows such processes to be considered in the interpretation of seasonal and interannual variations in measured flux and the elemental mass balance (e.g., carbon and nitrogen sources and sinks) of the euphotic zone. At Station ALOHA, 6 net tows are scheduled per cruise. Three midnight (2200 - 0200) and 3 mid-day (1000 - 1400) oblique tows are done using a 1-m2 net (3-m length) with 202-\u00c2\u00b5m mesh Nitex netting. The net is towed obliquely at approximately 1 knot, from the surface to approximately 175 m and then back to the surface. Towing time is approximately 20-30 minutes. The tows are subsequently size-fractioned and analyzed for mesozooplankton wet and dry weight and C and N biomass.\u00e2\u0080\u009d Rows with no depth value have been removed. Time is in local time (HST). [https://hahana.soest.hawaii.edu/hot/methods/plankton.html](https://hahana.soest.hawaii.edu/hot/methods/plankton.html)",
+            "dataset_id": 758,
+            "dataset_name": "Zooplankton Community Structure HOT v2022",
+            "dataset_short_name": "HOT_Macrozooplankton_v2022",
+            "depth_max": 271,
+            "depth_min": 9,
+            "distributor": "Hawaii Ocean Time-series http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18831,
+            "keywords": "ALOHA, Angel White Lab, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), Hawaii Ocean Time-series Data Organization & Graphical System (HOT-DOGS) http://hahana.soest.hawaii.edu/hot/hot-dogs/, HOT, HOT_Macrozooplankton_v2022, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT170, HOT171, HOT172, HOT174, HOT175, HOT176, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, in situ, insitu, in-situ, Macrozooplankton, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, UH, University of Hawaii, University of Hawai'i at Manoa, Wet Weight, wwt, zooplankton, Zooplankton Community Structure HOT v2022, Zooplankton Net",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Wet Weight",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "Zooplankton Net",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biology",
+            "table_name": "tblHOT_Macrozooplankton_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-02T22:13:00.000Z",
+            "time_min": "1994-02-17T11:08:00.000Z",
+            "units": "g/m2",
+            "variable_25th": 0.92145,
+            "variable_50th": 1.5543,
+            "variable_75th": 2.567225,
+            "variable_count": 8682.0,
+            "variable_max": 28.2872,
+            "variable_mean": 2.4719013707,
+            "variable_min": -0.0554,
+            "variable_std": 2.8067152069,
+            "visualize": 1.0
+        },
+        "xmiss/.zarray": {
+            "chunks": [
+                334,
+                1,
+                1,
+                8
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                659,
+                1,
+                1,
+                8
+            ],
+            "zarr_format": 2
+        },
+        "xmiss/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "latitude",
+                "longitude",
+                "depth"
+            ],
+            "acknowledgement": "''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "comment": NaN,
+            "data_source": "Hawaii Ocean Time-series (HOT)",
+            "dataset_description": "\u00e2\u0080\u009cThe majority of our sampling effort, approximately 60-72 h per standard HOT cruise, is spent at Station ALOHA. High vertical resolution environmental data are collected with a Sea-Bird CTD having external temperature (T), conductivity (C), dissolved oxygen (DO) and fluorescence (F) sensors and an internal pressure (P) sensor. A Sea-Bird 24-place carousel and an aluminum rosette that is capable of supporting 24 12-L PVC bottles are used to obtain water samples from desired depths. The CTD and rosette are deployed on a 3-conductor cable allowing for real-time display of data and for tripping the bottles at specific depths of interest. The CTD system takes 24 samples s-1 and the raw data are stored both on the computer and, for redundancy, on VHS-format video tapes. In February 2006, before cruise 178, we replaced our 24 aging 12-L PVC rosette bottles with new 12-L bottles fabricated at the University of Hawaii Engineering Support Facility, using plans and specifications from John Bullister (PMEL).\u00e2\u0080\u009d Time is in GMT.  [https://www.soest.hawaii.edu/HOT_WOCE/intro.html](https://www.soest.hawaii.edu/HOT_WOCE/intro.html)",
+            "dataset_id": 749,
+            "dataset_name": "CTD Hydrography HOT v2022",
+            "dataset_short_name": "HOT_CTD_v2022",
+            "depth_max": 4732.3762993821,
+            "depth_min": 0,
+            "distributor": "http://hahana.soest.hawaii.edu/hot/hot-dogs/",
+            "id": 18784,
+            "keywords": "ALOHA, Angel White Lab, CTD, CTD Hydrography HOT v2022, ''Data obtained via the Hawaii Ocean Time-series HOT-DOGS application; University of Hawai'i at Manoa. National Science Foundation Award # 1756517''. https://hahana.soest.hawaii.edu/hot/hot-dogs/, David Karl Lab, Hawaii Ocean Time Series, Hawaii Ocean Time-series (HOT), HOT, HOT_CTD_v2022, HOT001, HOT002, HOT003, HOT004, HOT005, HOT006, HOT007, HOT008, HOT009, HOT010, HOT011, HOT012, HOT013, HOT014, HOT015, HOT016, HOT017, HOT018, HOT019, HOT020, HOT022, HOT023, HOT024, HOT025, HOT026, HOT027, HOT028, HOT029, HOT030, HOT031, HOT032, HOT033, HOT034, HOT035, HOT036, HOT037, HOT038, HOT039, HOT040, HOT041, HOT042, HOT043, HOT044, HOT045, HOT046, HOT047, HOT049, HOT050, HOT051, HOT052, HOT053, HOT054, HOT055, HOT056, HOT057, HOT058, HOT059, HOT060, HOT061, HOT062, HOT063, HOT064, HOT065, HOT066, HOT067, HOT068, HOT069, HOT070, HOT071, HOT072, HOT073, HOT074, HOT075, HOT076, HOT077, HOT078, HOT079, HOT080, HOT081, HOT082, HOT083, HOT084, HOT085, HOT086, HOT087, HOT088, HOT089, HOT090, HOT091, HOT092, HOT093, HOT094, HOT095, HOT096, HOT097, HOT098, HOT099, HOT100, HOT101, HOT102, HOT103, HOT104, HOT105, HOT106, HOT107, HOT108, HOT109, HOT110, HOT111, HOT112, HOT113, HOT114, HOT115, HOT116, HOT117, HOT118, HOT119, HOT120, HOT121, HOT122, HOT123, HOT124, HOT125, HOT126, HOT127, HOT128, HOT129, HOT130, HOT131, HOT132, HOT133, HOT134, HOT135, HOT136, HOT137, HOT138, HOT139, HOT140, HOT141, HOT142, HOT143, HOT144, HOT145, HOT146, HOT147, HOT148, HOT149, HOT150, HOT151, HOT152, HOT153, HOT154, HOT155, HOT156, HOT157, HOT158, HOT159, HOT160, HOT161, HOT162, HOT163, HOT164, HOT165, HOT166, HOT167, HOT168, HOT169, HOT170, HOT171, HOT172, HOT173, HOT174, HOT175, HOT176, HOT177, HOT178, HOT179, HOT180, HOT181, HOT182, HOT183, HOT184, HOT185, HOT186, HOT187, HOT188, HOT189, HOT190, HOT191, HOT192, HOT193, HOT194, HOT195, HOT196, HOT197, HOT198, HOT199, HOT200, HOT201, HOT202, HOT203, HOT204, HOT205, HOT206, HOT208, HOT209, HOT210, HOT211, HOT212, HOT213, HOT214, HOT215, HOT216, HOT217, HOT219, HOT220, HOT221, HOT222, HOT223, HOT224, HOT225, HOT226, HOT227, HOT228, HOT229, HOT230, HOT231, HOT232, HOT233, HOT234, HOT235, HOT236, HOT237, HOT238, HOT239, HOT240, HOT241, HOT242, HOT243, HOT244, HOT245, HOT246, HOT247, HOT248, HOT249, HOT250, HOT251, HOT252, HOT253, HOT254, HOT255, HOT256, HOT257, HOT258, HOT259, HOT260, HOT261, HOT262, HOT263, HOT264, HOT265, HOT266, HOT267, HOT268, HOT269, HOT270, HOT271, HOT272, HOT273, HOT274, HOT275, HOT277, HOT278, HOT279, HOT280, HOT281, HOT282, HOT283, HOT284, HOT285, HOT286, HOT287, HOT288, HOT289, HOT290, HOT291, HOT292, HOT293, HOT294, HOT295, HOT296, HOT297, HOT298, HOT299, HOT300, HOT301, HOT302, HOT303, HOT304, HOT305, HOT306, HOT307, HOT308, HOT309, HOT310, HOT311, HOT312, HOT313, HOT314, HOT315, HOT316, HOT317, HOT318, HOT319, HOT320, HOT321, HOT322, HOT323, HOT324, HOT325, HOT326, HOT327, HOT328, HOT329, HOT330, HOT331, HOT332, HOT333, HOT334, HOT335, HOT336, HOT337, HOT338, HOT339, http://hahana.soest.hawaii.edu/hot/hot-dogs/, hydrography, in situ, insitu, in-situ, North Pacific Ocean, observation, Pacific Ocean, rep, reprocessed, Transmission, UH, University of Hawaii, University of Hawai'i at Manoa, xmiss",
+            "lat_max": 22.75,
+            "lat_min": 22.75,
+            "lon_max": -158,
+            "lon_min": -158,
+            "long_name": "Transmission",
+            "make": "Observation",
+            "process_level": "Reprocessed",
+            "refrences": NaN,
+            "sensor": "CTD",
+            "spatial_resolution": "Irregular",
+            "study_domain": "Biogeochemistry",
+            "table_name": "tblHOT_CTD_v2022",
+            "temporal_resolution": "Irregular",
+            "time_max": "2022-09-01T00:00:00.000Z",
+            "time_min": "1988-10-31T00:00:00.000Z",
+            "units": "% transmission",
+            "variable_25th": 89.8635,
+            "variable_50th": 90.73,
+            "variable_75th": 90.989,
+            "variable_count": 12464.0,
+            "variable_max": 91.965,
+            "variable_mean": 79.2659367779,
+            "variable_min": 0.0,
+            "variable_std": 29.8556715999,
+            "visualize": 1.0
+        }
+    },
+    "zarr_consolidated_format": 1
+}

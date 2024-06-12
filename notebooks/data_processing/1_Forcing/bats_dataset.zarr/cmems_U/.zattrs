@@ -1,0 +1,11 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "layer",
+        "latitude",
+        "longitude"
+    ],
+    "long_name": "Eastward sea water velocity vertical mean over pelagic layer",
+    "standard_name": "eastward_sea_water_velocity_vertical_mean_over_pelagic_layer",
+    "units": "m/s"
+}

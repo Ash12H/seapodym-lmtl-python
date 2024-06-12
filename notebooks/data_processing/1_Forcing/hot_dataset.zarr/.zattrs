@@ -1,0 +1,12 @@
+{
+    "Conventions": "CF-1.11",
+    "history": "Created on 2022-09-28",
+    "institution": "CLS",
+    "references": "http://www.cls.fr; http://www.seapodym.eu",
+    "source": "SEAPODYM-LMTL 3.0.0",
+    "subset:datasetId": "cmems_mod_glo_bgc_my_0.083deg-lmtl_PT1D-i_202211",
+    "subset:date": "2024-06-11T23:54:54.527Z",
+    "subset:productId": "GLOBAL_MULTIYEAR_BGC_001_033",
+    "subset:source": "ARCO data downloaded from the Marine Data Store using the MyOcean Data Portal",
+    "title": "Global ocean low and mid trophic levels biomass content hindcast"
+}

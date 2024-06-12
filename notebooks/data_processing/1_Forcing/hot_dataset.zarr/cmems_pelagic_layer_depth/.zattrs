@@ -1,0 +1,11 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "layer",
+        "latitude",
+        "longitude"
+    ],
+    "long_name": "Sea water pelagic layer bottom depth",
+    "standard_name": "sea_water_pelagic_layer_bottom_depth",
+    "units": "m"
+}

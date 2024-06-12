@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "latitude",
+        "longitude"
+    ],
+    "long_name": "Euphotic zone depth",
+    "standard_name": "euphotic_zone_depth",
+    "units": "m"
+}

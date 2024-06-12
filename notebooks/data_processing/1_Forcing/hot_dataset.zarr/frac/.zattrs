@@ -1,0 +1,8 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "frac"
+    ],
+    "long_name": "fraction",
+    "standard_name": "fraction",
+    "units": "mm"
+}

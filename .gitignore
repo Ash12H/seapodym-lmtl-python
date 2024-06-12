@@ -6,7 +6,6 @@ __pycache__
 # User
 .venv
 notebooks/*
-!notebooks/benchmark
 !notebooks/data_processing
 .DS_Store
 
