@@ -1,8 +1,0 @@
-{
-    "_ARRAY_DIMENSIONS": [
-        "sieve_size"
-    ],
-    "long_name": "Sieve size",
-    "standard_name": "size",
-    "units": "mm"
-}

@@ -1,9 +1,0 @@
-{
-    "_ARRAY_DIMENSIONS": [
-        "depth"
-    ],
-    "axis": "Z",
-    "long_name": "depth",
-    "standard_name": "depth",
-    "units": "m"
-}

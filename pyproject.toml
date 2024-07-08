@@ -31,13 +31,10 @@ numba = "^0.59.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.2.1"
-notebook = "^7.1.0"
 graphviz = "^0.20.1"
 pooch = "^1.8.1"
 pytest = "^8.0.1"
 pytest-local-badge = "^1.0.3"
-hvplot = "^0.9.2"
-jupyter-bokeh = "^4.0.4"
 
 
 [tool.poetry.group.docs.dependencies]
@@ -45,19 +42,6 @@ sphinx = "^7.2.6"
 nbsphinx = "^0.9.3"
 sphinx-rtd-theme = "^2.0.0"
 
-[tool.poetry.group.data.dependencies]
-google-cloud-storage = "^2.16.0"
-gcsfs = "^2024.3.1"
-openpyxl = "^3.1.2"
-scipy = "^1.13.0"
-copernicusmarine = "^1.1.1"
-
-
-[tool.poetry.group.science.dependencies]
-salib = "^1.5.0"
-seaborn = "^0.13.2"
-scikit-learn = "^1.5.0"
-scipy = "^1.13.1"
 
 [build-system]
 requires = ["poetry-core"]
