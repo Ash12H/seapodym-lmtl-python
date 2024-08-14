@@ -35,6 +35,7 @@ graphviz = "^0.20.1"
 pooch = "^1.8.1"
 pytest = "^8.0.1"
 pytest-local-badge = "^1.0.3"
+ipykernel = "^6.29.5"
 
 
 [tool.poetry.group.docs.dependencies]

@@ -6,7 +6,7 @@ __pycache__
 # User
 .venv
 notebooks/*
-!notebooks/data_processing
+!notebooks/lmtl_no_transport
 .DS_Store
 
 # Build
