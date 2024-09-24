@@ -112,6 +112,11 @@ class FunctionalGroupUnitRelationParameters:
             logger.warning(msg)
 
 
+# TODO : We should be able to fix some parameters easily
+# Utiliser une matrice 2D avec des NONE pour les paramètres à opti et des valeurs pour les paramètres fixé.
+# ensuite on rempli la matrice avec les valeurs de args en déroulant la matrice.
+
+
 @frozen(kw_only=True)
 class FunctionalGroupUnit:
     """Represent a functional group."""
