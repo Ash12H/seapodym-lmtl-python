@@ -1,6 +1,9 @@
 import logging
 import warnings
 
+# TODO(Jules): The logger is not working as expected. Especially when multiprocessing is on.
+# # For now debug is commented out.
+
 
 def indent_message(msg: str) -> list[str]:
     return "".join(["\n|\t" + line for line in msg.split("\n")])

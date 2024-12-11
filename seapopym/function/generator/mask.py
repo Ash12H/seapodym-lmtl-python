@@ -58,7 +58,7 @@ def mask_by_fgroup(state: xr.Dataset) -> xr.DataArray:
 def apply_mask_to_state(state: xr.Dataset) -> xr.Dataset:
     """Apply a mask to a state dataset."""
     if ForcingLabels.global_mask in state:
-        logger.debug("Applying the global mask to the state.")
+        # logger.debug("Applying the global mask to the state.")
         return state.where(state[ForcingLabels.global_mask])
     return state
 

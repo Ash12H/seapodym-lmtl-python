@@ -62,7 +62,7 @@ def path_validation(path: str | Path) -> str | Path:
             logger.info(f"Remote file : {file.fs.protocol}")
             return str(path)
         if "file" in file.fs.protocol and Path(path).exists():
-            logger.debug(f"Local file : ({file.fs.protocol})")
+            # logger.debug(f"Local file : ({file.fs.protocol})")
             return Path(path)
     msg = f"Cannot reach '{path}'."
     raise FileNotFoundError(msg)

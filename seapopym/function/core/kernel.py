@@ -21,7 +21,7 @@ class KernelUnits:
     kwargs: ParamSpecKwargs = field(factory=dict)
 
     def _map_block_without_dask(self: KernelUnits, state: SeapopymState):
-        logger.debug(f"Direct computation for {self.function.__name__}.")
+        # logger.debug(f"Direct computation for {self.function.__name__}.")
         results = self.function(state, *self.args, **self.kwargs)
 
         if isinstance(self.template, ForcingTemplate):
@@ -46,11 +46,11 @@ class KernelUnits:
         raise TypeError(msg)
 
     def _map_block_with_dask(self: KernelUnits, state: SeapopymState) -> SeapopymForcing | SeapopymState:
-        logger.debug(f"Creating template for {self.function.__name__}.")
+        # logger.debug(f"Creating template for {self.function.__name__}.")
 
         result_template = self.template.generate(state)
 
-        logger.debug(f"Applying map_blocks to {self.function.__name__}.")
+        # logger.debug(f"Applying map_blocks to {self.function.__name__}.")
         return xr.map_blocks(self.function, state, template=result_template, args=self.args, kwargs=self.kwargs)
 
     def run(self: KernelUnits, state: SeapopymState) -> SeapopymState | SeapopymForcing:
