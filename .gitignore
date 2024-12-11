@@ -8,6 +8,7 @@ __pycache__
 notebooks/*
 !notebooks/lmtl_no_transport
 .DS_Store
+settings.json
 
 # Build
 docs/build

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "seapopym"
-version = "0.0.1.3.1"
+version = "0.0.1.3.2"
 description = "Seapodym is a Python package that provides models to simulate the dynamics of low and mid trophic level marine ecosystems."
 authors = ["Jules Lehodey <lehodey.jules+seapopym@gmail.com>"]
 readme = "README.md"
