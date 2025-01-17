@@ -71,10 +71,10 @@ class FunctionalGroupUnitRelationParameters:
     def _inv_lambda_rate_rate_positive(
         self: FunctionalGroupUnitRelationParameters, attribute: Attribute, value: float
     ) -> None:
-        if value < 0:
+        if value > 0:
             message = (
-                f"Parameter {attribute.name} : {value} has a negative value. It means that the mortality is decreasing "
-                "when temperature increase. Do you mean to use a positive value?"
+                f"Parameter {attribute.name} : {value} has a positive value. It means that the mortality is decreasing "
+                "when temperature increase. Do you mean to use a negative value?"
             )
             logger.warning(message)
         if value == 0:

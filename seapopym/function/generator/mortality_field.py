@@ -40,7 +40,7 @@ def _mortality_field_helper(state: xr.Dataset) -> xr.DataArray:
     timestep = state[ConfigurationLabels.timestep]
 
     average_temperature = check_units(average_temperature, StandardUnitsLabels.temperature)
-    return np.exp(-timestep * (np.exp(inv_lambda_rate * average_temperature) / inv_lambda_max))
+    return np.exp(-timestep * np.exp(-inv_lambda_rate * average_temperature) / inv_lambda_max)
 
 
 def mortality_field_template(chunk: dict | None = None) -> ForcingTemplate:
