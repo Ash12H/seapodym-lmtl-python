@@ -17,8 +17,8 @@ class TestApplyCoefficientToPrimaryProduction:
         kernel = apply_coefficient_to_primary_production_kernel()
         results = kernel.run(state_preprod_fg4_t4d_y1_x1_z3)
         stop = time()
-        logger.debug(f"Execution time no chunk: {stop - start}")
-        logger.debug(f"Results: {results.functional_group.attrs}")
+        # logger.debug(f"Execution time no chunk: {stop - start}")
+        # logger.debug(f"Results: {results.functional_group.attrs}")
 
         assert isinstance(results, xr.DataArray)
         dims = (CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)
@@ -38,7 +38,7 @@ class TestApplyCoefficientToPrimaryProduction:
         kernel = apply_coefficient_to_primary_production_kernel(chunk=chunk)
         results = kernel.run(data).compute()
         stop = time()
-        logger.debug(f"Execution time no chunk: {stop - start}")
+        # logger.debug(f"Execution time no chunk: {stop - start}")
 
         assert isinstance(results, xr.DataArray)
         dims = (CoordinatesLabels.functional_group, CoordinatesLabels.time, CoordinatesLabels.Y, CoordinatesLabels.X)

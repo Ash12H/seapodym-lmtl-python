@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable, Literal
+from typing import Iterable, Literal, ParamSpecArgs, ParamSpecKwargs
 
 import cf_xarray  # noqa: F401
+import fsspec
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -54,11 +55,17 @@ def _check_single_forcing_timestep(timeseries: pd.DatetimeIndex) -> float | tupl
     return timedelta[0]
 
 
-def path_validation(path: Path) -> None:
+def path_validation(path: str | Path) -> str | Path:
     """Check if the path exists."""
-    if not path.exists():
-        msg = f"The path '{path}' does not exist."
-        raise FileExistsError(msg)
+    with fsspec.open(str(path)) as file:
+        if "file" not in file.fs.protocol:
+            logger.info(f"Remote file : {file.fs.protocol}")
+            return str(path)
+        if "file" in file.fs.protocol and Path(path).exists():
+            # logger.debug(f"Local file : ({file.fs.protocol})")
+            return Path(path)
+    msg = f"Cannot reach '{path}'."
+    raise FileNotFoundError(msg)
 
 
 def name_isin_forcing(forcing: xr.Dataset, name: str) -> None:
@@ -144,11 +151,13 @@ class ForcingUnit:
         resolution: tuple[float, float] | float | None = None,
         timestep: int | None = None,
         engine: Literal["zarr", "netcdf"] = "zarr",
+        *args: ParamSpecArgs,
+        **kwargs: ParamSpecKwargs,
     ) -> ForcingUnit:
         """Create a ForcingUnit from a path and a name."""
-        forcing = Path(forcing)
         path_validation(forcing)
-        data = xr.open_zarr(forcing) if engine == "zarr" else xr.open_dataset(forcing)
+        data = xr.open_dataset(forcing, *args, engine=engine, **kwargs)
+        # data = xr.open_zarr(forcing) if engine == "zarr" else xr.open_dataset(forcing)
         return cls.from_dataset(data, name, resolution, timestep)
 
     def __attrs_post_init__(self: ForcingUnit) -> None:

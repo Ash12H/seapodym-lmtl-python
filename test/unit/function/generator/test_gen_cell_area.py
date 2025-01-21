@@ -10,7 +10,7 @@ class TestCellArea:
         kernel = cell_area_kernel()
         res = kernel.run(state_preprod_fg4_t4d_y1_x1_z3)
         stop = time()
-        logger.debug(f"Execution time no chunk: {stop - start}")
+        # logger.debug(f"Execution time no chunk: {stop - start}")
         assert res.chunks is None
 
     def test_cell_area_chunk(self, state_preprod_fg4_t4d_y1_x1_z3):
@@ -20,5 +20,5 @@ class TestCellArea:
         res_chunked = kernel.run(state_preprod_fg4_t4d_y1_x1_z3.cf.chunk(chunk))
         _ = res_chunked.compute()
         stop = time()
-        logger.debug(f"Execution time all chunk: {stop - start}")
+        # logger.debug(f"Execution time all chunk: {stop - start}")
         assert res_chunked.chunks == ((1,), (1,))  # dim y = 1, dim x = 1

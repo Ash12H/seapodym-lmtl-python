@@ -6,8 +6,9 @@ __pycache__
 # User
 .venv
 notebooks/*
-!notebooks/benchmark
+!notebooks/lmtl_no_transport
 .DS_Store
+settings.json
 
 # Build
 docs/build

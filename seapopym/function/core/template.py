@@ -97,7 +97,7 @@ def _map_block_without_dask(
     *args: list,
     **kwargs: dict,
 ) -> SeapopymForcing:
-    logger.debug(f"Direct computation for {function.__name__}.")
+    # logger.debug(f"Direct computation for {function.__name__}.")
     results = function(state, *args, **kwargs)
 
     if isinstance(results, xr.Dataset) and not isinstance(template, Iterable):
@@ -127,7 +127,7 @@ def _map_block_with_dask(
     *args: list,
     **kwargs: dict,
 ) -> SeapopymForcing:
-    logger.debug(f"Creating template for {function.__name__}.")
+    # logger.debug(f"Creating template for {function.__name__}.")
 
     if isinstance(template, BaseTemplate):
         result_template = template.generate(state)
@@ -137,7 +137,7 @@ def _map_block_with_dask(
         msg = "The template attribut should be a BaseTemplate or an Iterable of BaseTemplate."
         raise TypeError(msg)
 
-    logger.debug(f"Applying map_blocks to {function.__name__}.")
+    # logger.debug(f"Applying map_blocks to {function.__name__}.")
     return xr.map_blocks(function, state, template=result_template, kwargs=kwargs, args=args)
 
 
